@@ -209,36 +209,13 @@ export function GamePage() {
             </div>
 
             {/* Pergunta e Respostas */}
-            <Card className="relative md:relative">
-              <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
+            <Card className="relative md:relative p-4 md:p-6">
+              <h2 className="text-xl md:text-3xl font-bold mb-6 md:mb-8 text-center">
                 {currentQuestion.question.text}
               </h2>
 
-              {/* Timer for Mobile - appears below question title on small screens */}
-              <div className="md:hidden mb-6 flex justify-center">
-                <div className={`flex flex-col items-center justify-center p-6 rounded-lg border-3 bg-white dark:bg-gray-800 ${
-                  timeRemaining <= 5 
-                    ? 'border-error-500 shadow-lg shadow-error-500/30' 
-                    : 'border-gray-300 dark:border-gray-600'
-                }`}>
-                  <Hourglass className={`w-12 h-12 mb-2 ${
-                    timeRemaining <= 5 
-                      ? 'text-error-500' 
-                      : 'text-gray-600 dark:text-gray-400'
-                  }`} />
-                  <div className={`text-5xl font-bold tabular-nums ${
-                    timeRemaining <= 5 
-                      ? 'text-error-600 dark:text-error-400' 
-                      : 'text-gray-900 dark:text-gray-100'
-                  }`}>
-                    {timeRemaining}
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">seg</div>
-                </div>
-              </div>
-
               {/* Respostas */}
-              <div className="grid gap-3">
+              <div className="grid gap-2 md:gap-3">
                 {currentQuestion.answers.map((answer) => {
                   const isSelected = selectedAnswerId === answer.id;
                   const showCorrect = isAnswered && answer.isCorrect;
@@ -250,7 +227,7 @@ export function GamePage() {
                       onClick={() => !isAnswered && selectAnswer(answer.id)}
                       disabled={isAnswered}
                       className={`
-                        p-4 text-left rounded-lg border-2
+                        p-3 md:p-4 text-left rounded-lg border-2 text-sm md:text-base
                         ${isSelected ? 'border-primary-500' : 'border-gray-300 dark:border-gray-600'}
                         ${showCorrect ? 'border-success-500 bg-success-50 dark:bg-success-900/20' : ''}
                         ${showWrong ? 'border-error-500 bg-error-50 dark:bg-error-900/20' : ''}
@@ -267,6 +244,29 @@ export function GamePage() {
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Timer for Mobile - appears below answers on small screens - compact version */}
+              <div className="md:hidden mt-6 flex justify-center">
+                <div className={`flex flex-col items-center justify-center p-4 rounded-lg border-2 bg-white dark:bg-gray-800 ${
+                  timeRemaining <= 5 
+                    ? 'border-error-500 shadow-lg shadow-error-500/30' 
+                    : 'border-gray-300 dark:border-gray-600'
+                }`}>
+                  <Hourglass className={`w-8 h-8 ${
+                    timeRemaining <= 5 
+                      ? 'text-error-500' 
+                      : 'text-gray-600 dark:text-gray-400'
+                  }`} />
+                  <div className={`text-4xl font-bold tabular-nums ${
+                    timeRemaining <= 5 
+                      ? 'text-error-600 dark:text-error-400' 
+                      : 'text-gray-900 dark:text-gray-100'
+                  }`}>
+                    {timeRemaining}
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">seg</div>
+                </div>
               </div>
             </Card>
           </div>
