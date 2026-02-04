@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+  }
+
+  .dark {
+    --background: 220 12% 6%; /* dark navy */
+    --foreground: 210 40% 98%;
+  }
+
+  body {
+    @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Segoe UI Mono', 'Fira Code', monospace;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    @apply border-gray-200 dark:border-gray-800;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-900 dark:text-gray-100 font-semibold py-2 px-4 rounded-lg transition-colors;
+  }
+
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700;
+    border-left-width: 4px;
+    border-left-color: transparent;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(2,6,23,0.4);
+  }
+
+  .input {
+    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
+  }
+
+  /* Header / app shell styles to resemble a code editor */
+  .app-header {
+    @apply bg-white dark:bg-[#071026] border-b border-gray-200 dark:border-gray-800;
+    backdrop-filter: blur(6px);
+  }
+
+  .site-title {
+    display: inline-block;
+    font-size: 1.125rem; /* ~18px */
+    font-weight: 800;
+    color: #06b6d4; /* cyan accent */
+    letter-spacing: -0.02em;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.12);
+    line-height: 1;
+  }
+
+  @media (min-width: 768px) {
+    .site-title { font-size: 1.25rem; }
+  }
+
+  @media (max-width: 420px) {
+    .site-title { font-size: 1rem; }
+  }
+
+  /* Buttons with a flatter, code-editor look */
+  .btn-primary {
+    @apply bg-[#0ea5a4] hover:bg-[#08988a] text-white font-medium py-2 px-4 rounded-md transition-all;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-gray-100 font-medium py-2 px-3 rounded-md;
+  }
+
+  /* Accent left border colors for cards */
+  .card[data-accent="cyan"] { border-left-color: #06b6d4; }
+  .card[data-accent="violet"] { border-left-color: #7c3aed; }
+  .card[data-accent="amber"] { border-left-color: #f59e0b; }
+}
