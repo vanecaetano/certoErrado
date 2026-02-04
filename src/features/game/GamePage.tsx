@@ -185,8 +185,8 @@ export function GamePage() {
         {/* Main Content */}
         <div className="flex-1 flex items-center justify-center px-4 py-8 relative">
           <div className="max-w-4xl w-full">
-            {/* Timer - Fixed position top right */}
-            <div className="fixed top-32 right-4 z-40">
+            {/* Timer - Responsive positioning */}
+            <div className="hidden md:fixed md:top-32 md:right-4 md:z-40 md:flex md:flex-col md:items-center md:justify-center">
               <div className={`flex flex-col items-center justify-center p-8 rounded-lg border-3 bg-white dark:bg-gray-800 ${
                 timeRemaining <= 5 
                   ? 'border-error-500 shadow-lg shadow-error-500/30' 
@@ -209,7 +209,7 @@ export function GamePage() {
             </div>
 
             {/* Pergunta e Respostas */}
-            <Card className="relative">
+            <Card className="relative md:relative">
               <h2 className="text-2xl md:text-3xl font-bold mb-8 text-center">
                 {currentQuestion.question.text}
               </h2>
@@ -244,6 +244,29 @@ export function GamePage() {
                     </button>
                   );
                 })}
+              </div>
+
+              {/* Timer for Mobile - appears below answers on small screens */}
+              <div className="md:hidden mt-8 flex justify-center">
+                <div className={`flex flex-col items-center justify-center p-6 rounded-lg border-3 bg-white dark:bg-gray-800 ${
+                  timeRemaining <= 5 
+                    ? 'border-error-500 shadow-lg shadow-error-500/30' 
+                    : 'border-gray-300 dark:border-gray-600'
+                }`}>
+                  <Hourglass className={`w-12 h-12 mb-2 ${
+                    timeRemaining <= 5 
+                      ? 'text-error-500' 
+                      : 'text-gray-600 dark:text-gray-400'
+                  }`} />
+                  <div className={`text-5xl font-bold tabular-nums ${
+                    timeRemaining <= 5 
+                      ? 'text-error-600 dark:text-error-400' 
+                      : 'text-gray-900 dark:text-gray-100'
+                  }`}>
+                    {timeRemaining}
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">seg</div>
+                </div>
               </div>
             </Card>
           </div>
