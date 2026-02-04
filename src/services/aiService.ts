@@ -1,5 +1,5 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import type { Question, Answer } from '@/types';
+import type { Answer } from '@/types';
 import { dbService } from './database';
 
 interface GeneratedQuestion {

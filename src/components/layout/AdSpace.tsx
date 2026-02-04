@@ -26,7 +26,7 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
   const slot = import.meta.env.VITE_ADSENSE_SLOT as string | undefined;
   const isDev = import.meta.env.MODE === 'development';
   const isTest = isDev || import.meta.env.VITE_ADSENSE_TEST === 'true';
-  const [consent, setConsent] = useState<'granted' | 'denied' | 'unknown'>(() => getConsent());
+  const [consent] = useState<'granted' | 'denied' | 'unknown'>(() => getConsent());
 
   useEffect(() => {
     if (!client || !slot) return;

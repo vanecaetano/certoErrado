@@ -40,7 +40,7 @@ class DatabaseService {
     return await db.subjects.orderBy('name').toArray();
   }
 
-  getSubjectById(id: number): Subject | null {
+  getSubjectById(_id: number): Subject | null {
     return null;
   }
 
