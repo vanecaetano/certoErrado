@@ -1,6 +1,7 @@
 import { Moon, Sun } from 'lucide-react';
 import { useThemeStore } from '@/store/themeStore';
 import logoUrl from '@/assets/logo.svg';
+import { Link } from 'react-router-dom';
 
 export function Header() {
   const { theme, toggleTheme } = useThemeStore();
@@ -14,7 +15,10 @@ export function Header() {
               Certo ou Errado?
             </span>
           </div>
-        <button
+        <div className="flex items-center gap-4">
+          <Link to="/privacy" className="text-sm text-gray-600 dark:text-gray-300 hover:underline">Privacidade</Link>
+          <Link to="/settings" className="text-sm text-gray-600 dark:text-gray-300 hover:underline">Configurações</Link>
+          <button
           onClick={toggleTheme}
           className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
           aria-label="Alternar tema"
@@ -25,6 +29,7 @@ export function Header() {
             <Moon className="w-6 h-6" />
           )}
         </button>
+        </div>
       </div>
     </header>
   );

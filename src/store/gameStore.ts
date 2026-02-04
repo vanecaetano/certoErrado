@@ -53,6 +53,29 @@ export const useGameStore = create<GameStore>((set, get) => ({
     });
   },
 
+  addMoreQuestions: async (subjectId: number, count: number) => {
+    const state = get();
+    // collect existing question ids to avoid duplicates
+    const existingIds = new Set(state.questions.map(q => q.question.id));
+
+    // Request up to all questions for subject then filter
+    const candidates = await dbService.getRandomQuestionsBySubject(subjectId, 1000);
+    const filtered = candidates.filter(q => !existingIds.has(q.id)).slice(0, count);
+
+    const newQuestions = [] as any[];
+    for (const question of filtered) {
+      const answers = await dbService.getAnswersByQuestionId(question.id);
+      const shuffledAnswers = [...answers].sort(() => Math.random() - 0.5);
+      newQuestions.push({ question, answers: shuffledAnswers });
+    }
+
+    if (newQuestions.length === 0) return;
+
+    set({
+      questions: [...state.questions, ...newQuestions],
+    });
+  },
+
   selectAnswer: (answerId: number) => {
     const state = get();
     if (state.isAnswered) return;

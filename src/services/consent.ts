@@ -1,24 +1,30 @@
-export type ConsentState = 'granted' | 'denied' | 'unknown';
+export type AdsConsent = 'personalized' | 'non_personalized' | 'denied' | 'unknown';
 
-const CONSENT_KEY = 'ads_consent';
+const CONSENT_KEY = 'certo_errado_ads_consent_v1';
 
-export function getConsent(): ConsentState {
+export function getConsent(): { ads: AdsConsent } {
   try {
-    const v = localStorage.getItem(CONSENT_KEY);
-    if (v === 'granted' || v === 'denied') return v;
+    const raw = localStorage.getItem(CONSENT_KEY);
+    if (!raw) return { ads: 'unknown' };
+    const parsed = JSON.parse(raw);
+    if (parsed && (parsed.ads === 'personalized' || parsed.ads === 'non_personalized' || parsed.ads === 'denied')) {
+      return { ads: parsed.ads };
+    }
   } catch (e) {
     // ignore
   }
-  return 'unknown';
+  return { ads: 'unknown' };
 }
 
-export function setConsent(state: ConsentState) {
+export function setConsentAds(value: AdsConsent) {
   try {
-    if (state === 'unknown') {
+    if (value === 'unknown') {
       localStorage.removeItem(CONSENT_KEY);
     } else {
-      localStorage.setItem(CONSENT_KEY, state);
+      localStorage.setItem(CONSENT_KEY, JSON.stringify({ ads: value }));
     }
+    // Disparar evento customizado para sincronizar em tempo real
+    window.dispatchEvent(new CustomEvent('consent-changed', { detail: { ads: value } }));
   } catch (e) {
     // ignore
   }

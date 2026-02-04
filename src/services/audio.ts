@@ -29,6 +29,46 @@ class AudioService {
     this.playTone(800, 0.2, 'sine');
   }
 
+  playCorrectVibrant(): void {
+    // play a short arpeggio with envelope to feel more vibrant
+    const ctx = this.getAudioContext();
+    if (!ctx) {
+      this.playTone(880, 0.18, 'sine');
+      return;
+    }
+
+    const now = ctx.currentTime;
+    try {
+      const master = ctx.createGain();
+      master.connect(ctx.destination);
+      master.gain.setValueAtTime(0.001, now);
+      master.gain.exponentialRampToValueAtTime(0.25, now + 0.01);
+
+      const freqs = [880, 1100, 1320];
+      freqs.forEach((f, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.value = f;
+        osc.connect(gain);
+        gain.connect(master);
+        const start = now + i * 0.05;
+        const dur = 0.18;
+        gain.gain.setValueAtTime(0.0, start);
+        gain.gain.linearRampToValueAtTime(0.25 / freqs.length, start + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+        osc.start(start);
+        osc.stop(start + dur + 0.02);
+      });
+
+      // smooth master down
+      master.gain.exponentialRampToValueAtTime(0.0001, now + 0.7);
+    } catch (e) {
+      // fallback
+      this.playTone(880, 0.18, 'sine');
+    }
+  }
+
   playWrong(): void {
     this.playTone(300, 0.3, 'sawtooth');
   }

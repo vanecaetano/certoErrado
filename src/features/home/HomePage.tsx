@@ -10,7 +10,7 @@ import type { Subject } from '@/types';
 export function HomePage() {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [selectedSubjects, setSelectedSubjects] = useState<Map<number, number>>(new Map());
+  const [selectedSubjects, setSelectedSubjects] = useState<Set<number>>(new Set());
   const initializeGame = useGameStore((state) => state.initializeGame);
 
   useEffect(() => {
@@ -19,7 +19,6 @@ export function HomePage() {
       setSubjects(allSubjects);
 
       if (allSubjects.length === 0) {
-        // Redirecionar para configurações se não houver assuntos
         navigate('/settings');
       }
     };
@@ -27,18 +26,12 @@ export function HomePage() {
   }, [navigate]);
 
   const handleSubjectToggle = (subjectId: number) => {
-    const newSelection = new Map(selectedSubjects);
+    const newSelection = new Set(selectedSubjects);
     if (newSelection.has(subjectId)) {
       newSelection.delete(subjectId);
     } else {
-      newSelection.set(subjectId, 50); // Default: 50 perguntas
+      newSelection.add(subjectId);
     }
-    setSelectedSubjects(newSelection);
-  };
-
-  const handleQuestionCountChange = (subjectId: number, count: number) => {
-    const newSelection = new Map(selectedSubjects);
-    newSelection.set(subjectId, Math.max(1, Math.min(count, 50)));
     setSelectedSubjects(newSelection);
   };
 
@@ -49,14 +42,17 @@ export function HomePage() {
     }
 
     const config = {
-      subjects: Array.from(selectedSubjects.entries()).map(([subjectId, questionCount]) => ({
-        subjectId,
-        questionCount,
-      })),
+      subjects: Array.from(selectedSubjects).map((subjectId) => {
+        const subject = subjects.find((s) => s.id === subjectId);
+        return {
+          subjectId,
+          questionCount: subject?.questionCount || 10,
+        };
+      }),
     };
 
     await initializeGame(config);
-    navigate('/game');
+    setTimeout(() => navigate('/game'), 100);
   };
 
   if (subjects.length === 0) {
@@ -80,7 +76,6 @@ export function HomePage() {
       <div className="grid gap-4 mb-6">
         {subjects.map((subject) => {
           const isSelected = selectedSubjects.has(subject.id);
-          const questionCount = selectedSubjects.get(subject.id) || 50;
 
           return (
             <Card
@@ -95,22 +90,6 @@ export function HomePage() {
                     {subject.questionCount} perguntas disponíveis
                   </p>
                 </div>
-                {isSelected && (
-                  <div className="flex items-center gap-2 ml-4" onClick={(e) => e.stopPropagation()}>
-                    <label className="text-sm">Quantidade:</label>
-                    <input
-                      type="number"
-                      min="1"
-                      max={Math.min(subject.questionCount, 50)}
-                      value={questionCount}
-                      onChange={(e) =>
-                        handleQuestionCountChange(subject.id, parseInt(e.target.value) || 1)
-                      }
-                      className="w-20 px-2 py-1 border rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  </div>
-                )}
               </div>
             </Card>
           );

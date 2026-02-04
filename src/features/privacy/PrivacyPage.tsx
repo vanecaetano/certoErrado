@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/Button';
 import { useNavigate } from 'react-router-dom';
+import { setConsentAds, AdsConsent } from '@/services/consent';
 
 export function PrivacyPage() {
   const navigate = useNavigate();
@@ -31,10 +32,19 @@ export function PrivacyPage() {
       <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
         Para questões sobre privacidade, envie email para: suporte@seudominio.com
       </p>
-
-      <div className="flex gap-2">
+      <div className="flex gap-2 mb-4">
         <Button variant="secondary" onClick={() => navigate(-1)}>Voltar</Button>
         <Button onClick={() => navigate('/')}>Ir para Início</Button>
+      </div>
+
+      <div className="mt-6 border-t pt-4">
+        <h3 className="font-semibold">Gerenciar consentimento</h3>
+        <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">Use as opções abaixo para alterar ou revogar seu consentimento.</p>
+        <div className="flex gap-2">
+          <Button variant="primary" onClick={() => { setConsentAds('personalized' as AdsConsent); navigate('/'); }}>Aceitar anúncios personalizados</Button>
+          <Button variant="secondary" onClick={() => { setConsentAds('non_personalized' as AdsConsent); navigate('/'); }}>Aceitar não personalizados</Button>
+          <Button variant="danger" onClick={() => { setConsentAds('denied'); setTimeout(() => navigate('/'), 100); }}>Revogar consentimento</Button>
+        </div>
       </div>
     </div>
   );

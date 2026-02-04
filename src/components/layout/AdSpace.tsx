@@ -26,11 +26,11 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
   const slot = import.meta.env.VITE_ADSENSE_SLOT as string | undefined;
   const isDev = import.meta.env.MODE === 'development';
   const isTest = isDev || import.meta.env.VITE_ADSENSE_TEST === 'true';
-  const [consent] = useState<'granted' | 'denied' | 'unknown'>(() => getConsent());
+  const [consent] = useState(() => getConsent());
 
   useEffect(() => {
     if (!client || !slot) return;
-    if (consent !== 'granted') return;
+    if (!consent || consent.ads === 'denied' || consent.ads === 'unknown') return;
 
     // Avoid injecting script multiple times
     const scriptId = 'adsbygoogle-js';
@@ -71,7 +71,7 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
   return (
     <div className={outerClasses} style={{ minHeight: position === 'bottom' ? minHeightStyle : 'auto' }}>
       <div className="container mx-auto px-4 py-4 flex items-center justify-center">
-        {client && slot && consent === 'granted' ? (
+        {client && slot && (consent.ads === 'personalized' || consent.ads === 'non_personalized') ? (
           <div ref={adRef} className="w-full flex items-center justify-center">
             <ins
               className="adsbygoogle"
@@ -81,6 +81,7 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
               data-ad-format="auto"
               data-full-width-responsive="true"
               {...(isTest ? { 'data-adtest': 'on' } : {})}
+              // NOTE: For non-personalized ads, additional tag / server-side config may be required.
             />
           </div>
         ) : (

@@ -7,7 +7,6 @@ import { Card } from '@/components/ui/Card';
 import { dbService } from '@/services/database';
 import { aiService } from '@/services/aiService';
 import type { Subject } from '@/types';
-import { getConsent, clearConsent } from '@/services/consent';
 
 export function SettingsPage() {
   const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -36,8 +35,8 @@ export function SettingsPage() {
     setLoading(newSubject);
 
     try {
-      // Gerar 50 perguntas usando IA
-      await aiService.generateQuestionsForSubject(newSubject.trim(), 50);
+      // Gerar 10 perguntas usando IA
+      await aiService.generateQuestionsForSubject(newSubject.trim(), 10);
       
       // Atualizar lista de assuntos
       await loadSubjects();
@@ -57,16 +56,6 @@ export function SettingsPage() {
     }
   };
 
-  const [consentState, setConsentState] = useState<'granted'|'denied'|'unknown'>(() => getConsent());
-
-  const handleRevokeConsent = () => {
-    if (!confirm('Deseja revogar o consentimento para anúncios? Isso fará com que os anúncios parem de ser exibidos.')) return;
-    clearConsent();
-    setConsentState('unknown');
-    // reload to ensure ad scripts stop / placeholders appear
-    window.location.reload();
-  };
-
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
       <h2 className="text-3xl font-bold mb-6">Configurações de Assuntos</h2>
@@ -84,7 +73,7 @@ export function SettingsPage() {
             label="Nome do Assunto"
             value={newSubject}
             onChange={(e) => setNewSubject(e.target.value)}
-            placeholder="Ex: JavaScript, React, TypeScript..."
+            placeholder="Ex: Filmes, Ciências, Esportes..."
             onKeyPress={(e) => e.key === 'Enter' && handleAddSubject()}
             disabled={!!loading}
           />
@@ -113,18 +102,9 @@ export function SettingsPage() {
           </div>
         )}
         <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-          Ao adicionar um assunto, serão geradas automaticamente 50 perguntas sobre o tema usando IA.
+          Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA.
           Isso pode levar alguns minutos.
         </p>
-
-        <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-900 rounded border border-gray-200 dark:border-gray-800">
-          <h4 className="font-semibold mb-2">Privacidade e anúncios</h4>
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">Status do consentimento: <strong>{consentState}</strong></p>
-          <div className="flex gap-2">
-            <Button variant="secondary" size="sm" onClick={() => window.open('/privacy', '_blank')}>Política de Privacidade</Button>
-            <Button variant="danger" size="sm" onClick={handleRevokeConsent}>Revogar consentimento</Button>
-          </div>
-        </div>
       </Card>
 
       <div>

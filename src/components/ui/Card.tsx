@@ -12,7 +12,7 @@ export function Card({ children, className, onClick }: CardProps) {
     <div
       className={cn(
         'card',
-        onClick && 'cursor-pointer hover:shadow-xl transition-shadow',
+        onClick && 'cursor-pointer',
         className
       )}
       onClick={onClick}
