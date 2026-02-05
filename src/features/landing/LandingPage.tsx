@@ -3,12 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { Zap, Brain, Trophy, Shield } from 'lucide-react';
-import { getConsent, setConsentAds } from '@/services/consent';
 import { dbService } from '@/services/database';
 
 export function LandingPage() {
   const navigate = useNavigate();
-  const [consentStatus, setConsentStatus] = useState(() => getConsent().ads);
   const [hasSubjects, setHasSubjects] = useState(false);
 
   useEffect(() => {
@@ -18,47 +16,7 @@ export function LandingPage() {
     };
 
     checkSubjects();
-
-    // Monitor consent changes via custom event
-    const handleConsentChange = (e: Event) => {
-      if (e instanceof CustomEvent) {
-        const newConsent = e.detail?.ads || getConsent().ads;
-        setConsentStatus(newConsent);
-      }
-    };
-
-    window.addEventListener('consent-changed', handleConsentChange);
-    return () => window.removeEventListener('consent-changed', handleConsentChange);
   }, [navigate]);
-
-  // Block access if user denied consent
-  if (consentStatus === 'denied') {
-    return (
-      <div className="container mx-auto px-4 py-12 max-w-2xl">
-        <Card className="text-center py-12">
-          <h2 className="text-3xl font-bold mb-4">Acesso Bloqueado</h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-            Para acessar o jogo, você precisa aceitar o consentimento de anúncios. 
-            Isso nos permite manter o serviço gratuito e funcionando.
-          </p>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
-            Você pode aceitar anúncios personalizados ou apenas anúncios não personalizados.
-          </p>
-          <div className="flex gap-3 justify-center flex-wrap">
-            <Button onClick={() => { setConsentAds('personalized'); setConsentStatus('personalized'); }}>
-              Aceitar Anúncios Personalizados
-            </Button>
-            <Button variant="secondary" onClick={() => { setConsentAds('non_personalized'); setConsentStatus('non_personalized'); }}>
-              Aceitar Anúncios Não Personalizados
-            </Button>
-            <Button variant="secondary" onClick={() => navigate('/privacy')}>
-              Política de Privacidade
-            </Button>
-          </div>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-5xl">
@@ -75,45 +33,43 @@ export function LandingPage() {
         </p>
 
         {/* Modo Relâmpago e Personalizado - Highlighted Cards */}
-        {consentStatus === 'personalized' || consentStatus === 'non_personalized' ? (
-          <div className="mb-16 grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
-            {/* Modo Relâmpago Card */}
-            <Card className="border-2 border-primary-600 p-8">
-              <div className="flex justify-center mb-6">
-                <Zap className="w-16 h-16 text-primary-600" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3 text-primary-600">Modo Relâmpago</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Jogue agora com 30 perguntas gerais aleatórias! Rápido, desafiador e divertido.
-              </p>
-              <Button 
-                size="lg" 
-                className="w-full"
-                onClick={() => navigate('/play')}
-              >
-                ⚡ Começar
-              </Button>
-            </Card>
+        <div className="mb-16 grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+          {/* Modo Relâmpago Card */}
+          <Card className="border-2 border-primary-600 p-8">
+            <div className="flex justify-center mb-6">
+              <Zap className="w-16 h-16 text-primary-600" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-primary-600">Modo Relâmpago</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Jogue agora com 30 perguntas gerais aleatórias! Rápido, desafiador e divertido.
+            </p>
+            <Button 
+              size="lg" 
+              className="w-full"
+              onClick={() => navigate('/play')}
+            >
+              ⚡ Começar
+            </Button>
+          </Card>
 
-            {/* Personalizado Card */}
-            <Card className="border-2 border-success-600 p-8">
-              <div className="flex justify-center mb-6">
-                <Brain className="w-16 h-16 text-success-600" />
-              </div>
-              <h3 className="text-2xl font-bold mb-3 text-success-600">Personalizado</h3>
-              <p className="text-gray-600 dark:text-gray-400 mb-6">
-                Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.
-              </p>
-              <Button 
-                size="lg" 
-                className="w-full bg-success-600 hover:bg-success-700"
-                onClick={() => navigate('/settings')}
-              >
-                📚 Criar Assuntos
-              </Button>
-            </Card>
-          </div>
-        ) : null}
+          {/* Personalizado Card */}
+          <Card className="border-2 border-success-600 p-8">
+            <div className="flex justify-center mb-6">
+              <Brain className="w-16 h-16 text-success-600" />
+            </div>
+            <h3 className="text-2xl font-bold mb-3 text-success-600">Personalizado</h3>
+            <p className="text-gray-600 dark:text-gray-400 mb-6">
+              Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.
+            </p>
+            <Button 
+              size="lg" 
+              className="w-full bg-success-600 hover:bg-success-700"
+              onClick={() => navigate('/settings')}
+            >
+              📚 Criar Assuntos
+            </Button>
+          </Card>
+        </div>
       </div>
 
       {/* Features Grid */}
@@ -192,42 +148,19 @@ export function LandingPage() {
       {/* CTA Section */}
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-4">Pronto para Começar?</h2>
-        {consentStatus === 'personalized' || consentStatus === 'non_personalized' ? (
-          <div>
-            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-              Você já aceitou os anúncios! Agora é hora de jogar. {hasSubjects ? 'Comece a jogar ou crie novos assuntos!' : 'Crie seus primeiros assuntos!'}
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              {hasSubjects && (
-                <Button size="lg" onClick={() => navigate('/play')}>
-                  🎮 Começar a Jogar
-                </Button>
-              )}
-              <Button size="lg" variant="secondary" onClick={() => navigate('/settings')}>
-                ⚙️ {hasSubjects ? 'Gerenciar' : 'Criar'} Assuntos
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div>
-            <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-              Para jogar, primeiro você precisa aceitar o consentimento de anúncios. Isso nos ajuda a manter o jogo gratuito!
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Button size="lg" onClick={() => { setConsentAds('personalized'); setConsentStatus('personalized'); }}>
-                ✅ Aceitar Anúncios Personalizados
-              </Button>
-              <Button size="lg" variant="secondary" onClick={() => { setConsentAds('non_personalized'); setConsentStatus('non_personalized'); }}>
-                🔇 Aceitar Anúncios Não Personalizados
-              </Button>
-            </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-6">
-              <button className="underline hover:text-gray-600 dark:hover:text-gray-300" onClick={() => navigate('/privacy')}>
-                Ler política de privacidade
-              </button>
-            </p>
-          </div>
-        )}
+        <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
+          {hasSubjects ? 'Comece a jogar ou crie novos assuntos!' : 'Crie seus primeiros assuntos!'}
+        </p>
+        <div className="flex gap-4 justify-center flex-wrap">
+          {hasSubjects && (
+            <Button size="lg" onClick={() => navigate('/play')}>
+              🎮 Começar a Jogar
+            </Button>
+          )}
+          <Button size="lg" variant="secondary" onClick={() => navigate('/settings')}>
+            ⚙️ {hasSubjects ? 'Gerenciar' : 'Criar'} Assuntos
+          </Button>
+        </div>
       </div>
     </div>
   );

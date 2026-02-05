@@ -1,21 +1,13 @@
 import { useState } from 'react';
-import { getConsent } from '@/services/consent';
 
 interface FullscreenAdProps {
   onClose: () => void;
 }
 
 export function FullscreenAd({ onClose }: FullscreenAdProps) {
-  const consent = getConsent();
   const [visible, setVisible] = useState(true);
 
   if (!visible) return null;
-
-  // If user denied or never accepted ads, immediately close
-  if (consent.ads === 'denied' || consent.ads === 'unknown') {
-    onClose();
-    return null;
-  }
 
   const handleClose = () => {
     setVisible(false);

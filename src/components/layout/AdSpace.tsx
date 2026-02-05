@@ -9,9 +9,7 @@
  * 5. Anúncios nativos que se integram ao design
  */
 
-import { useEffect, useRef, useState } from 'react';
-import { getConsent } from '@/services/consent';
-import { ConsentBanner } from '@/components/ui/ConsentBanner';
+import { useEffect, useRef } from 'react';
 
 interface AdSpaceProps {
   position?: 'bottom' | 'top' | 'sidebar';
@@ -26,11 +24,9 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
   const slot = import.meta.env.VITE_ADSENSE_SLOT as string | undefined;
   const isDev = import.meta.env.MODE === 'development';
   const isTest = isDev || import.meta.env.VITE_ADSENSE_TEST === 'true';
-  const [consent] = useState(() => getConsent());
 
   useEffect(() => {
     if (!client || !slot) return;
-    if (!consent || consent.ads === 'denied' || consent.ads === 'unknown') return;
 
     // Avoid injecting script multiple times
     const scriptId = 'adsbygoogle-js';
@@ -56,7 +52,7 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
     // Small timeout to ensure script executes
     const t = setTimeout(tryPush, 500);
     return () => clearTimeout(t);
-  }, [client, slot, consent, isTest]);
+  }, [client, slot, isTest]);
 
   const outerClasses = `
     ${position === 'bottom' ? 'left-0 right-0 md:fixed md:bottom-0' : ''}
@@ -71,7 +67,7 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
   return (
     <div className={outerClasses} style={{ minHeight: position === 'bottom' ? minHeightStyle : 'auto' }}>
       <div className="container mx-auto px-4 py-4 flex items-center justify-center">
-        {client && slot && (consent.ads === 'personalized' || consent.ads === 'non_personalized') ? (
+        {client && slot ? (
           <div ref={adRef} className="w-full flex items-center justify-center">
             <ins
               className="adsbygoogle"
@@ -81,7 +77,6 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
               data-ad-format="auto"
               data-full-width-responsive="true"
               {...(isTest ? { 'data-adtest': 'on' } : {})}
-              // NOTE: For non-personalized ads, additional tag / server-side config may be required.
             />
           </div>
         ) : (
@@ -89,12 +84,11 @@ export function AdSpace({ position = 'bottom', className = '' }: AdSpaceProps) {
             <p className="text-xs">Espaço para anúncios</p>
             <div className="mt-2 w-full h-16 bg-gray-200 dark:bg-gray-700 rounded flex flex-col items-center justify-center">
               <span className="text-xs text-gray-400">320x100</span>
-              <small className="text-xs text-gray-400 mt-1">Configure VITE_ADSENSE_CLIENT e VITE_ADSENSE_SLOT e aceite anúncios</small>
+              <small className="text-xs text-gray-400 mt-1">Configure VITE_ADSENSE_CLIENT e VITE_ADSENSE_SLOT</small>
             </div>
           </div>
         )}
       </div>
-      <ConsentBanner />
     </div>
   );
 }
