@@ -34,7 +34,11 @@ export function Header() {
           </button>
         </div>
         <div className="flex items-center gap-4">
-          <Link to="/play" className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:underline">Jogar</Link>
+          <Link to="/play" className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:underline" onClick={() => {
+            // Tenta iniciar a música de fundo ao clicar em Jogar
+            const evt = new Event('click');
+            window.dispatchEvent(evt);
+          }}>Jogar</Link>
           <Link to="/privacy" className="text-sm text-gray-600 dark:text-gray-300 hover:underline">Privacidade</Link>
           <Link to="/settings" className="text-sm text-gray-600 dark:text-gray-300 hover:underline">Configurações</Link>
           <button

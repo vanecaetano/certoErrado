@@ -74,16 +74,14 @@ export function ResultsPage() {
 
   return (
     <div className="container mx-auto px-4 py-12 max-w-3xl">
-      <Card className="mb-8 text-center bg-gradient-to-br from-primary-600/90 to-indigo-700/90 text-white shadow-2xl border-0">
-        <Trophy className="w-12 h-12 mx-auto text-yellow-400 mb-2 drop-shadow-lg" />
-        <h2 className="text-3xl font-bold mb-2 tracking-tight">Resultado Final</h2>
-        <div className="text-4xl font-extrabold text-yellow-400 mb-2 drop-shadow">{score} pontos</div>
-        <div className="text-lg text-white/80 mb-4">
-          Precisão geral: <span className="font-bold text-white">{sessionAccuracy.toFixed(1)}%</span>
-        </div>
-      </Card>
-
-      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 mb-8 border-0">
+      <div className="flex justify-center mb-8">
+        <Button size="lg" onClick={() => navigate('/')}
+          className="bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-xl border-0">
+          <Home className="w-5 h-5 mr-2 inline" /> Voltar ao Início
+        </Button>
+      </div>
+      <Card className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 border-0">
+        <h3 className="text-xl font-semibold mb-4 text-center">Desempenho por Assunto</h3>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
             data={chartData}
@@ -107,14 +105,7 @@ export function ResultsPage() {
             <Bar dataKey="Erros" radius={[8,8,0,0]} fill="#ef4444" />
           </BarChart>
         </ResponsiveContainer>
-      </div>
-
-      <div className="flex justify-center">
-        <Button size="lg" onClick={() => navigate('/')}
-          className="bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-xl border-0">
-          <Home className="w-5 h-5 mr-2 inline" /> Voltar ao Início
-        </Button>
-      </div>
+      </Card>
     </div>
   );
 }

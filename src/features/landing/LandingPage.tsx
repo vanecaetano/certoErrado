@@ -47,6 +47,9 @@ export function LandingPage() {
         size="lg"
         className="w-full h-14 text-lg font-semibold rounded-xl"
         onClick={async () => {
+          // Tenta iniciar a música de fundo ao clicar
+          const evt = new Event('click');
+          window.dispatchEvent(evt);
           // Tocar som de início e aguardar terminar
           try {
             const audio = new Audio(startSound);
