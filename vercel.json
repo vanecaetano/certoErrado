@@ -9,6 +9,7 @@
   ],
   "routes": [
     { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/ads.txt", "dest": "/ads.txt" },
     { "src": "/(.*)", "dest": "/index.html" }
   ]
 }
