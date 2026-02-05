@@ -9,6 +9,18 @@ import type { Subject } from '@/types';
 import startSound from '@/assets/start.mp3';
 
 export function HomePage() {
+
+    // Ativa música de fundo ao dar scroll na lista de assuntos
+    useEffect(() => {
+      const handleScroll = () => {
+        const audio = (window as any).backgroundAudio as HTMLAudioElement | undefined;
+        if (audio && audio.paused) {
+          audio.play().catch(() => {});
+        }
+      };
+      window.addEventListener('scroll', handleScroll, { passive: true });
+      return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<number[]>([]);
