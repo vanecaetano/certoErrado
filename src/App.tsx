@@ -20,16 +20,16 @@ function App() {
   const { theme } = useThemeStore();
   // Música de fundo global
   useEffect(() => {
-    let audio: HTMLAudioElement | null = new Audio(backgroundMusic);
-    audio.loop = true;
-    audio.volume = 0.15;
+    let audio: HTMLAudioElement | null = (window as any).backgroundAudio;
+    if (!audio) {
+      audio = new Audio(backgroundMusic);
+      audio.loop = true;
+      audio.volume = 0.15;
+      (window as any).backgroundAudio = audio;
+    }
     let enabled = true;
-    let started = false;
     const tryPlay = () => {
-      if (!started) {
-        started = true;
-        audio?.play().catch(() => {});
-      }
+      audio?.play().catch(() => {});
     };
     const toggle = (e: any) => {
       enabled = e.detail;
@@ -37,16 +37,6 @@ function App() {
       else audio?.pause();
     };
     window.addEventListener('music-toggle', toggle);
-    const mouseHandler = () => {
-      tryPlay();
-      window.removeEventListener('mousemove', mouseHandler);
-    };
-    const clickHandler = () => {
-      tryPlay();
-      window.removeEventListener('click', clickHandler);
-    };
-    window.addEventListener('mousemove', mouseHandler);
-    window.addEventListener('click', clickHandler);
     // Inicializar banco de dados, tema, etc
     dbService.initialize().catch(console.error);
     dbService.createDefaultSubject().catch(console.error);
@@ -54,10 +44,7 @@ function App() {
     window.dispatchEvent(new CustomEvent('music-toggle', { detail: true }));
     return () => {
       window.removeEventListener('music-toggle', toggle);
-      window.removeEventListener('mousemove', mouseHandler);
-      window.removeEventListener('click', clickHandler);
       audio?.pause();
-      audio = null;
     };
   }, [theme]);
 

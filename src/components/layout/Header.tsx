@@ -15,15 +15,12 @@ export function Header() {
   function handleMusicToggle() {
     setMusicOn((v) => {
       const next = !v;
+      const audio = (window as any).backgroundAudio as HTMLAudioElement | undefined;
       if (next) {
-        // Tenta tocar a música de fundo diretamente
-        const audios = document.getElementsByTagName('audio');
-        for (let i = 0; i < audios.length; i++) {
-          try { audios[i].play(); } catch {}
-        }
-        // Também dispara o evento para App
+        if (audio) audio.play().catch(() => {});
         window.dispatchEvent(new CustomEvent('music-toggle', { detail: true }));
       } else {
+        if (audio) audio.pause();
         window.dispatchEvent(new CustomEvent('music-toggle', { detail: false }));
       }
       return next;
