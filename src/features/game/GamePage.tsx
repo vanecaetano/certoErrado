@@ -205,7 +205,7 @@ export function GamePage() {
         <div className="flex-1 flex items-center justify-center px-4 py-8 relative">
           <div className="max-w-4xl w-full">
             {/* Timer - Responsive positioning */}
-            <div className="hidden md:fixed md:top-32 md:right-4 md:z-40 md:flex md:flex-col md:items-center md:justify-center">
+            <div className="fixed top-20 right-4 z-40 flex flex-col items-center justify-center md:top-32 md:right-4 md:z-40">
               <div className={`flex flex-col items-center justify-center p-8 rounded-lg border-3 bg-white dark:bg-gray-800 ${
                 timeRemaining <= 5 
                   ? 'border-error-500 shadow-lg shadow-error-500/30' 
