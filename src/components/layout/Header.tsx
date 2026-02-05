@@ -9,6 +9,12 @@ export function Header() {
   const [musicOn, setMusicOn] = useState(true);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('music-toggle', { detail: musicOn }));
+    if (musicOn) {
+      // Garante que a música de fundo tente tocar após interação
+      setTimeout(() => {
+        window.dispatchEvent(new Event('click'));
+      }, 0);
+    }
   }, [musicOn]);
 
   return (

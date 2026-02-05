@@ -183,8 +183,8 @@ export function GamePage() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
-      <div className="flex-1 flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-x-hidden overflow-y-auto">
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-6 sticky top-0 z-30">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
