@@ -12,13 +12,12 @@ import type { PerformanceData } from '@/types';
 
 export function ResultsPage() {
   const navigate = useNavigate();
-  const { questions, score, config, resetGame } = useGameStore();
+  const { questions, config, resetGame } = useGameStore();
 
   const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
 
   // Se houver dados da sessão atual, use-os para o gráfico e placar
   let totalQuestions = questions.length;
-  let sessionScore = score;
   useEffect(() => {
     const loadPerformanceData = async () => {
       const data: PerformanceData[] = [];
@@ -45,8 +44,7 @@ export function ResultsPage() {
   // Se não houver dados da sessão atual, use o agregado do banco
   if (totalQuestions === 0 && performanceData.length > 0) {
     totalQuestions = performanceData.reduce((sum, d) => sum + d.totalQuestions, 0);
-    sessionScore = performanceData.reduce((sum, d) => sum + d.averageScore, 0);
-    // sessionAccuracy removido, não é mais usado
+    // sessionAccuracy e sessionScore removidos, não são mais usados
   }
 
   const chartData = performanceData.map((d) => ({
