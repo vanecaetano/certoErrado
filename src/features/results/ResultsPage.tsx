@@ -5,7 +5,7 @@ import { useGameStore } from '@/store/gameStore';
 import { dbService } from '@/services/database';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Home, Trophy } from 'lucide-react';
+import { Home } from 'lucide-react';
 import type { PerformanceData } from '@/types';
 
 
@@ -41,7 +41,6 @@ export function ResultsPage() {
     loadPerformanceData();
   }, [config]);
 
-  let sessionAccuracy = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
 
   // Se não houver dados da sessão atual, use o agregado do banco
   if (totalQuestions === 0 && performanceData.length > 0) {
