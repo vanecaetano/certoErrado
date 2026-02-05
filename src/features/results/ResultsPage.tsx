@@ -46,7 +46,7 @@ export function ResultsPage() {
   if (totalQuestions === 0 && performanceData.length > 0) {
     totalQuestions = performanceData.reduce((sum, d) => sum + d.totalQuestions, 0);
     sessionScore = performanceData.reduce((sum, d) => sum + d.averageScore, 0);
-    sessionAccuracy = totalQuestions > 0 ? (sessionScore / totalQuestions) * 100 : 0;
+    // sessionAccuracy removido, não é mais usado
   }
 
   const chartData = performanceData.map((d) => ({
