@@ -36,16 +36,34 @@ export function GamePage() {
     audio.loop = true;
     audio.volume = 0.15;
     let enabled = true;
-    audio.play().catch(() => {});
+    let started = false;
+    const tryPlay = () => {
+      if (!started) {
+        started = true;
+        audio?.play().catch(() => {});
+      }
+    };
     setClockAudio(audio);
     const toggle = (e: any) => {
       enabled = e.detail;
-      if (enabled && !isAnswered) audio?.play().catch(() => {});
+      if (enabled && !isAnswered) tryPlay();
       else audio?.pause();
     };
     window.addEventListener('music-toggle', toggle);
+    const mouseHandler = () => {
+      tryPlay();
+      window.removeEventListener('mousemove', mouseHandler);
+    };
+    const clickHandler = () => {
+      tryPlay();
+      window.removeEventListener('click', clickHandler);
+    };
+    window.addEventListener('mousemove', mouseHandler);
+    window.addEventListener('click', clickHandler);
     return () => {
       window.removeEventListener('music-toggle', toggle);
+      window.removeEventListener('mousemove', mouseHandler);
+      window.removeEventListener('click', clickHandler);
       audio?.pause();
       setClockAudio(null);
     };
@@ -165,8 +183,8 @@ export function GamePage() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   return (
-    <div className="fixed inset-0 bg-gray-50 dark:bg-gray-900 overflow-y-auto">
-      <div className="min-h-full flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
+      <div className="flex-1 flex flex-col">
         {/* Header */}
         <div className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 px-4 py-6 sticky top-0 z-30">
           <div className="max-w-4xl mx-auto flex items-center justify-between">
