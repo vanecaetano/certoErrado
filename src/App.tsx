@@ -36,7 +36,13 @@ function App() {
       if (enabled) tryPlay();
       else audio?.pause();
     };
+    const scrollHandler = () => {
+      if (audio && audio.paused && enabled) {
+        audio.play().catch(() => {});
+      }
+    };
     window.addEventListener('music-toggle', toggle);
+    window.addEventListener('scroll', scrollHandler, { passive: true });
     // Inicializar banco de dados, tema, etc
     dbService.initialize().catch(console.error);
     dbService.createDefaultSubject().catch(console.error);
@@ -44,6 +50,7 @@ function App() {
     window.dispatchEvent(new CustomEvent('music-toggle', { detail: true }));
     return () => {
       window.removeEventListener('music-toggle', toggle);
+      window.removeEventListener('scroll', scrollHandler);
       audio?.pause();
     };
   }, [theme]);
