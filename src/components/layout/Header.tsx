@@ -9,13 +9,26 @@ export function Header() {
   const [musicOn, setMusicOn] = useState(true);
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('music-toggle', { detail: musicOn }));
-    if (musicOn) {
-      // Garante que a música de fundo tente tocar após interação
-      setTimeout(() => {
-        window.dispatchEvent(new Event('click'));
-      }, 0);
-    }
   }, [musicOn]);
+
+  // Função para garantir play direto no clique
+  function handleMusicToggle() {
+    setMusicOn((v) => {
+      const next = !v;
+      if (next) {
+        // Tenta tocar a música de fundo diretamente
+        const audios = document.getElementsByTagName('audio');
+        for (let i = 0; i < audios.length; i++) {
+          try { audios[i].play(); } catch {}
+        }
+        // Também dispara o evento para App
+        window.dispatchEvent(new CustomEvent('music-toggle', { detail: true }));
+      } else {
+        window.dispatchEvent(new CustomEvent('music-toggle', { detail: false }));
+      }
+      return next;
+    });
+  }
 
   return (
     <header className="app-header sticky top-0 z-50">
@@ -48,7 +61,7 @@ export function Header() {
           <Link to="/privacy" className="text-sm text-gray-600 dark:text-gray-300 hover:underline">Privacidade</Link>
           <Link to="/settings" className="text-sm text-gray-600 dark:text-gray-300 hover:underline">Configurações</Link>
           <button
-            onClick={() => setMusicOn((v) => !v)}
+            onClick={handleMusicToggle}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
             aria-label={musicOn ? 'Desligar música' : 'Ligar música'}
           >
