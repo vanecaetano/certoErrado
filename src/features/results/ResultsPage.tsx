@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
 import { useGameStore } from '@/store/gameStore';
 import { dbService } from '@/services/database';
 import { Button } from '@/components/ui/Button';
@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/Card';
 import { Home, Trophy } from 'lucide-react';
 import type { PerformanceData } from '@/types';
 
-const COLORS = ['#0ea5e9', '#22c55e', '#ef4444', '#f59e0b', '#8b5cf6'];
+
 
 export function ResultsPage() {
   const navigate = useNavigate();
@@ -100,7 +100,7 @@ export function ResultsPage() {
             />
             <Legend wrapperStyle={{ fontWeight: 700, fontSize: 16 }} />
             <Bar dataKey="Acertos" radius={[8,8,0,0]}>
-              {chartData.map((entry, idx) => (
+              {chartData.map((_, idx) => (
                 <Cell key={`cell-acertos-${idx}`} fill={MODERN_COLORS[idx % MODERN_COLORS.length]} />
               ))}
             </Bar>
