@@ -13,18 +13,17 @@ export function Header() {
 
   // Função para garantir play direto no clique
   function handleMusicToggle() {
-    setMusicOn((v) => {
-      const next = !v;
-      const audio = (window as any).backgroundAudio as HTMLAudioElement | undefined;
-      if (next) {
-        if (audio) audio.play().catch(() => {});
-        window.dispatchEvent(new CustomEvent('music-toggle', { detail: true }));
-      } else {
-        if (audio) audio.pause();
-        window.dispatchEvent(new CustomEvent('music-toggle', { detail: false }));
-      }
-      return next;
-    });
+    const audio = (window as any).backgroundAudio as HTMLAudioElement | undefined;
+    if (!musicOn) {
+      // Ativa e tenta tocar imediatamente, sincronicamente
+      if (audio) audio.play().catch(() => {});
+      window.dispatchEvent(new CustomEvent('music-toggle', { detail: true }));
+      setMusicOn(true);
+    } else {
+      if (audio) audio.pause();
+      window.dispatchEvent(new CustomEvent('music-toggle', { detail: false }));
+      setMusicOn(false);
+    }
   }
 
   return (
