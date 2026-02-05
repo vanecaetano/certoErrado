@@ -40,6 +40,7 @@ export interface GameConfig {
     subjectId: number;
     questionCount: number;
   }[];
+  allQuestions?: any[];
 }
 
 export interface GameState {

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
 import { useGameStore } from '@/store/gameStore';
 import { dbService } from '@/services/database';
 import { Button } from '@/components/ui/Button';
@@ -16,6 +16,9 @@ export function ResultsPage() {
 
   const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
 
+  // Se houver dados da sessão atual, use-os para o gráfico e placar
+  let totalQuestions = questions.length;
+  let sessionScore = score;
   useEffect(() => {
     const loadPerformanceData = async () => {
       const data: PerformanceData[] = [];
@@ -38,118 +41,78 @@ export function ResultsPage() {
     loadPerformanceData();
   }, [config]);
 
-  const totalQuestions = questions.length;
-  const accuracy = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
+  let sessionAccuracy = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
+
+  // Se não houver dados da sessão atual, use o agregado do banco
+  if (totalQuestions === 0 && performanceData.length > 0) {
+    totalQuestions = performanceData.reduce((sum, d) => sum + d.totalQuestions, 0);
+    sessionScore = performanceData.reduce((sum, d) => sum + d.averageScore, 0);
+    sessionAccuracy = totalQuestions > 0 ? (sessionScore / totalQuestions) * 100 : 0;
+  }
 
   const chartData = performanceData.map((d) => ({
     name: d.subjectName,
-    acertos: d.correctAnswers,
-    erros: d.totalQuestions - d.correctAnswers,
-    precisão: Number(d.accuracy.toFixed(1)),
+    Acertos: d.correctAnswers,
+    Erros: d.totalQuestions - d.correctAnswers,
+    Total: d.totalQuestions,
+    Precisao: Number(d.accuracy.toFixed(1)),
   }));
 
-  const pieData = performanceData.map((d) => ({
-    name: d.subjectName,
-    value: d.totalQuestions,
-  }));
+  // Paleta moderna e vibrante
+  const MODERN_COLORS = [
+    '#0ea5e9', // azul
+    '#22c55e', // verde
+    '#f43f5e', // rosa
+    '#f59e42', // laranja
+    '#a21caf', // roxo
+    '#fbbf24', // amarelo
+  ];
 
   useEffect(() => {
     resetGame();
   }, [resetGame]);
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="text-center mb-8">
-        <Trophy className="w-16 h-16 mx-auto mb-4 text-primary-600 dark:text-primary-400" />
-        <h2 className="text-3xl font-bold mb-2">Resultados do Jogo</h2>
-        <div className="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">
-          {score} / {totalQuestions}
+    <div className="container mx-auto px-4 py-12 max-w-3xl">
+      <Card className="mb-8 text-center bg-gradient-to-br from-primary-600/90 to-indigo-700/90 text-white shadow-2xl border-0">
+        <Trophy className="w-12 h-12 mx-auto text-yellow-400 mb-2 drop-shadow-lg" />
+        <h2 className="text-3xl font-bold mb-2 tracking-tight">Resultado Final</h2>
+        <div className="text-4xl font-extrabold text-yellow-400 mb-2 drop-shadow">{score} pontos</div>
+        <div className="text-lg text-white/80 mb-4">
+          Precisão geral: <span className="font-bold text-white">{sessionAccuracy.toFixed(1)}%</span>
         </div>
-        <p className="text-lg text-gray-600 dark:text-gray-400">
-          Precisão: {accuracy.toFixed(1)}%
-        </p>
+      </Card>
+
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 mb-8 border-0">
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart
+            data={chartData}
+            margin={{ top: 24, right: 24, left: 0, bottom: 8 }}
+            barCategoryGap={32}
+          >
+            <XAxis dataKey="name" tick={{ fontSize: 16, fontWeight: 700, fill: '#334155' }} axisLine={false} tickLine={false} />
+            <YAxis tick={{ fontSize: 16, fill: '#64748b' }} axisLine={false} tickLine={false} />
+            <Tooltip
+              contentStyle={{ background: '#18181b', borderRadius: 12, color: '#fff', border: 'none' }}
+              labelStyle={{ color: '#fff', fontWeight: 700 }}
+              itemStyle={{ fontWeight: 600 }}
+              cursor={{ fill: '#6366f1', opacity: 0.08 }}
+            />
+            <Legend wrapperStyle={{ fontWeight: 700, fontSize: 16 }} />
+            <Bar dataKey="Acertos" radius={[8,8,0,0]}>
+              {chartData.map((entry, idx) => (
+                <Cell key={`cell-acertos-${idx}`} fill={MODERN_COLORS[idx % MODERN_COLORS.length]} />
+              ))}
+            </Bar>
+            <Bar dataKey="Erros" radius={[8,8,0,0]} fill="#ef4444" />
+          </BarChart>
+        </ResponsiveContainer>
       </div>
 
-      {performanceData.length > 0 && (
-        <>
-          <Card className="mb-6">
-            <h3 className="text-xl font-semibold mb-4">Performance por Assunto</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="acertos" fill="#22c55e" name="Acertos" />
-                <Bar dataKey="erros" fill="#ef4444" name="Erros" />
-              </BarChart>
-            </ResponsiveContainer>
-          </Card>
-
-          <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <Card>
-              <h3 className="text-xl font-semibold mb-4">Precisão por Assunto</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <BarChart data={chartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
-                  <Tooltip />
-                  <Bar dataKey="precisão" fill="#0ea5e9" name="Precisão (%)" />
-                </BarChart>
-              </ResponsiveContainer>
-            </Card>
-
-            <Card>
-              <h3 className="text-xl font-semibold mb-4">Distribuição de Perguntas</h3>
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    outerRadius={80}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {pieData.map((_, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            </Card>
-          </div>
-
-          <Card className="mb-6">
-            <h3 className="text-xl font-semibold mb-4">Estatísticas Detalhadas</h3>
-            <div className="grid md:grid-cols-2 gap-4">
-              {performanceData.map((data) => (
-                <div
-                  key={data.subjectId}
-                  className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg"
-                >
-                  <h4 className="font-semibold mb-2">{data.subjectName}</h4>
-                  <div className="space-y-1 text-sm">
-                    <p>Total de perguntas: {data.totalQuestions}</p>
-                    <p>Acertos: {data.correctAnswers}</p>
-                    <p>Precisão: {data.accuracy.toFixed(1)}%</p>
-                    <p>Pontuação média: {data.averageScore.toFixed(1)}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </>
-      )}
-
-      <div className="flex justify-center gap-4">
-        <Button onClick={() => navigate('/')}>
-          <Home className="w-4 h-4 mr-2 inline" />
-          Voltar ao Início
+      <div className="flex justify-center">
+        <Button size="lg" onClick={() => navigate('/')}
+          className="bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-xl border-0">
+          <Home className="w-5 h-5 mr-2 inline" /> Voltar ao Início
         </Button>
       </div>
     </div>

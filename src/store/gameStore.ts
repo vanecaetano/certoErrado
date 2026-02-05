@@ -24,31 +24,31 @@ const initialState: GameState = {
 export const useGameStore = create<GameStore>((set, get) => ({
   ...initialState,
 
-  initializeGame: async (config: GameConfig) => {
-    const allQuestions: GameQuestion[] = [];
-
-    // Coletar perguntas de cada assunto
-    for (const { subjectId, questionCount } of config.subjects) {
-      const questions = await dbService.getRandomQuestionsBySubject(subjectId, questionCount);
-      
-      for (const question of questions) {
-        const answers = await dbService.getAnswersByQuestionId(question.id);
-        // Embaralhar respostas
+  initializeGame: async (config: any) => {
+    let questions: GameQuestion[] = [];
+    if (config.allQuestions) {
+      // Recebeu todas as perguntas já embaralhadas
+      for (const q of config.allQuestions) {
+        const answers = await dbService.getAnswersByQuestionId(q.id);
         const shuffledAnswers = [...answers].sort(() => Math.random() - 0.5);
-        
-        allQuestions.push({
-          question,
-          answers: shuffledAnswers,
-        });
+        questions.push({ question: q, answers: shuffledAnswers });
       }
+    } else {
+      // Modo antigo: buscar por assunto
+      for (const { subjectId, questionCount } of config.subjects) {
+        const qs = await dbService.getRandomQuestionsBySubject(subjectId, questionCount);
+        for (const question of qs) {
+          const answers = await dbService.getAnswersByQuestionId(question.id);
+          const shuffledAnswers = [...answers].sort(() => Math.random() - 0.5);
+          questions.push({ question, answers: shuffledAnswers });
+        }
+      }
+      // Embaralhar todas as perguntas
+      questions = questions.sort(() => Math.random() - 0.5);
     }
-
-    // Embaralhar todas as perguntas
-    const shuffledQuestions = allQuestions.sort(() => Math.random() - 0.5);
-
     set({
       ...initialState,
-      questions: shuffledQuestions,
+      questions,
       config,
     });
   },

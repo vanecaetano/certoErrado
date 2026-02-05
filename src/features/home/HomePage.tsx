@@ -6,19 +6,22 @@ import { Card } from '@/components/ui/Card';
 import { dbService } from '@/services/database';
 import { useGameStore } from '@/store/gameStore';
 import type { Subject } from '@/types';
+import startSound from '@/assets/start.mp3';
 
 export function HomePage() {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<Subject[]>([]);
-  const [selectedSubjects, setSelectedSubjects] = useState<Set<number>>(new Set());
+  const [selectedSubjects, setSelectedSubjects] = useState<number[]>([]);
   const initializeGame = useGameStore((state) => state.initializeGame);
 
   useEffect(() => {
     const loadSubjects = async () => {
       const allSubjects = await dbService.getAllSubjectsAsync();
-      setSubjects(allSubjects);
+      // Filtrar para não exibir o assunto "Modo Relâmpago"
+      const filtered = allSubjects.filter(s => s.name.trim().toLowerCase() !== 'modo relâmpago');
+      setSubjects(filtered);
 
-      if (allSubjects.length === 0) {
+      if (filtered.length === 0) {
         navigate('/settings');
       }
     };
@@ -26,33 +29,39 @@ export function HomePage() {
   }, [navigate]);
 
   const handleSubjectToggle = (subjectId: number) => {
-    const newSelection = new Set(selectedSubjects);
-    if (newSelection.has(subjectId)) {
-      newSelection.delete(subjectId);
-    } else {
-      newSelection.add(subjectId);
-    }
-    setSelectedSubjects(newSelection);
+    setSelectedSubjects((prev) =>
+      prev.includes(subjectId)
+        ? prev.filter((id) => id !== subjectId)
+        : [...prev, subjectId]
+    );
   };
 
   const handleStartGame = async () => {
-    if (selectedSubjects.size === 0) {
+    if (selectedSubjects.length === 0) {
       alert('Selecione pelo menos um assunto para começar!');
       return;
     }
+    // Tocar som de início
+    const audio = new Audio(startSound);
+    audio.play().catch(() => {});
 
+    // Buscar todas as perguntas de todos os assuntos selecionados
+    let allQuestions: any[] = [];
+    for (const subjectId of selectedSubjects) {
+      const questions = await dbService.getRandomQuestionsBySubject(subjectId, 1000); // 1000 = todas
+      allQuestions = allQuestions.concat(questions.map(q => ({ ...q, subjectId })));
+    }
+    // Embaralhar todas as perguntas
+    allQuestions = allQuestions.sort(() => Math.random() - 0.5);
+
+    // Montar config para o gameStore
     const config = {
-      subjects: Array.from(selectedSubjects).map((subjectId) => {
-        const subject = subjects.find((s) => s.id === subjectId);
-        return {
-          subjectId,
-          questionCount: subject?.questionCount || 10,
-        };
-      }),
+      subjects: selectedSubjects.map((subjectId) => ({ subjectId, questionCount: 0 })),
+      allQuestions,
     };
 
     await initializeGame(config);
-    setTimeout(() => navigate('/game'), 100);
+    navigate('/game');
   };
 
   if (subjects.length === 0) {
@@ -75,13 +84,18 @@ export function HomePage() {
 
       <div className="grid gap-4 mb-6">
         {subjects.map((subject) => {
-          const isSelected = selectedSubjects.has(subject.id);
+          const isSelected = selectedSubjects.includes(subject.id);
 
           return (
             <Card
               key={subject.id}
               onClick={() => handleSubjectToggle(subject.id)}
-              className={isSelected ? 'ring-2 ring-primary-500' : ''}
+              className={
+                `transition-all duration-150 ` +
+                (isSelected
+                  ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/20 '
+                  : 'hover:ring-2 hover:ring-primary-300 hover:bg-primary-100/40 dark:hover:bg-primary-900/10')
+              }
             >
               <div className="flex items-center justify-between">
                 <div className="flex-1">
@@ -101,7 +115,7 @@ export function HomePage() {
           <Settings className="w-4 h-4 mr-2 inline" />
           Configurações
         </Button>
-        <Button onClick={handleStartGame} disabled={selectedSubjects.size === 0}>
+        <Button onClick={handleStartGame} disabled={selectedSubjects.length === 0}>
           <Play className="w-4 h-4 mr-2 inline" />
           Iniciar Jogo
         </Button>

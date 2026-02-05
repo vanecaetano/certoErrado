@@ -1,10 +1,15 @@
-import { Moon, Sun } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Moon, Sun, Volume2, VolumeX } from 'lucide-react';
 import { useThemeStore } from '@/store/themeStore';
 import logoUrl from '@/assets/logo.svg';
 import { Link } from 'react-router-dom';
 
 export function Header() {
   const { theme, toggleTheme } = useThemeStore();
+  const [musicOn, setMusicOn] = useState(true);
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent('music-toggle', { detail: musicOn }));
+  }, [musicOn]);
 
   return (
     <header className="app-header sticky top-0 z-50">
@@ -31,6 +36,13 @@ export function Header() {
         <div className="hidden md:flex items-center gap-4">
           <Link to="/privacy" className="text-sm text-gray-600 dark:text-gray-300 hover:underline">Privacidade</Link>
           <Link to="/settings" className="text-sm text-gray-600 dark:text-gray-300 hover:underline">Configurações</Link>
+          <button
+            onClick={() => setMusicOn((v) => !v)}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            aria-label={musicOn ? 'Desligar música' : 'Ligar música'}
+          >
+            {musicOn ? <Volume2 className="w-6 h-6" /> : <VolumeX className="w-6 h-6" />}
+          </button>
           <button
             onClick={toggleTheme}
             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"

@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/store/gameStore';
 import { dbService } from '@/services/database';
 import { audioService } from '@/services/audio';
-// ...existing code...
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { CheckCircle2, XCircle, Hourglass, LogOut } from 'lucide-react';
+import clockMusic from '@/assets/clock.mp3';
 
 export function GamePage() {
+  const [clockAudio, setClockAudio] = useState<HTMLAudioElement | null>(null);
   const navigate = useNavigate();
   const {
     questions,
@@ -28,8 +29,37 @@ export function GamePage() {
   const [showLoading, setShowLoading] = useState(false);
   const [motivational, setMotivational] = useState<string | null>(null);
   const [showAddMorePrompt, setShowAddMorePrompt] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(30);
-  // ...existing code...
+  const [timeRemaining, setTimeRemaining] = useState(15);
+
+  useEffect(() => {
+    const audio = new Audio(clockMusic);
+    audio.loop = true;
+    audio.volume = 0.15;
+    let enabled = true;
+    audio.play().catch(() => {});
+    setClockAudio(audio);
+    const toggle = (e: any) => {
+      enabled = e.detail;
+      if (enabled && !isAnswered) audio?.play().catch(() => {});
+      else audio?.pause();
+    };
+    window.addEventListener('music-toggle', toggle);
+    return () => {
+      window.removeEventListener('music-toggle', toggle);
+      audio?.pause();
+      setClockAudio(null);
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (!clockAudio) return;
+    if (isAnswered || timeRemaining > 5) {
+      clockAudio.pause();
+    } else if (timeRemaining <= 5) {
+      clockAudio.play().catch(() => {});
+    }
+  }, [isAnswered, clockAudio, timeRemaining]);
 
   useEffect(() => {
     if (questions.length === 0) {
@@ -40,7 +70,7 @@ export function GamePage() {
 
   // Timer effect
   useEffect(() => {
-    setTimeRemaining(30); // Reset timer when current question changes
+    setTimeRemaining(15); // Reset timer quando muda a pergunta
   }, [currentQuestionIndex]);
 
   useEffect(() => {
@@ -53,7 +83,7 @@ export function GamePage() {
         if (prev <= 1) {
           audioService.playWrong(); // Play fail sound
           nextQuestion(); // Go to next question
-          return 30; // Reset for next question
+          return 15; // Reset for next question
         }
         return prev - 1;
       });
@@ -194,6 +224,11 @@ export function GamePage() {
                   {timeRemaining}
                 </div>
                 <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">seg</div>
+                {/* Pontuação abaixo do cronômetro */}
+                <div className="mt-6 flex flex-col items-center">
+                  <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">{score}</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">Pontos</div>
+                </div>
               </div>
             </div>
 
@@ -282,9 +317,12 @@ export function GamePage() {
             <div className="text-sm text-gray-600 dark:text-gray-300">Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.</div>
           </div>
           <div className="flex justify-center gap-3">
-            <Button variant="primary" onClick={() => {
+            <Button variant="primary" onClick={async () => {
               setShowAddMorePrompt(false);
               // Aqui você pode implementar outra ação, se desejar
+              // Se não adicionar mais perguntas, finalizar o jogo corretamente
+              await finishGame();
+              navigate('/results');
             }}>
               Adicionar +10 perguntas
             </Button>
