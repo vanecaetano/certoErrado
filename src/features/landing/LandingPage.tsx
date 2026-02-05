@@ -99,7 +99,7 @@ export function LandingPage() {
           <div>
             <h3 className="text-xl font-semibold mb-2">Sistema de Pontos</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Ganhe 10 pontos por acerto! A cada 10 perguntas respondidas, desbloqueie mais 10 perguntas!
+              Ganhe 10 pontos por acerto! Estude facilmente para provas ou apenas divirta-se com seus amigos!
             </p>
           </div>
         </Card>

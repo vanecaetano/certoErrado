@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/store/gameStore';
 import { dbService } from '@/services/database';
 import { audioService } from '@/services/audio';
-import FullscreenAd from '@/components/layout/FullscreenAd';
+// ...existing code...
 import LoadingOverlay from '@/components/ui/LoadingOverlay';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -26,12 +26,10 @@ export function GamePage() {
 
   const [pulseClass, setPulseClass] = useState<string>('');
   const [showLoading, setShowLoading] = useState(false);
-  const [showInterstitial, setShowInterstitial] = useState(false);
   const [motivational, setMotivational] = useState<string | null>(null);
   const [showAddMorePrompt, setShowAddMorePrompt] = useState(false);
-  const [pendingAddSubject, setPendingAddSubject] = useState<number | null>(null);
   const [timeRemaining, setTimeRemaining] = useState(30);
-  const addMoreQuestions = useGameStore((s) => (s as any).addMoreQuestions as (subjectId: number, count: number) => Promise<void>);
+  // ...existing code...
 
   useEffect(() => {
     if (questions.length === 0) {
@@ -91,52 +89,43 @@ export function GamePage() {
       const resultTimeout = setTimeout(() => {
         setPulseClass('');
         setMotivational(null);
-        // Check for interstitial ad every 10 answered questions
-        const answeredIndex = currentQuestionIndex + 1; // 1-based
-        const shouldShowInterstitial = answeredIndex % 10 === 0 && currentQuestionIndex < questions.length - 1;
-        if (shouldShowInterstitial) {
-          setShowInterstitial(true);
-        } else {
-          // If we're at the last question, offer to add more (watch ad to get +10)
-          if (currentQuestionIndex >= questions.length - 1) {
-            // Check if there are remaining questions for current subject
-            (async () => {
-              try {
-                const subjectId = currentQuestion.question.subjectId;
-                const allForSubject = await dbService.getRandomQuestionsBySubject(subjectId, 1000);
-                const existingIds = new Set(questions.map(q => q.question.id));
-                const remaining = allForSubject.filter(q => !existingIds.has(q.id));
-                if (remaining.length > 0) {
-                  setPendingAddSubject(subjectId);
-                  setShowAddMorePrompt(true);
-                } else {
-                  await finishGame();
-                  navigate('/results');
-                }
-              } catch (e) {
-                await finishGame();
-                navigate('/results');
-              }
-            })();
-          } else {
-            // show small loading to build expectation
-            setShowLoading(true);
-            setTimeout(async () => {
-              setShowLoading(false);
-              if (currentQuestionIndex < questions.length - 1) {
-                nextQuestion();
+        // Se for a última pergunta, finalizar o jogo
+        if (currentQuestionIndex >= questions.length - 1) {
+          (async () => {
+            try {
+              const subjectId = currentQuestion.question.subjectId;
+              const allForSubject = await dbService.getRandomQuestionsBySubject(subjectId, 1000);
+              const existingIds = new Set(questions.map(q => q.question.id));
+              const remaining = allForSubject.filter(q => !existingIds.has(q.id));
+              if (remaining.length > 0) {
+                setShowAddMorePrompt(true);
               } else {
                 await finishGame();
                 navigate('/results');
               }
-            }, 500);
-          }
+            } catch (e) {
+              await finishGame();
+              navigate('/results');
+            }
+          })();
+        } else {
+          // show small loading to build expectation
+          setShowLoading(true);
+          setTimeout(async () => {
+            setShowLoading(false);
+            if (currentQuestionIndex < questions.length - 1) {
+              nextQuestion();
+            } else {
+              await finishGame();
+              navigate('/results');
+            }
+          }, 500);
         }
       }, 1200);
 
-      return () => clearTimeout(resultTimeout);
-    }
-  }, [isAnswered, isCorrect, currentQuestionIndex, questions.length, nextQuestion, finishGame, navigate]);
+    return () => clearTimeout(resultTimeout);
+  }
+}, [isAnswered, isCorrect, currentQuestionIndex, questions.length, nextQuestion, finishGame, navigate]);
 
   if (questions.length === 0) {
     return null;
@@ -285,43 +274,7 @@ export function GamePage() {
 
       {showLoading && <LoadingOverlay />}
 
-      {showInterstitial && (
-        <FullscreenAd
-          onClose={async () => {
-            setShowInterstitial(false);
-            // if ad was requested to add more questions, perform that action
-            if (pendingAddSubject) {
-              try {
-                await addMoreQuestions(pendingAddSubject, 10);
-              } catch (e) {
-                // ignore errors
-              }
-              setPendingAddSubject(null);
-              setShowLoading(true);
-              setTimeout(() => {
-                setShowLoading(false);
-                // move to next question (newly added)
-                if (currentQuestionIndex < questions.length - 1) {
-                  nextQuestion();
-                }
-              }, 500);
-              return;
-            }
-
-            // otherwise act as a normal interstitial
-            setShowLoading(true);
-            setTimeout(async () => {
-              setShowLoading(false);
-              if (currentQuestionIndex < questions.length - 1) {
-                nextQuestion();
-              } else {
-                await finishGame();
-                navigate('/results');
-              }
-            }, 500);
-          }}
-        />
-      )}
+      {/* Anúncios intersticiais removidos. */}
       {showAddMorePrompt && (
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 w-11/12 max-w-2xl">
           <div className="mb-3 text-center">
@@ -330,11 +283,10 @@ export function GamePage() {
           </div>
           <div className="flex justify-center gap-3">
             <Button variant="primary" onClick={() => {
-              // start interstitial then add more on close
               setShowAddMorePrompt(false);
-              setShowInterstitial(true);
+              // Aqui você pode implementar outra ação, se desejar
             }}>
-              Assistir anúncio e adicionar +10
+              Adicionar +10 perguntas
             </Button>
             <Button variant="secondary" onClick={async () => {
               setShowAddMorePrompt(false);

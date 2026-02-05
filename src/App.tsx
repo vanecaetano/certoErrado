@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Header } from '@/components/layout/Header';
-import { AdSpace } from '@/components/layout/AdSpace';
+// ...existing code...
 import { HomePage } from '@/features/home/HomePage';
 import { LandingPage } from '@/features/landing/LandingPage';
 import { SettingsPage } from '@/features/settings/SettingsPage';
@@ -49,7 +49,7 @@ function App() {
               <Route path="/privacy" element={<PrivacyPage />} />
             </Routes>
           </main>
-          <AdSpace position="bottom" />
+          {/* AdSpace removido. Anúncios agora são gerenciados pelo Google AdSense global. */}
         </div>
       </BrowserRouter>
     </QueryClientProvider>
