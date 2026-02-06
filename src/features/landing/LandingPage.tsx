@@ -136,7 +136,7 @@ export function LandingPage() {
           <div>
             <h3 className="text-xl font-semibold mb-2">Assuntos do Seu Jeito</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos. Sem limites, sem restrições!
+              Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos!
             </p>
           </div>
         </Card>
@@ -166,7 +166,7 @@ export function LandingPage() {
           <div>
             <h3 className="text-xl font-semibold mb-2">Gratuito & Seguro</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              Totalmente gratuito! Mantido por anúncios discretos. Seus dados são protegidos e armazenados apenas no seu navegador.
+              Totalmente gratuito! Seus dados são protegidos e armazenados apenas no seu navegador.
             </p>
           </div>
         </Card>

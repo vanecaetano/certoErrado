@@ -30,7 +30,7 @@ export function PrivacyPage() {
 
       <h2 className="font-semibold mt-4">Contato</h2>
       <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
-        Para questões sobre privacidade, envie email para: suporte@seudominio.com
+        Para questões sobre privacidade, envie email para: vwcodedev@gmail.com
       </p>
       <div className="flex gap-2 mb-4">
         <Button variant="secondary" onClick={() => navigate(-1)}>Voltar</Button>

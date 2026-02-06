@@ -91,47 +91,55 @@ export function HomePage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h2 className="text-3xl font-bold mb-6 text-center">Selecione os Assuntos</h2>
+    <>
+      <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <h2 className="text-3xl font-bold mb-6 text-center">Selecione os Assuntos</h2>
 
-      <div className="grid gap-4 mb-6">
-        {subjects.map((subject) => {
-          const isSelected = selectedSubjects.includes(subject.id);
-
-          return (
-            <Card
-              key={subject.id}
-              onClick={() => handleSubjectToggle(subject.id)}
-              className={
-                `transition-all duration-150 ` +
-                (isSelected
-                  ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/20 '
-                  : 'hover:ring-2 hover:ring-primary-300 hover:bg-primary-100/40 dark:hover:bg-primary-900/10')
-              }
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold mb-2">{subject.name}</h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
-                    {subject.questionCount} perguntas disponíveis
-                  </p>
+        <div className="grid gap-4 mb-6">
+          {subjects.map((subject) => {
+            const isSelected = selectedSubjects.includes(subject.id);
+            return (
+              <Card
+                key={subject.id}
+                className={
+                  `transition-all duration-150 cursor-pointer ` +
+                  (isSelected
+                    ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/20 '
+                    : 'hover:ring-2 hover:ring-primary-300 hover:bg-primary-100/40 dark:hover:bg-primary-900/10')
+                }
+                onClick={() => handleSubjectToggle(subject.id)}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold mb-2">{subject.name}</h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      {subject.questionCount} perguntas disponíveis
+                    </p>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    readOnly
+                    className="w-5 h-5 accent-primary-600 ml-2 pointer-events-none"
+                    aria-label={`Selecionar assunto ${subject.name}`}
+                  />
                 </div>
-              </div>
-            </Card>
-          );
-        })}
-      </div>
+              </Card>
+            );
+          })}
+        </div>
 
-      <div className="flex justify-center gap-4">
-        <Button variant="secondary" onClick={() => navigate('/settings')}>
-          <Settings className="w-4 h-4 mr-2 inline" />
-          Configurações
-        </Button>
-        <Button onClick={handleStartGame} disabled={selectedSubjects.length === 0}>
-          <Play className="w-4 h-4 mr-2 inline" />
-          Iniciar Jogo
-        </Button>
+        <div className="flex justify-center gap-4">
+          <Button variant="secondary" onClick={() => navigate('/settings')}>
+            <Settings className="w-4 h-4 mr-2 inline" />
+            Configurações
+          </Button>
+          <Button onClick={handleStartGame} disabled={selectedSubjects.length === 0}>
+            <Play className="w-4 h-4 mr-2 inline" />
+            Iniciar Jogo
+          </Button>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
