@@ -105,15 +105,9 @@ export function HomePage() {
                   `transition-all duration-150 cursor-pointer ` +
                   (isSelected
                     ? 'ring-2 ring-primary-500 bg-primary-50 dark:bg-primary-900/20 '
-                    : '')
+                    : 'hover:ring-2 hover:ring-primary-300 hover:bg-primary-100/40 dark:hover:bg-primary-900/10')
                 }
                 onClick={() => handleSubjectToggle(subject.id)}
-                onMouseEnter={e => {
-                  e.currentTarget.classList.add('hover:ring-2', 'hover:ring-primary-300', 'hover:bg-primary-100/40', 'dark:hover:bg-primary-900/10');
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.classList.remove('hover:ring-2', 'hover:ring-primary-300', 'hover:bg-primary-100/40', 'dark:hover:bg-primary-900/10');
-                }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
