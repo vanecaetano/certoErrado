@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/store/gameStore';
 import { dbService } from '@/services/database';
@@ -10,6 +11,7 @@ import { CheckCircle2, XCircle, Hourglass, LogOut } from 'lucide-react';
 import clockMusic from '@/assets/clock.mp3';
 
 export function GamePage() {
+    const { t } = useTranslation();
   const [clockAudio, setClockAudio] = useState<HTMLAudioElement | null>(null);
   const navigate = useNavigate();
   const {
@@ -119,18 +121,18 @@ export function GamePage() {
 
         // dynamic motivational messages
         const messages = [
-          'Excelente! Continue assim!',
-          'Mandou bem — foco e vitória!',
-          'Ótimo acerto! Você está afiado!',
-          'Acertou! Mantenha o ritmo!',
-          'Boaa! Mais uma vitória!',
+          t('Excelente! Continue assim!'),
+          t('Mandou bem — foco e vitória!'),
+          t('Ótimo acerto! Você está afiado!'),
+          t('Acertou! Mantenha o ritmo!'),
+          t('Boaa! Mais uma vitória!'),
         ];
         setMotivational(messages[Math.floor(Math.random() * messages.length)]);
       } else {
         setPulseClass('animate-pulse-red');
         audioService.playWrong();
         audioService.vibrate(200);
-        setMotivational('Não desista — tente a próxima!');
+        setMotivational(t('Não desista — tente a próxima!'));
       }
 
       // show result briefly then loading
@@ -196,24 +198,24 @@ export function GamePage() {
                 />
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                Pergunta {currentQuestionIndex + 1} de {questions.length}
+                {t('Pergunta')} {currentQuestionIndex + 1} {t('de')} {questions.length}
               </p>
             </div>
             <div className="text-right flex items-center gap-3">
               <Button variant="secondary" size="sm" onClick={() => {
-                if (confirm('Deseja realmente sair do jogo? Seu progresso atual será perdido.')) {
+                if (confirm(t('Deseja realmente sair do jogo? Seu progresso atual será perdido.'))) {
                   resetGame();
                   navigate('/');
                 }
               }}>
                 <LogOut className="w-4 h-4 mr-2 inline" />
-                Sair
+                {t('Sair')}
               </Button>
               <div>
                 <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">
                   {score}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">Pontos</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400">{t('Pontos')}</div>
               </div>
             </div>
           </div>
@@ -241,11 +243,11 @@ export function GamePage() {
                 }`}>
                   {timeRemaining}
                 </div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">seg</div>
+                <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">{t('seg')}</div>
                 {/* Pontuação abaixo do cronômetro */}
                 <div className="mt-6 flex flex-col items-center">
                   <div className="text-2xl font-bold text-primary-600 dark:text-primary-400">{score}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Pontos</div>
+                  <div className="text-sm text-gray-600 dark:text-gray-400">{t('Pontos')}</div>
                 </div>
               </div>
             </div>
@@ -307,7 +309,7 @@ export function GamePage() {
                   }`}>
                     {timeRemaining}
                   </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400">seg</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400">{t('seg')}</div>
                 </div>
               </div>
             </Card>
@@ -331,8 +333,8 @@ export function GamePage() {
       {showAddMorePrompt && (
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 w-11/12 max-w-2xl">
           <div className="mb-3 text-center">
-            <div className="font-semibold">Deseja continuar?</div>
-            <div className="text-sm text-gray-600 dark:text-gray-300">Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.</div>
+            <div className="font-semibold">{t('Deseja continuar?')}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">{t('Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.')}</div>
           </div>
           <div className="flex justify-center gap-3">
             <Button variant="primary" onClick={async () => {
@@ -342,14 +344,14 @@ export function GamePage() {
               await finishGame();
               navigate('/results');
             }}>
-              Adicionar +10 perguntas
+              {t('Adicionar +10 perguntas')}
             </Button>
             <Button variant="secondary" onClick={async () => {
               setShowAddMorePrompt(false);
               await finishGame();
               navigate('/results');
             }}>
-              Finalizar jogo
+              {t('Finalizar jogo')}
             </Button>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Plus, Trash2, Loader2, ArrowLeft, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
@@ -9,6 +10,7 @@ import { aiService } from '@/services/aiService';
 import type { Subject } from '@/types';
 
 export function SettingsPage() {
+    const { t, i18n } = useTranslation();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [newSubject, setNewSubject] = useState('');
   const [loading, setLoading] = useState<string | null>(null);
@@ -29,7 +31,7 @@ export function SettingsPage() {
 
   const handleAddSubject = async () => {
     if (!newSubject.trim()) {
-      setError('Por favor, insira um nome para o assunto');
+      setError(t('Por favor, insira um nome para o assunto'));
       return;
     }
 
@@ -43,7 +45,7 @@ export function SettingsPage() {
       await loadSubjects();
       setNewSubject('');
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Erro ao gerar perguntas');
+      setError(err instanceof Error ? err.message : t('Erro ao gerar perguntas'));
       console.error('Erro:', err);
     } finally {
       setLoading(null);
@@ -51,7 +53,7 @@ export function SettingsPage() {
   };
 
   const handleDeleteSubject = async (id: number) => {
-    if (confirm('Tem certeza que deseja excluir este assunto e todas as suas perguntas?')) {
+    if (confirm(t('Tem certeza que deseja excluir este assunto e todas as suas perguntas?'))) {
       await dbService.deleteSubject(id);
       await loadSubjects();
     }
@@ -59,7 +61,7 @@ export function SettingsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h2 className="text-3xl font-bold mb-6">Configurações de Assuntos</h2>
+      <h2 className="text-3xl font-bold mb-6">{t('Configurações de Assuntos')}</h2>
       {/* Botão Iniciar Jogo acima do card de adicionar assunto */}
       {subjects.length > 0 && (
         <div className="mb-6 flex justify-end">
@@ -69,7 +71,7 @@ export function SettingsPage() {
             onClick={() => navigate('/play')}
           >
             <Play className="w-5 h-5 mr-2 inline" />
-            Iniciar Jogo
+            {t('Iniciar Jogo')}
           </Button>
         </div>
       )}
@@ -77,16 +79,16 @@ export function SettingsPage() {
         <div className="mb-4">
           <Button variant="secondary" size="sm" onClick={() => navigate('/') }>
             <ArrowLeft className="w-4 h-4 mr-2 inline" />
-            Voltar
+            {t('Voltar')}
           </Button>
         </div>
-        <h3 className="text-xl font-semibold mb-4">Adicionar Novo Assunto</h3>
+        <h3 className="text-xl font-semibold mb-4">{t('Adicionar Novo Assunto')}</h3>
         <div className="flex gap-4 items-end">
           <Input
-            label="Nome do Assunto"
+            label={t('Nome do Assunto')}
             value={newSubject}
             onChange={(e) => setNewSubject(e.target.value)}
-            placeholder="Ex: Filmes, Ciências, Esportes..."
+            placeholder={t('Ex: Filmes, Ciências, Esportes...')}
             onKeyPress={(e) => e.key === 'Enter' && handleAddSubject()}
             disabled={!!loading}
           />
@@ -97,12 +99,12 @@ export function SettingsPage() {
             {loading === newSubject ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin inline" />
-                Gerando...
+                {t('Gerando...')}
               </>
             ) : (
               <>
                 <Plus className="w-4 h-4 mr-2 inline" />
-                Adicionar
+                {t('Adicionar')}
               </>
             )}
           </Button>
@@ -111,17 +113,16 @@ export function SettingsPage() {
           <div className="text-red-600 mt-2 text-sm">{error}</div>
         )}
         <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-          Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA.
-          Isso pode levar alguns minutos.
+          {t('Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.')}
         </p>
       </Card>
 
       <div>
-        <h3 className="text-xl font-semibold mb-4">Assuntos Cadastrados</h3>
+        <h3 className="text-xl font-semibold mb-4">{t('Assuntos Cadastrados')}</h3>
         {subjects.length === 0 ? (
           <Card>
             <p className="text-gray-600 dark:text-gray-400 text-center py-8">
-              Nenhum assunto cadastrado. Adicione um assunto para começar!
+              {t('Nenhum assunto cadastrado. Adicione um assunto para começar!')}
             </p>
           </Card>
         ) : (
@@ -134,16 +135,16 @@ export function SettingsPage() {
                     <div className="flex-1">
                       <h4 className="text-lg font-semibold mb-2">{subject.name}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                        {subject.questionCount} perguntas disponíveis
+                        {t('perguntas disponíveis', { count: subject.questionCount })}
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
-                        Criado em: {new Date(subject.createdAt).toLocaleDateString('pt-BR')}
+                        {t('Criado em')}: {new Date(subject.createdAt).toLocaleDateString(i18n.language === 'en' ? 'en-US' : i18n.language === 'es' ? 'es-ES' : i18n.language === 'fr' ? 'fr-FR' : i18n.language === 'de' ? 'de-DE' : 'pt-BR')}
                       </p>
                     </div>
                     <button
                       onClick={() => handleDeleteSubject(subject.id)}
                       className="p-2 text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 rounded transition-colors"
-                      aria-label="Excluir assunto"
+                      aria-label={t('Excluir assunto')}
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>

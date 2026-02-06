@@ -1,0 +1,595 @@
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+
+const resources = {
+  pt: {
+    translation: {
+      // Common
+      'Certo ou Errado?': 'Certo ou Errado?',
+      'Iniciar Jogo': 'Iniciar Jogo',
+      'Configurações': 'Configurações',
+      'Selecione os Assuntos': 'Selecione os Assuntos',
+      'perguntas disponíveis': '{{count}} perguntas disponíveis',
+      'Nenhum assunto cadastrado ainda.': 'Nenhum assunto cadastrado ainda.',
+      'Ir para Configurações': 'Ir para Configurações',
+      'Voltar': 'Voltar',
+      'Ir para Início': 'Ir para Início',
+      'Voltar ao Início': 'Voltar ao Início',
+      'Pontos': 'Pontos',
+      
+      // Navigation
+      'Landing Page': 'Landing Page',
+      'Home': 'Início',
+      'Game': 'Jogo',
+      'Results': 'Resultados',
+      'Settings': 'Configurações',
+      'Privacy': 'Privacidade',
+      'Privacidade': 'Privacidade',
+      
+      // Results Page
+      'Desempenho por Assunto': 'Desempenho por Assunto',
+      
+      // Privacy Page
+      'Política de Privacidade': 'Política de Privacidade',
+      'Esta aplicação utiliza cookies e serviços de terceiros (ex.: Google AdSense) para exibir anúncios e manter o serviço gratuito. As informações coletadas são limitadas ao necessário para veicular anúncios e melhorar a experiência do usuário.': 'Esta aplicação utiliza cookies e serviços de terceiros (ex.: Google AdSense) para exibir anúncios e manter o serviço gratuito. As informações coletadas são limitadas ao necessário para veicular anúncios e melhorar a experiência do usuário.',
+      'Consentimento': 'Consentimento',
+      'Seu consentimento é gerenciado através do Google CMP (Consent Management Platform). Você pode gerenciar suas preferências de consentimento a qualquer momento através da mensagem de consentimento do Google.': 'Seu consentimento é gerenciado através do Google CMP (Consent Management Platform). Você pode gerenciar suas preferências de consentimento a qualquer momento através da mensagem de consentimento do Google.',
+      'Dados coletados': 'Dados coletados',
+      'Podemos utilizar identificadores do navegador, preferências de exibição e dados anônimos agregados para otimizar anúncios. Nenhum dado pessoal sensível é coletado pelo aplicativo sem sua permissão.': 'Podemos utilizar identificadores do navegador, preferências de exibição e dados anônimos agregados para otimizar anúncios. Nenhum dado pessoal sensível é coletado pelo aplicativo sem sua permissão.',
+      'Contato': 'Contato',
+      'Para questões sobre privacidade, envie email para: vwcodedev@gmail.com': 'Para questões sobre privacidade, envie email para: vwcodedev@gmail.com',
+      
+      // Settings Page
+      'Configurações de Assuntos': 'Configurações de Assuntos',
+      'Adicionar Novo Assunto': 'Adicionar Novo Assunto',
+      'Nome do Assunto': 'Nome do Assunto',
+      'Ex: Filmes, Ciências, Esportes...': 'Ex: Filmes, Ciências, Esportes...',
+      'Gerando...': 'Gerando...',
+      'Adicionar': 'Adicionar',
+      'Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.': 'Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.',
+      'Assuntos Cadastrados': 'Assuntos Cadastrados',
+      'Nenhum assunto cadastrado. Adicione um assunto para começar!': 'Nenhum assunto cadastrado. Adicione um assunto para começar!',
+      'Criado em': 'Criado em',
+      'Excluir assunto': 'Excluir assunto',
+      
+      // Game Page
+      'Pergunta': 'Pergunta',
+      'de': 'de',
+      'Deseja realmente sair do jogo? Seu progresso atual será perdido.': 'Deseja realmente sair do jogo? Seu progresso atual será perdido.',
+      'Sair': 'Sair',
+      'seg': 'seg',
+      
+      // Landing Page
+      'O jogo inteligente que desafia seu conhecimento! 🎮': 'O jogo inteligente que desafia seu conhecimento! 🎮',
+      'Escolha entre qualquer assunto que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!': 'Escolha entre qualquer assunto que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!',
+      'Modo Relâmpago': 'Modo Relâmpago',
+      'Jogue agora com 30 perguntas gerais aleatórias! Rápido, desafiador e divertido.': 'Jogue agora com 30 perguntas gerais aleatórias! Rápido, desafiador e divertido.',
+      'Personalizado': 'Personalizado',
+      'Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.': 'Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.',
+      'Selecione seus assuntos favoritos e comece a jogar agora mesmo!': 'Selecione seus assuntos favoritos e comece a jogar agora mesmo!',
+      'Assuntos do Seu Jeito': 'Assuntos do Seu Jeito',
+      'Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos!': 'Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos!',
+      'Comece automaticamente com um assunto aleatório! Ideal para quando você quer jogar rápido sem escolher.': 'Comece automaticamente com um assunto aleatório! Ideal para quando você quer jogar rápido sem escolher.',
+      'Sistema de Pontos': 'Sistema de Pontos',
+      'Ganhe 10 pontos por acerto! Estude facilmente para provas ou apenas divirta-se com seus amigos!': 'Ganhe 10 pontos por acerto! Estude facilmente para provas ou apenas divirta-se com seus amigos!',
+      'Gratuito & Seguro': 'Gratuito & Seguro',
+      'Totalmente gratuito! Seus dados são protegidos e armazenados apenas no seu navegador.': 'Totalmente gratuito! Seus dados são protegidos e armazenados apenas no seu navegador.',
+      'Como Funciona': 'Como Funciona',
+      'Crie Qualquer Assunto': 'Crie Qualquer Assunto',
+      'Pense em um assunto que você adora: Filmes, Culinária, História da arte, Estrela de cinema favorita... e em segundos a IA cria perguntas incríveis sobre isso!': 'Pense em um assunto que você adora: Filmes, Culinária, História da arte, Estrela de cinema favorita... e em segundos a IA cria perguntas incríveis sobre isso!',
+      'Selecione & Jogue': 'Selecione & Jogue',
+      'Escolha seus assuntos e comece a jogar! Responda certo para ganhar pontos.': 'Escolha seus assuntos e comece a jogar! Responda certo para ganhar pontos.',
+      'Divirta-se e Compartilhe': 'Divirta-se e Compartilhe',
+      'Jogue sozinho ou desafie amigos! Compare pontuações, descubra curiosidades e torne cada rodada uma experiência divertida e social.': 'Jogue sozinho ou desafie amigos! Compare pontuações, descubra curiosidades e torne cada rodada uma experiência divertida e social.',
+      'Pronto para Começar?': 'Pronto para Começar?',
+      'Comece a jogar ou crie novos assuntos!': 'Comece a jogar ou crie novos assuntos!',
+      'Crie seus primeiros assuntos!': 'Crie seus primeiros assuntos!',
+      '🎮 Começar a Jogar': '🎮 Começar a Jogar',
+      '⚙️ Gerenciar Assuntos': '⚙️ Gerenciar Assuntos',
+      '⚙️ Criar Assuntos': '⚙️ Criar Assuntos',
+      
+      // Alerts
+      'Selecione pelo menos um assunto para começar!': 'Selecione pelo menos um assunto para começar!',
+      'O assunto Relâmpago não foi encontrado. Crie um assunto chamado "Modo Relâmpago" nas configurações.': 'O assunto Relâmpago não foi encontrado. Crie um assunto chamado "Modo Relâmpago" nas configurações.',
+      'O assunto Relâmpago não possui perguntas.': 'O assunto Relâmpago não possui perguntas.',
+      'Tem certeza que deseja excluir este assunto e todas as suas perguntas?': 'Tem certeza que deseja excluir este assunto e todas as suas perguntas?',
+      'Por favor, insira um nome para o assunto': 'Por favor, insira um nome para o assunto',
+      'Erro ao gerar perguntas': 'Erro ao gerar perguntas',
+      'Jogar': 'Jogar',
+      '⚡ Começar': '⚡ Começar',
+      '📚 Criar Assuntos': '📚 Criar Assuntos',
+      'Música On': 'Música On',
+      'Música Off': 'Música Off',
+      'Modo Claro': 'Modo Claro',
+      'Modo Escuro': 'Modo Escuro',
+      'Deseja continuar?': 'Deseja continuar?',
+      'Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.': 'Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.',
+      'Adicionar +10 perguntas': 'Adicionar +10 perguntas',
+      'Finalizar jogo': 'Finalizar jogo',
+      
+      // Mensagens motivacionais
+      'Excelente! Continue assim!': 'Excelente! Continue assim!',
+      'Mandou bem — foco e vitória!': 'Mandou bem — foco e vitória!',
+      'Ótimo acerto! Você está afiado!': 'Ótimo acerto! Você está afiado!',
+      'Acertou! Mantenha o ritmo!': 'Acertou! Mantenha o ritmo!',
+      'Boaa! Mais uma vitória!': 'Boaa! Mais uma vitória!',
+      'Não desista — tente a próxima!': 'Não desista — tente a próxima!'
+    }
+  },
+  en: {
+    translation: {
+      // Common
+      'Certo ou Errado?': 'True or False?',
+      'Iniciar Jogo': 'Start Game',
+      'Configurações': 'Settings',
+      'Selecione os Assuntos': 'Select Topics',
+      'perguntas disponíveis': '{{count}} questions available',
+      'Nenhum assunto cadastrado ainda.': 'No topics registered yet.',
+      'Ir para Configurações': 'Go to Settings',
+      'Voltar': 'Back',
+      'Ir para Início': 'Go to Home',
+      'Voltar ao Início': 'Back to Home',
+      'Pontos': 'Points',
+      
+      // Navigation
+      'Landing Page': 'Landing Page',
+      'Home': 'Home',
+      'Game': 'Game',
+      'Results': 'Results',
+      'Settings': 'Settings',
+      'Privacy': 'Privacy',
+      'Privacidade': 'Privacy',
+      
+      // Results Page
+      'Desempenho por Assunto': 'Performance by Topic',
+      
+      // Privacy Page
+      'Política de Privacidade': 'Privacy Policy',
+      'Esta aplicação utiliza cookies e serviços de terceiros (ex.: Google AdSense) para exibir anúncios e manter o serviço gratuito. As informações coletadas são limitadas ao necessário para veicular anúncios e melhorar a experiência do usuário.': 'This application uses cookies and third-party services (e.g., Google AdSense) to display ads and keep the service free. The information collected is limited to what is necessary to serve ads and improve user experience.',
+      'Consentimento': 'Consent',
+      'Seu consentimento é gerenciado através do Google CMP (Consent Management Platform). Você pode gerenciar suas preferências de consentimento a qualquer momento através da mensagem de consentimento do Google.': 'Your consent is managed through Google CMP (Consent Management Platform). You can manage your consent preferences at any time through Google\'s consent message.',
+      'Dados coletados': 'Data Collected',
+      'Podemos utilizar identificadores do navegador, preferências de exibição e dados anônimos agregados para otimizar anúncios. Nenhum dado pessoal sensível é coletado pelo aplicativo sem sua permissão.': 'We may use browser identifiers, display preferences, and anonymous aggregated data to optimize ads. No sensitive personal data is collected by the application without your permission.',
+      'Contato': 'Contact',
+      'Para questões sobre privacidade, envie email para: vwcodedev@gmail.com': 'For privacy questions, send an email to: vwcodedev@gmail.com',
+      
+      // Settings Page
+      'Configurações de Assuntos': 'Topic Settings',
+      'Adicionar Novo Assunto': 'Add New Topic',
+      'Nome do Assunto': 'Topic Name',
+      'Ex: Filmes, Ciências, Esportes...': 'E.g.: Movies, Science, Sports...',
+      'Gerando...': 'Generating...',
+      'Adicionar': 'Add',
+      'Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.': 'When adding a topic, 10 questions about it will be automatically generated using AI. This may take a few minutes.',
+      'Assuntos Cadastrados': 'Registered Topics',
+      'Nenhum assunto cadastrado. Adicione um assunto para começar!': 'No topics registered. Add a topic to get started!',
+      'Criado em': 'Created on',
+      'Excluir assunto': 'Delete topic',
+      
+      // Game Page
+      'Pergunta': 'Question',
+      'de': 'of',
+      'Deseja realmente sair do jogo? Seu progresso atual será perdido.': 'Do you really want to exit the game? Your current progress will be lost.',
+      'Sair': 'Exit',
+      'seg': 'sec',
+      
+      // Landing Page
+      'O jogo inteligente que desafia seu conhecimento! 🎮': 'The smart game that challenges your knowledge! 🎮',
+      'Escolha entre qualquer assunto que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!': 'Choose any topic you want! Technology, history, sports, cooking, series, or anything you imagine. Earn points by answering correctly and unlock more questions!',
+      'Modo Relâmpago': 'Lightning Mode',
+      'Jogue agora com 30 perguntas gerais aleatórias! Rápido, desafiador e divertido.': 'Play now with 30 random general questions! Fast, challenging, and fun.',
+      'Personalizado': 'Custom',
+      'Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.': 'Create your own topics! Choose the themes you love and challenge your knowledge.',
+      'Selecione seus assuntos favoritos e comece a jogar agora mesmo!': 'Select your favorite topics and start playing right now!',
+      'Assuntos do Seu Jeito': 'Topics Your Way',
+      'Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos!': 'Create questions about ANYTHING you want! Technology, history, cooking, movies, sports... AI generates 10 unique and challenging questions in seconds!',
+      'Comece automaticamente com um assunto aleatório! Ideal para quando você quer jogar rápido sem escolher.': 'Start automatically with a random topic! Ideal for when you want to play quickly without choosing.',
+      'Sistema de Pontos': 'Points System',
+      'Ganhe 10 pontos por acerto! Estude facilmente para provas ou apenas divirta-se com seus amigos!': 'Earn 10 points per correct answer! Study easily for tests or just have fun with friends!',
+      'Gratuito & Seguro': 'Free & Secure',
+      'Totalmente gratuito! Seus dados são protegidos e armazenados apenas no seu navegador.': 'Completely free! Your data is protected and stored only in your browser.',
+      'Como Funciona': 'How It Works',
+      'Crie Qualquer Assunto': 'Create Any Topic',
+      'Pense em um assunto que você adora: Filmes, Culinária, História da arte, Estrela de cinema favorita... e em segundos a IA cria perguntas incríveis sobre isso!': 'Think of a topic you love: Movies, Cooking, Art history, Favorite movie star... and in seconds AI creates amazing questions about it!',
+      'Selecione & Jogue': 'Select & Play',
+      'Escolha seus assuntos e comece a jogar! Responda certo para ganhar pontos.': 'Choose your topics and start playing! Answer correctly to earn points.',
+      'Divirta-se e Compartilhe': 'Have Fun and Share',
+      'Jogue sozinho ou desafie amigos! Compare pontuações, descubra curiosidades e torne cada rodada uma experiência divertida e social.': 'Play alone or challenge friends! Compare scores, discover curiosities, and make each round a fun and social experience.',
+      'Pronto para Começar?': 'Ready to Start?',
+      'Comece a jogar ou crie novos assuntos!': 'Start playing or create new topics!',
+      'Crie seus primeiros assuntos!': 'Create your first topics!',
+      '🎮 Começar a Jogar': '🎮 Start Playing',
+      '⚙️ Gerenciar Assuntos': '⚙️ Manage Topics',
+      '⚙️ Criar Assuntos': '⚙️ Create Topics',
+      
+      // Alerts
+      'Selecione pelo menos um assunto para começar!': 'Select at least one topic to start!',
+      'O assunto Relâmpago não foi encontrado. Crie um assunto chamado "Modo Relâmpago" nas configurações.': 'The Lightning topic was not found. Create a topic called "Lightning Mode" in settings.',
+      'O assunto Relâmpago não possui perguntas.': 'The Lightning topic has no questions.',
+      'Tem certeza que deseja excluir este assunto e todas as suas perguntas?': 'Are you sure you want to delete this topic and all its questions?',
+      'Por favor, insira um nome para o assunto': 'Please enter a name for the topic',
+      'Erro ao gerar perguntas': 'Error generating questions',
+      'Jogar': 'Play',
+      '⚡ Começar': '⚡ Start',
+      '📚 Criar Assuntos': '📚 Create Topics',
+      'Música On': 'Music On',
+      'Música Off': 'Music Off',
+      'Modo Claro': 'Light Mode',
+      'Modo Escuro': 'Dark Mode',
+      'Deseja continuar?': 'Continue playing?',
+      'Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.': 'Watch an ad to unlock 10 more questions on this subject.',
+      'Adicionar +10 perguntas': 'Add +10 questions',
+      'Finalizar jogo': 'Finish game',
+      
+      // Mensagens motivacionais
+      'Excelente! Continue assim!': 'Excellent! Keep it up!',
+      'Mandou bem — foco e vitória!': 'Great job — focus and victory!',
+      'Ótimo acerto! Você está afiado!': 'Great answer! You\'re sharp!',
+      'Acertou! Mantenha o ritmo!': 'Correct! Keep the pace!',
+      'Boaa! Mais uma vitória!': 'Nice! Another win!',
+      'Não desista — tente a próxima!': 'Don\'t give up — try the next one!'
+    }
+  },
+  es: {
+    translation: {
+      // Common
+      'Certo ou Errado?': '¿Verdadero o Falso?',
+      'Iniciar Jogo': 'Iniciar Juego',
+      'Configurações': 'Configuración',
+      'Selecione os Assuntos': 'Seleccionar Temas',
+      'perguntas disponíveis': '{{count}} preguntas disponibles',
+      'Nenhum assunto cadastrado ainda.': 'Aún no hay temas registrados.',
+      'Ir para Configurações': 'Ir a Configuración',
+      'Voltar': 'Volver',
+      'Ir para Início': 'Ir a Inicio',
+      'Voltar ao Início': 'Volver al Inicio',
+      'Pontos': 'Puntos',
+      
+      // Navigation
+      'Landing Page': 'Página de Inicio',
+      'Home': 'Inicio',
+      'Game': 'Juego',
+      'Results': 'Resultados',
+      'Settings': 'Configuración',
+      'Privacy': 'Privacidad',
+      'Privacidade': 'Privacidad',
+      
+      // Results Page
+      'Desempenho por Assunto': 'Rendimiento por Tema',
+      
+      // Privacy Page
+      'Política de Privacidade': 'Política de Privacidad',
+      'Esta aplicação utiliza cookies e serviços de terceiros (ex.: Google AdSense) para exibir anúncios e manter o serviço gratuito. As informações coletadas são limitadas ao necessário para veicular anúncios e melhorar a experiência do usuário.': 'Esta aplicación utiliza cookies y servicios de terceros (p. ej.: Google AdSense) para mostrar anuncios y mantener el servicio gratuito. La información recopilada se limita a lo necesario para publicar anuncios y mejorar la experiencia del usuario.',
+      'Consentimento': 'Consentimiento',
+      'Seu consentimento é gerenciado através do Google CMP (Consent Management Platform). Você pode gerenciar suas preferências de consentimento a qualquer momento através da mensagem de consentimento do Google.': 'Su consentimiento se gestiona a través de Google CMP (Plataforma de Gestión de Consentimiento). Puede gestionar sus preferencias de consentimiento en cualquier momento a través del mensaje de consentimiento de Google.',
+      'Dados coletados': 'Datos Recopilados',
+      'Podemos utilizar identificadores do navegador, preferências de exibição e dados anônimos agregados para otimizar anúncios. Nenhum dado pessoal sensível é coletado pelo aplicativo sem sua permissão.': 'Podemos utilizar identificadores del navegador, preferencias de visualización y datos anónimos agregados para optimizar anuncios. No se recopilan datos personales sensibles por la aplicación sin su permiso.',
+      'Contato': 'Contacto',
+      'Para questões sobre privacidade, envie email para: vwcodedev@gmail.com': 'Para preguntas sobre privacidad, envíe un correo electrónico a: vwcodedev@gmail.com',
+      
+      // Settings Page
+      'Configurações de Assuntos': 'Configuración de Temas',
+      'Adicionar Novo Assunto': 'Agregar Nuevo Tema',
+      'Nome do Assunto': 'Nombre del Tema',
+      'Ex: Filmes, Ciências, Esportes...': 'Ej.: Películas, Ciencias, Deportes...',
+      'Gerando...': 'Generando...',
+      'Adicionar': 'Agregar',
+      'Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.': 'Al agregar un tema, se generarán automáticamente 10 preguntas sobre él usando IA. Esto puede llevar algunos minutos.',
+      'Assuntos Cadastrados': 'Temas Registrados',
+      'Nenhum assunto cadastrado. Adicione um assunto para começar!': 'No hay temas registrados. ¡Agregue un tema para comenzar!',
+      'Criado em': 'Creado el',
+      'Excluir assunto': 'Eliminar tema',
+      
+      // Game Page
+      'Pergunta': 'Pregunta',
+      'de': 'de',
+      'Deseja realmente sair do jogo? Seu progresso atual será perdido.': '¿Realmente desea salir del juego? Se perderá su progreso actual.',
+      'Sair': 'Salir',
+      'seg': 'seg',
+      
+      // Landing Page
+      'O jogo inteligente que desafia seu conhecimento! 🎮': '¡El juego inteligente que desafía tu conocimiento! 🎮',
+      'Escolha entre qualquer assunto que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!': '¡Elige cualquier tema que desees! Tecnología, historia, deportes, cocina, series o todo lo que imagines. ¡Gana puntos respondiendo correctamente y desbloquea más preguntas!',
+      'Modo Relâmpago': 'Modo Relámpago',
+      'Jogue agora com 30 perguntas gerais aleatórias! Rápido, desafiador e divertido.': '¡Juega ahora con 30 preguntas generales aleatorias! Rápido, desafiante y divertido.',
+      'Personalizado': 'Personalizado',
+      'Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.': '¡Crea tus propios temas! Elige los temas que amas y desafía tu conocimiento.',
+      'Selecione seus assuntos favoritos e comece a jogar agora mesmo!': '¡Selecciona tus temas favoritos y comienza a jugar ahora mismo!',
+      'Assuntos do Seu Jeito': 'Temas a Tu Manera',
+      'Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos!': '¡Crea preguntas sobre CUALQUIER cosa que quieras! Tecnología, historia, cocina, películas, deportes... ¡La IA genera 10 preguntas únicas y desafiantes en segundos!',
+      'Comece automaticamente com um assunto aleatório! Ideal para quando você quer jogar rápido sem escolher.': '¡Comienza automáticamente con un tema aleatorio! Ideal para cuando quieres jugar rápido sin elegir.',
+      'Sistema de Pontos': 'Sistema de Puntos',
+      'Ganhe 10 pontos por acerto! Estude facilmente para provas ou apenas divirta-se com seus amigos!': '¡Gana 10 puntos por acierto! ¡Estudia fácilmente para exámenes o simplemente diviértete con tus amigos!',
+      'Gratuito & Seguro': 'Gratis y Seguro',
+      'Totalmente gratuito! Seus dados são protegidos e armazenados apenas no seu navegador.': '¡Completamente gratis! Tus datos están protegidos y almacenados solo en tu navegador.',
+      'Como Funciona': 'Cómo Funciona',
+      'Crie Qualquer Assunto': 'Crea Cualquier Tema',
+      'Pense em um assunto que você adora: Filmes, Culinária, História da arte, Estrela de cinema favorita... e em segundos a IA cria perguntas incríveis sobre isso!': '¡Piensa en un tema que adores: Películas, Cocina, Historia del arte, Estrella de cine favorita... y en segundos la IA crea preguntas increíbles sobre eso!',
+      'Selecione & Jogue': 'Selecciona y Juega',
+      'Escolha seus assuntos e comece a jogar! Responda certo para ganhar pontos.': '¡Elige tus temas y comienza a jugar! Responde correctamente para ganar puntos.',
+      'Divirta-se e Compartilhe': 'Diviértete y Comparte',
+      'Jogue sozinho ou desafie amigos! Compare pontuações, descubra curiosidades e torne cada rodada uma experiência divertida e social.': '¡Juega solo o desafía a amigos! Compara puntuaciones, descubre curiosidades y convierte cada ronda en una experiencia divertida y social.',
+      'Pronto para Começar?': '¿Listo para Comenzar?',
+      'Comece a jogar ou crie novos assuntos!': '¡Comienza a jugar o crea nuevos temas!',
+      'Crie seus primeiros assuntos!': '¡Crea tus primeros temas!',
+      '🎮 Começar a Jogar': '🎮 Comenzar a Jugar',
+      '⚙️ Gerenciar Assuntos': '⚙️ Gestionar Temas',
+      '⚙️ Criar Assuntos': '⚙️ Crear Temas',
+      
+      // Alerts
+      'Selecione pelo menos um assunto para começar!': '¡Seleccione al menos un tema para comenzar!',
+      'O assunto Relâmpago não foi encontrado. Crie um assunto chamado "Modo Relâmpago" nas configurações.': 'El tema Relámpago no fue encontrado. Cree un tema llamado "Modo Relámpago" en la configuración.',
+      'O assunto Relâmpago não possui perguntas.': 'El tema Relámpago no tiene preguntas.',
+      'Tem certeza que deseja excluir este assunto e todas as suas perguntas?': '¿Está seguro de que desea eliminar este tema y todas sus preguntas?',
+      'Por favor, insira um nome para o assunto': 'Por favor, ingrese un nombre para el tema',
+      'Erro ao gerar perguntas': 'Error al generar preguntas',
+      'Jogar': 'Jugar',
+      '⚡ Começar': '⚡ Comenzar',
+      '📚 Criar Assuntos': '📚 Crear Temas',
+      'Música On': 'Música On',
+      'Música Off': 'Música Off',
+      'Modo Claro': 'Modo Claro',
+      'Modo Escuro': 'Modo Oscuro',
+      'Deseja continuar?': '¿Desea continuar?',
+      'Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.': 'Mire un anuncio para desbloquear 10 preguntas más sobre este tema.',
+      'Adicionar +10 perguntas': 'Agregar +10 preguntas',
+      'Finalizar jogo': 'Finalizar juego',
+      
+      // Mensagens motivacionais
+      'Excelente! Continue assim!': '¡Excelente! ¡Sigue así!',
+      'Mandou bem — foco e vitória!': '¡Buen trabajo — enfoque y victoria!',
+      'Ótimo acerto! Você está afiado!': '¡Gran respuesta! ¡Estás agudo!',
+      'Acertou! Mantenha o ritmo!': '¡Correcto! ¡Mantén el ritmo!',
+      'Boaa! Mais uma vitória!': '¡Bien! ¡Otra victoria!',
+      'Não desista — tente a próxima!': '¡No te rindas — intenta la siguiente!'
+    }
+  },
+  fr: {
+    translation: {
+      // Common
+      'Certo ou Errado?': 'Vrai ou Faux?',
+      'Iniciar Jogo': 'Démarrer le Jeu',
+      'Configurações': 'Paramètres',
+      'Selecione os Assuntos': 'Sélectionner les Sujets',
+      'perguntas disponíveis': '{{count}} questions disponibles',
+      'Nenhum assunto cadastrado ainda.': 'Aucun sujet enregistré pour le moment.',
+      'Ir para Configurações': 'Aller aux Paramètres',
+      'Voltar': 'Retour',
+      'Ir para Início': 'Aller à l\'Accueil',
+      'Voltar ao Início': 'Retour à l\'Accueil',
+      'Pontos': 'Points',
+      
+      // Navigation
+      'Landing Page': 'Page d\'Accueil',
+      'Home': 'Accueil',
+      'Game': 'Jeu',
+      'Results': 'Résultats',
+      'Settings': 'Paramètres',
+      'Privacy': 'Confidentialité',
+      'Privacidade': 'Confidentialité',
+      
+      // Results Page
+      'Desempenho por Assunto': 'Performance par Sujet',
+      
+      // Privacy Page
+      'Política de Privacidade': 'Politique de Confidentialité',
+      'Esta aplicação utiliza cookies e serviços de terceiros (ex.: Google AdSense) para exibir anúncios e manter o serviço gratuito. As informações coletadas são limitadas ao necessário para veicular anúncios e melhorar a experiência do usuário.': 'Cette application utilise des cookies et des services tiers (par exemple : Google AdSense) pour afficher des publicités et maintenir le service gratuit. Les informations collectées sont limitées à ce qui est nécessaire pour diffuser des publicités et améliorer l\'expérience utilisateur.',
+      'Consentimento': 'Consentement',
+      'Seu consentimento é gerenciado através do Google CMP (Consent Management Platform). Você pode gerenciar suas preferências de consentimento a qualquer momento através da mensagem de consentimento do Google.': 'Votre consentement est géré via Google CMP (Plateforme de Gestion du Consentement). Vous pouvez gérer vos préférences de consentement à tout moment via le message de consentement de Google.',
+      'Dados coletados': 'Données Collectées',
+      'Podemos utilizar identificadores do navegador, preferências de exibição e dados anônimos agregados para otimizar anúncios. Nenhum dado pessoal sensível é coletado pelo aplicativo sem sua permissão.': 'Nous pouvons utiliser des identifiants de navigateur, des préférences d\'affichage et des données anonymes agrégées pour optimiser les publicités. Aucune donnée personnelle sensible n\'est collectée par l\'application sans votre permission.',
+      'Contato': 'Contact',
+      'Para questões sobre privacidade, envie email para: vwcodedev@gmail.com': 'Pour des questions sur la confidentialité, envoyez un email à : vwcodedev@gmail.com',
+      
+      // Settings Page
+      'Configurações de Assuntos': 'Paramètres des Sujets',
+      'Adicionar Novo Assunto': 'Ajouter un Nouveau Sujet',
+      'Nome do Assunto': 'Nom du Sujet',
+      'Ex: Filmes, Ciências, Esportes...': 'Ex : Films, Sciences, Sports...',
+      'Gerando...': 'Génération...',
+      'Adicionar': 'Ajouter',
+      'Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.': 'Lors de l\'ajout d\'un sujet, 10 questions seront générées automatiquement à son sujet en utilisant l\'IA. Cela peut prendre quelques minutes.',
+      'Assuntos Cadastrados': 'Sujets Enregistrés',
+      'Nenhum assunto cadastrado. Adicione um assunto para começar!': 'Aucun sujet enregistré. Ajoutez un sujet pour commencer !',
+      'Criado em': 'Créé le',
+      'Excluir assunto': 'Supprimer le sujet',
+      
+      // Game Page
+      'Pergunta': 'Question',
+      'de': 'de',
+      'Deseja realmente sair do jogo? Seu progresso atual será perdido.': 'Voulez-vous vraiment quitter le jeu ? Votre progression actuelle sera perdue.',
+      'Sair': 'Quitter',
+      'seg': 'sec',
+      
+      // Landing Page
+      'O jogo inteligente que desafia seu conhecimento! 🎮': 'Le jeu intelligent qui défie vos connaissances ! 🎮',
+      'Escolha entre qualquer assunto que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!': 'Choisissez n\'importe quel sujet que vous souhaitez ! Technologie, histoire, sports, cuisine, séries ou tout ce que vous imaginez. Gagnez des points en répondant correctement et débloquez plus de questions !',
+      'Modo Relâmpago': 'Mode Éclair',
+      'Jogue agora com 30 perguntas gerais aleatórias! Rápido, desafiador e divertido.': 'Jouez maintenant avec 30 questions générales aléatoires ! Rapide, stimulant et amusant.',
+      'Personalizado': 'Personnalisé',
+      'Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.': 'Créez vos propres sujets ! Choisissez les thèmes que vous aimez et défiez vos connaissances.',
+      'Selecione seus assuntos favoritos e comece a jogar agora mesmo!': 'Sélectionnez vos sujets préférés et commencez à jouer maintenant !',
+      'Assuntos do Seu Jeito': 'Sujets à Votre Façon',
+      'Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos!': 'Créez des questions sur N\'IMPORTE QUOI que vous voulez ! Technologie, histoire, cuisine, films, sports... L\'IA génère 10 questions uniques et stimulantes en quelques secondes !',
+      'Comece automaticamente com um assunto aleatório! Ideal para quando você quer jogar rápido sem escolher.': 'Commencez automatiquement avec un sujet aléatoire ! Idéal quand vous voulez jouer rapidement sans choisir.',
+      'Sistema de Pontos': 'Système de Points',
+      'Ganhe 10 pontos por acerto! Estude facilmente para provas ou apenas divirta-se com seus amigos!': 'Gagnez 10 points par bonne réponse ! Étudiez facilement pour les examens ou amusez-vous simplement avec vos amis !',
+      'Gratuito & Seguro': 'Gratuit et Sécurisé',
+      'Totalmente gratuito! Seus dados são protegidos e armazenados apenas no seu navegador.': 'Entièrement gratuit ! Vos données sont protégées et stockées uniquement dans votre navigateur.',
+      'Como Funciona': 'Comment Ça Marche',
+      'Crie Qualquer Assunto': 'Créer N\'importe Quel Sujet',
+      'Pense em um assunto que você adora: Filmes, Culinária, História da arte, Estrela de cinema favorita... e em segundos a IA cria perguntas incríveis sobre isso!': 'Pensez à un sujet que vous adorez : Films, Cuisine, Histoire de l\'art, Star de cinéma préférée... et en quelques secondes l\'IA crée des questions incroyables à ce sujet !',
+      'Selecione & Jogue': 'Sélectionnez et Jouez',
+      'Escolha seus assuntos e comece a jogar! Responda certo para ganhar pontos.': 'Choisissez vos sujets et commencez à jouer ! Répondez correctement pour gagner des points.',
+      'Divirta-se e Compartilhe': 'Amusez-vous et Partagez',
+      'Jogue sozinho ou desafie amigos! Compare pontuações, descubra curiosidades e torne cada rodada uma experiência divertida e social.': 'Jouez seul ou défiez des amis ! Comparez les scores, découvrez des curiosités et transformez chaque tour en une expérience amusante et sociale.',
+      'Pronto para Começar?': 'Prêt à Commencer ?',
+      'Comece a jogar ou crie novos assuntos!': 'Commencez à jouer ou créez de nouveaux sujets !',
+      'Crie seus primeiros assuntos!': 'Créez vos premiers sujets !',
+      '🎮 Começar a Jogar': '🎮 Commencer à Jouer',
+      '⚙️ Gerenciar Assuntos': '⚙️ Gérer les Sujets',
+      '⚙️ Criar Assuntos': '⚙️ Créer des Sujets',
+      
+      // Alerts
+      'Selecione pelo menos um assunto para começar!': 'Sélectionnez au moins un sujet pour commencer !',
+      'O assunto Relâmpago não foi encontrado. Crie um assunto chamado "Modo Relâmpago" nas configurações.': 'Le sujet Éclair n\'a pas été trouvé. Créez un sujet appelé "Mode Éclair" dans les paramètres.',
+      'O assunto Relâmpago não possui perguntas.': 'Le sujet Éclair n\'a pas de questions.',
+      'Tem certeza que deseja excluir este assunto e todas as suas perguntas?': 'Êtes-vous sûr de vouloir supprimer ce sujet et toutes ses questions ?',
+      'Por favor, insira um nome para o assunto': 'Veuillez entrer un nom pour le sujet',
+      'Erro ao gerar perguntas': 'Erreur lors de la génération des questions',
+      'Jogar': 'Jouer',
+      '⚡ Começar': '⚡ Commencer',
+      '📚 Criar Assuntos': '📚 Créer des Sujets',
+      'Música On': 'Musique On',
+      'Música Off': 'Musique Off',
+      'Modo Claro': 'Mode Clair',
+      'Modo Escuro': 'Mode Sombre',
+      'Deseja continuar?': 'Voulez-vous continuer ?',
+      'Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.': 'Regardez une publicité pour débloquer 10 questions supplémentaires sur ce sujet.',
+      'Adicionar +10 perguntas': 'Ajouter +10 questions',
+      'Finalizar jogo': 'Terminer le jeu',
+      
+      // Mensagens motivacionais
+      'Excelente! Continue assim!': 'Excellent ! Continuez comme ça !',
+      'Mandou bem — foco e vitória!': 'Bon travail — concentration et victoire !',
+      'Ótimo acerto! Você está afiado!': 'Excellente réponse ! Vous êtes vif !',
+      'Acertou! Mantenha o ritmo!': 'Correct ! Gardez le rythme !',
+      'Boaa! Mais uma vitória!': 'Bien ! Une autre victoire !',
+      'Não desista — tente a próxima!': 'N\'abandonnez pas — essayez la suivante !'
+    }
+  },
+  de: {
+    translation: {
+      // Common
+      'Certo ou Errado?': 'Richtig oder Falsch?',
+      'Iniciar Jogo': 'Spiel Starten',
+      'Configurações': 'Einstellungen',
+      'Selecione os Assuntos': 'Themen Auswählen',
+      'perguntas disponíveis': '{{count}} Fragen verfügbar',
+      'Nenhum assunto cadastrado ainda.': 'Noch keine Themen registriert.',
+      'Ir para Configurações': 'Zu Einstellungen',
+      'Voltar': 'Zurück',
+      'Ir para Início': 'Zur Startseite',
+      'Voltar ao Início': 'Zurück zur Startseite',
+      'Pontos': 'Punkte',
+      
+      // Navigation
+      'Landing Page': 'Startseite',
+      'Home': 'Startseite',
+      'Game': 'Spiel',
+      'Results': 'Ergebnisse',
+      'Settings': 'Einstellungen',
+      'Privacy': 'Datenschutz',
+      'Privacidade': 'Datenschutz',
+      
+      // Results Page
+      'Desempenho por Assunto': 'Leistung nach Thema',
+      
+      // Privacy Page
+      'Política de Privacidade': 'Datenschutzrichtlinie',
+      'Esta aplicação utiliza cookies e serviços de terceiros (ex.: Google AdSense) para exibir anúncios e manter o serviço gratuito. As informações coletadas são limitadas ao necessário para veicular anúncios e melhorar a experiência do usuário.': 'Diese Anwendung verwendet Cookies und Dienste von Drittanbietern (z. B.: Google AdSense), um Anzeigen anzuzeigen und den Service kostenlos zu halten. Die gesammelten Informationen sind auf das beschränkt, was zur Schaltung von Anzeigen und zur Verbesserung der Benutzererfahrung erforderlich ist.',
+      'Consentimento': 'Einwilligung',
+      'Seu consentimento é gerenciado através do Google CMP (Consent Management Platform). Você pode gerenciar suas preferências de consentimento a qualquer momento através da mensagem de consentimento do Google.': 'Ihre Einwilligung wird über Google CMP (Consent Management Platform) verwaltet. Sie können Ihre Einwilligungspräferenzen jederzeit über die Einwilligungsnachricht von Google verwalten.',
+      'Dados coletados': 'Gesammelte Daten',
+      'Podemos utilizar identificadores do navegador, preferências de exibição e dados anônimos agregados para otimizar anúncios. Nenhum dado pessoal sensível é coletado pelo aplicativo sem sua permissão.': 'Wir können Browser-Kennungen, Anzeigeeinstellungen und anonyme aggregierte Daten verwenden, um Anzeigen zu optimieren. Keine sensiblen persönlichen Daten werden ohne Ihre Erlaubnis von der Anwendung gesammelt.',
+      'Contato': 'Kontakt',
+      'Para questões sobre privacidade, envie email para: vwcodedev@gmail.com': 'Für Datenschutzfragen senden Sie eine E-Mail an: vwcodedev@gmail.com',
+      
+      // Settings Page
+      'Configurações de Assuntos': 'Themeneinstellungen',
+      'Adicionar Novo Assunto': 'Neues Thema Hinzufügen',
+      'Nome do Assunto': 'Themenname',
+      'Ex: Filmes, Ciências, Esportes...': 'Z.B.: Filme, Wissenschaft, Sport...',
+      'Gerando...': 'Generiere...',
+      'Adicionar': 'Hinzufügen',
+      'Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.': 'Beim Hinzufügen eines Themas werden automatisch 10 Fragen dazu mit KI generiert. Dies kann einige Minuten dauern.',
+      'Assuntos Cadastrados': 'Registrierte Themen',
+      'Nenhum assunto cadastrado. Adicione um assunto para começar!': 'Keine Themen registriert. Fügen Sie ein Thema hinzu, um zu beginnen!',
+      'Criado em': 'Erstellt am',
+      'Excluir assunto': 'Thema löschen',
+      
+      // Game Page
+      'Pergunta': 'Frage',
+      'de': 'von',
+      'Deseja realmente sair do jogo? Seu progresso atual será perdido.': 'Möchten Sie das Spiel wirklich verlassen? Ihr aktueller Fortschritt geht verloren.',
+      'Sair': 'Beenden',
+      'seg': 'Sek',
+      
+      // Landing Page
+      'O jogo inteligente que desafia seu conhecimento! 🎮': 'Das intelligente Spiel, das Ihr Wissen herausfordert! 🎮',
+      'Escolha entre qualquer assunto que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!': 'Wählen Sie jedes gewünschte Thema! Technologie, Geschichte, Sport, Kochen, Serien oder alles, was Sie sich vorstellen können. Verdienen Sie Punkte durch richtige Antworten und schalten Sie mehr Fragen frei!',
+      'Modo Relâmpago': 'Blitzmodus',
+      'Jogue agora com 30 perguntas gerais aleatórias! Rápido, desafiador e divertido.': 'Spielen Sie jetzt mit 30 zufälligen allgemeinen Fragen! Schnell, herausfordernd und unterhaltsam.',
+      'Personalizado': 'Benutzerdefiniert',
+      'Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.': 'Erstellen Sie Ihre eigenen Themen! Wählen Sie die Themen, die Sie lieben, und fordern Sie Ihr Wissen heraus.',
+      'Selecione seus assuntos favoritos e comece a jogar agora mesmo!': 'Wählen Sie Ihre Lieblingsthemen aus und fangen Sie jetzt an zu spielen!',
+      'Assuntos do Seu Jeito': 'Themen auf Ihre Weise',
+      'Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos!': 'Erstellen Sie Fragen über ALLES, was Sie wollen! Technologie, Geschichte, Kochen, Filme, Sport... KI generiert in Sekunden 10 einzigartige und herausfordernde Fragen!',
+      'Comece automaticamente com um assunto aleatório! Ideal para quando você quer jogar rápido sem escolher.': 'Starten Sie automatisch mit einem zufälligen Thema! Ideal, wenn Sie schnell spielen möchten, ohne zu wählen.',
+      'Sistema de Pontos': 'Punktesystem',
+      'Ganhe 10 pontos por acerto! Estude facilmente para provas ou apenas divirta-se com seus amigos!': 'Verdienen Sie 10 Punkte pro richtiger Antwort! Lernen Sie leicht für Tests oder haben Sie einfach Spaß mit Freunden!',
+      'Gratuito & Seguro': 'Kostenlos & Sicher',
+      'Totalmente gratuito! Seus dados são protegidos e armazenados apenas no seu navegador.': 'Völlig kostenlos! Ihre Daten sind geschützt und werden nur in Ihrem Browser gespeichert.',
+      'Como Funciona': 'Wie Es Funktioniert',
+      'Crie Qualquer Assunto': 'Erstellen Sie Jedes Thema',
+      'Pense em um assunto que você adora: Filmes, Culinária, História da arte, Estrela de cinema favorita... e em segundos a IA cria perguntas incríveis sobre isso!': 'Denken Sie an ein Thema, das Sie lieben: Filme, Kochen, Kunstgeschichte, Lieblingsfilmstar... und in Sekunden erstellt KI erstaunliche Fragen darüber!',
+      'Selecione & Jogue': 'Auswählen & Spielen',
+      'Escolha seus assuntos e comece a jogar! Responda certo para ganhar pontos.': 'Wählen Sie Ihre Themen und beginnen Sie zu spielen! Antworten Sie richtig, um Punkte zu verdienen.',
+      'Divirta-se e Compartilhe': 'Haben Sie Spaß und Teilen Sie',
+      'Jogue sozinho ou desafie amigos! Compare pontuações, descubra curiosidades e torne cada rodada uma experiência divertida e social.': 'Spielen Sie allein oder fordern Sie Freunde heraus! Vergleichen Sie Punktzahlen, entdecken Sie Kuriositäten und machen Sie jede Runde zu einem unterhaltsamen und sozialen Erlebnis.',
+      'Pronto para Começar?': 'Bereit Anzufangen?',
+      'Comece a jogar ou crie novos assuntos!': 'Fangen Sie an zu spielen oder erstellen Sie neue Themen!',
+      'Crie seus primeiros assuntos!': 'Erstellen Sie Ihre ersten Themen!',
+      '🎮 Começar a Jogar': '🎮 Spielen Beginnen',
+      '⚙️ Gerenciar Assuntos': '⚙️ Themen Verwalten',
+      '⚙️ Criar Assuntos': '⚙️ Themen Erstellen',
+      
+      // Alerts
+      'Selecione pelo menos um assunto para começar!': 'Wählen Sie mindestens ein Thema aus, um zu beginnen!',
+      'O assunto Relâmpago não foi encontrado. Crie um assunto chamado "Modo Relâmpago" nas configurações.': 'Das Blitz-Thema wurde nicht gefunden. Erstellen Sie ein Thema namens "Blitzmodus" in den Einstellungen.',
+      'O assunto Relâmpago não possui perguntas.': 'Das Blitz-Thema hat keine Fragen.',
+      'Tem certeza que deseja excluir este assunto e todas as suas perguntas?': 'Sind Sie sicher, dass Sie dieses Thema und alle seine Fragen löschen möchten?',
+      'Por favor, insira um nome para o assunto': 'Bitte geben Sie einen Namen für das Thema ein',
+      'Erro ao gerar perguntas': 'Fehler beim Generieren von Fragen',
+      'Jogar': 'Spielen',
+      '⚡ Começar': '⚡ Beginnen',
+      '📚 Criar Assuntos': '📚 Themen Erstellen',
+      'Música On': 'Musik An',
+      'Música Off': 'Musik Aus',
+      'Modo Claro': 'Heller Modus',
+      'Modo Escuro': 'Dunkler Modus',
+      'Deseja continuar?': 'Möchten Sie fortfahren?',
+      'Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.': 'Sehen Sie sich eine Anzeige an, um 10 weitere Fragen zu diesem Thema freizuschalten.',
+      'Adicionar +10 perguntas': '+10 Fragen hinzufügen',
+      'Finalizar jogo': 'Spiel beenden',
+      
+      // Mensagens motivacionais
+      'Excelente! Continue assim!': 'Ausgezeichnet! Weiter so!',
+      'Mandou bem — foco e vitória!': 'Gut gemacht — Fokus und Sieg!',
+      'Ótimo acerto! Você está afiado!': 'Großartige Antwort! Sie sind scharf!',
+      'Acertou! Mantenha o ritmo!': 'Richtig! Halten Sie das Tempo!',
+      'Boaa! Mais uma vitória!': 'Schön! Noch ein Sieg!',
+      'Não desista — tente a próxima!': 'Geben Sie nicht auf — versuchen Sie die nächste!'
+    }
+  }
+};
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: window.localStorage.getItem('lang') || (() => {
+      const browserLang = navigator.language.toLowerCase();
+      if (browserLang.startsWith('pt')) return 'pt';
+      if (browserLang.startsWith('es')) return 'es';
+      if (browserLang.startsWith('fr')) return 'fr';
+      if (browserLang.startsWith('de')) return 'de';
+      return 'en';
+    })(),
+    fallbackLng: 'pt',
+    interpolation: {
+      escapeValue: false
+    }
+  });
+
+export default i18n;

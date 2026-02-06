@@ -34,14 +34,16 @@ export class AIService {
       subjectRecord = await dbService.createSubject(subject);
     }
 
+    // Obter idioma selecionado
+    const lang = window.localStorage.getItem('lang') || 'pt';
+
     const batchSize = 50; // Gerar em lotes para não sobrecarregar a API
     const batches = Math.ceil(count / batchSize);
 
     for (let batch = 0; batch < batches; batch++) {
       const currentBatchSize = Math.min(batchSize, count - (batch * batchSize));
-      
       try {
-        const questions = await this.generateBatch(subject, currentBatchSize);
+        const questions = await this.generateBatch(subject, currentBatchSize, lang);
         
         // Salvar no banco de dados
         for (const q of questions) {
@@ -80,14 +82,118 @@ export class AIService {
     }
   }
 
-  private async generateBatch(subject: string, count: number): Promise<GeneratedQuestion[]> {
+  private async generateBatch(subject: string, count: number, lang: string = 'pt'): Promise<GeneratedQuestion[]> {
     if (!this.genAI) {
       throw new Error('Google Generative AI não inicializado');
     }
 
     const model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    
+    let prompt = '';
+    
+    switch (lang) {
+      case 'en':
+        prompt = `You are an expert in creating educational and objective multiple-choice questions.
 
-    const prompt = `Você é um especialista em criar perguntas de múltipla escolha educacionais e objetivas.
+Create exactly ${count} questions about the topic: "${subject}"
+
+REQUIREMENTS:
+- Each question must be short, clear, and objective (max 100 characters)
+- Each question must have 1 correct answer and 4 incorrect answers
+- Answers must be short (max 80 characters each)
+- Incorrect answers must be plausible but clearly wrong
+- Questions should vary in difficulty (easy, medium, hard)
+- Focus on important and practical concepts about ${subject}
+
+RESPONSE FORMAT (JSON array):
+[
+  {
+    "question": "Question text",
+    "correctAnswer": "Correct answer",
+    "wrongAnswers": ["Wrong answer 1", "Wrong answer 2", "Wrong answer 3", "Wrong answer 4"]
+  }
+]
+
+Return ONLY the JSON array, no extra text before or after. No markdown, no code blocks, just pure JSON.`;
+        break;
+        
+      case 'es':
+        prompt = `Eres un experto en crear preguntas educativas y objetivas de opción múltiple.
+
+Crea exactamente ${count} preguntas sobre el tema: "${subject}"
+
+REQUISITOS:
+- Cada pregunta debe ser corta, clara y objetiva (máximo 100 caracteres)
+- Cada pregunta debe tener 1 respuesta correcta y 4 respuestas incorrectas
+- Las respuestas deben ser cortas (máximo 80 caracteres cada una)
+- Las respuestas incorrectas deben ser plausibles pero claramente incorrectas
+- Las preguntas deben variar en dificultad (fácil, medio, difícil)
+- Enfócate en conceptos importantes y prácticos sobre ${subject}
+
+FORMATO DE RESPUESTA (array JSON):
+[
+  {
+    "question": "Texto de la pregunta",
+    "correctAnswer": "Respuesta correcta",
+    "wrongAnswers": ["Respuesta incorrecta 1", "Respuesta incorrecta 2", "Respuesta incorrecta 3", "Respuesta incorrecta 4"]
+  }
+]
+
+Devuelve SOLO el array JSON, sin texto adicional antes o después. Sin markdown, sin bloques de código, solo JSON puro.`;
+        break;
+        
+      case 'fr':
+        prompt = `Vous êtes un expert dans la création de questions éducatives et objectives à choix multiples.
+
+Créez exactement ${count} questions sur le sujet: "${subject}"
+
+EXIGENCES:
+- Chaque question doit être courte, claire et objective (maximum 100 caractères)
+- Chaque question doit avoir 1 bonne réponse et 4 mauvaises réponses
+- Les réponses doivent être courtes (maximum 80 caractères chacune)
+- Les mauvaises réponses doivent être plausibles mais clairement fausses
+- Les questions doivent varier en difficulté (facile, moyen, difficile)
+- Concentrez-vous sur les concepts importants et pratiques concernant ${subject}
+
+FORMAT DE RÉPONSE (tableau JSON):
+[
+  {
+    "question": "Texte de la question",
+    "correctAnswer": "Bonne réponse",
+    "wrongAnswers": ["Mauvaise réponse 1", "Mauvaise réponse 2", "Mauvaise réponse 3", "Mauvaise réponse 4"]
+  }
+]
+
+Retournez UNIQUEMENT le tableau JSON, sans texte supplémentaire avant ou après. Pas de markdown, pas de blocs de code, juste du JSON pur.`;
+        break;
+        
+      case 'de':
+        prompt = `Sie sind ein Experte für die Erstellung pädagogischer und objektiver Multiple-Choice-Fragen.
+
+Erstellen Sie genau ${count} Fragen zum Thema: "${subject}"
+
+ANFORDERUNGEN:
+- Jede Frage muss kurz, klar und objektiv sein (maximal 100 Zeichen)
+- Jede Frage muss 1 richtige Antwort und 4 falsche Antworten haben
+- Die Antworten müssen kurz sein (maximal 80 Zeichen pro Antwort)
+- Falsche Antworten müssen plausibel, aber eindeutig falsch sein
+- Die Fragen sollten unterschiedliche Schwierigkeitsgrade haben (einfach, mittel, schwer)
+- Konzentrieren Sie sich auf wichtige und praktische Konzepte zu ${subject}
+
+ANTWORTFORMAT (JSON-Array):
+[
+  {
+    "question": "Fragetext",
+    "correctAnswer": "Richtige Antwort",
+    "wrongAnswers": ["Falsche Antwort 1", "Falsche Antwort 2", "Falsche Antwort 3", "Falsche Antwort 4"]
+  }
+]
+
+Geben Sie NUR das JSON-Array zurück, ohne zusätzlichen Text davor oder danach. Kein Markdown, keine Codeblöcke, nur reines JSON.`;
+        break;
+        
+      default: // 'pt'
+        prompt = `Você é um especialista em criar perguntas de múltipla escolha educacionais e objetivas.
 
 Crie exatamente ${count} perguntas sobre o assunto: "${subject}"
 
@@ -109,6 +215,7 @@ FORMATO DE RESPOSTA (JSON array):
 ]
 
 Retorne APENAS o JSON array, sem texto adicional antes ou depois. Sem markdown, sem código blocks, apenas o JSON puro.`;
+    }
 
     try {
       const result = await model.generateContent(prompt);

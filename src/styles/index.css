@@ -92,3 +92,51 @@ html, body {
   .card[data-accent="violet"] { border-left-color: #7c3aed; }
   .card[data-accent="amber"] { border-left-color: #f59e0b; }
 }
+
+@layer utilities {
+  /* Prevenir overflow de texto */
+  .text-ellipsis {
+    @apply overflow-hidden text-ellipsis whitespace-nowrap;
+  }
+  
+  /* Garantir que containers não quebrem o layout */
+  .container-safe {
+    @apply max-w-full overflow-x-hidden;
+  }
+  
+  /* Hover suave */
+  .hover-lift {
+    @apply transition-transform duration-200 hover:-translate-y-1;
+  }
+  
+  /* Foco visível para acessibilidade */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+  }
+}
+
+/* Animações suaves */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Garantir que o layout nunca quebre */
+* {
+  min-width: 0;
+}
+
+/* Mobile-first: garantir que elementos não quebrem em telas pequenas */
+@media (max-width: 640px) {
+  h1 { @apply text-3xl; }
+  h2 { @apply text-2xl; }
+  h3 { @apply text-xl; }
+  
+  .container {
+    @apply px-3;
+  }
+}

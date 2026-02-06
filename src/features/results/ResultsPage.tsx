@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
 import { useGameStore } from '@/store/gameStore';
@@ -11,6 +12,7 @@ import type { PerformanceData } from '@/types';
 
 
 export function ResultsPage() {
+    const { t } = useTranslation();
   const navigate = useNavigate();
   const { questions, config, resetGame } = useGameStore();
 
@@ -74,11 +76,11 @@ export function ResultsPage() {
       <div className="flex justify-center mb-8">
         <Button size="lg" onClick={() => navigate('/')}
           className="bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-xl border-0">
-          <Home className="w-5 h-5 mr-2 inline" /> Voltar ao Início
+          <Home className="w-5 h-5 mr-2 inline" /> {t('Voltar ao Início')}
         </Button>
       </div>
       <Card className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 border-0">
-        <h3 className="text-xl font-semibold mb-4 text-center">Desempenho por Assunto</h3>
+        <h3 className="text-xl font-semibold mb-4 text-center">{t('Desempenho por Assunto')}</h3>
         <ResponsiveContainer width="100%" height={400}>
           <BarChart
             data={chartData}
