@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Header } from '@/components/layout/Header';
@@ -74,6 +75,7 @@ function App() {
               <Route path="/privacy" element={<PrivacyPage />} />
             </Routes>
           </main>
+          <SpeedInsights />
           {/* AdSpace removido. Anúncios agora são gerenciados pelo Google AdSense global. */}
         </div>
       </BrowserRouter>
