@@ -24,6 +24,7 @@ export function HomePage() {
   const navigate = useNavigate();
   const [subjects, setSubjects] = useState<Subject[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<number[]>([]);
+  const [touchHack, setTouchHack] = useState(0);
   const initializeGame = useGameStore((state) => state.initializeGame);
 
   useEffect(() => {
@@ -46,6 +47,8 @@ export function HomePage() {
         ? prev.filter((id) => id !== subjectId)
         : [...prev, subjectId]
     );
+    // Força re-render para mobile
+    setTouchHack((v) => v + 1);
   };
 
   const handleStartGame = async () => {
@@ -100,7 +103,7 @@ export function HomePage() {
             const isSelected = selectedSubjects.includes(subject.id);
             return (
               <Card
-                key={subject.id}
+                key={subject.id + '-' + touchHack}
                 className={
                   `transition-all duration-150 cursor-pointer ` +
                   (isSelected
