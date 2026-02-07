@@ -23,7 +23,7 @@ export function LobbyPage() {
   const [linkCopied, setLinkCopied] = useState(false);
 
   const shareUrl = roomId ? multiplayerService.getShareableUrl(roomId) : '';
-  const isHost = room && playerId === room.host;
+  const isHost = !!(room && playerId === room.host);
   const allPlayersReady = room ? multiplayerService.areAllPlayersReady(room) : false;
   const canStart = isHost && allPlayersReady;
 
