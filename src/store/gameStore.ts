@@ -28,10 +28,10 @@ const initialState: GameState = {
   speedBonus: 0,
 };
 
-  questionStartTime: Date.now(),
 export const useGameStore = create<GameStore>((set, get) => ({
   ...initialState,
   isPaused: false,
+  questionStartTime: Date.now(),
 
   initializeGame: async (config: any) => {
     let questions: GameQuestion[] = [];

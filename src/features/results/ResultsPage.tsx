@@ -86,7 +86,14 @@ export function ResultsPage() {
         </div>
 
         {/* Título */}
-        <h1 className="text-4flex-col md:flex-row justify-center gap-4 mb-6">
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-primary-600 to-indigo-600 text-transparent bg-clip-text">
+          {t('Resultado Final')}
+        </h1>
+      </div>
+
+      {/* Card de Estatísticas */}
+      <Card className="mb-6 p-6">
+        <div className="flex flex-col md:flex-row justify-center gap-4 mb-6">
           {/* Acertos */}
           <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-8 border-2 border-green-200 dark:border-green-800 text-center flex-1 max-w-sm">
             <Target className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-3" />
@@ -122,14 +129,7 @@ export function ResultsPage() {
               {t('Você economizou tempo nas respostas!')}
             </p>
           </div>
-        )} className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-8 border-2 border-green-200 dark:border-green-800 text-center max-w-sm w-full">
-            <Target className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-3" />
-            <div className="text-green-700 dark:text-green-400 text-sm font-bold mb-2">{t('ACERTOS')}</div>
-            <div className="text-6xl font-bold text-green-900 dark:text-green-300">
-              {correctAnswers}/{totalQuestions}
-            </div>
-          </div>
-        </div>
+        )}
       </Card>
 
       {/* Card de Provocação */}
