@@ -192,19 +192,19 @@ export function ShareQuizButton({ questions, subjects = [], score, variant = 'de
                 <Button
                   onClick={handleShare}
                   disabled={isSharing || !firebaseAvailable}
-                  className="w-full bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white text-sm sm:text-base"
+                  className="w-full bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white py-4 min-h-[3.5rem] h-auto"
                   size="lg"
                 >
                   {isSharing ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin flex-shrink-0" />
-                      <span className="truncate">{t('Compartilhando...')}</span>
-                    </>
+                    <div className="flex items-center justify-center gap-2">
+                      <Loader2 className="w-5 h-5 animate-spin flex-shrink-0" />
+                      <span className="text-sm sm:text-base leading-tight">{t('Compartilhando...')}</span>
+                    </div>
                   ) : (
-                    <>
-                      <Share2 className="w-5 h-5 mr-2 flex-shrink-0" />
-                      <span className="truncate">{t('Gerar Link de Compartilhamento')}</span>
-                    </>
+                    <div className="flex items-center justify-center gap-2">
+                      <Share2 className="w-5 h-5 flex-shrink-0" />
+                      <span className="text-sm sm:text-base leading-tight">{t('Gerar Link')}</span>
+                    </div>
                   )}
                 </Button>
 
@@ -244,30 +244,34 @@ export function ShareQuizButton({ questions, subjects = [], score, variant = 'de
                 <div className="flex flex-col gap-3">
                   <Button
                     onClick={handleCopyLink}
-                    className="w-full"
+                    className="w-full py-4 min-h-[3.5rem] h-auto"
                     variant="secondary"
                     size="lg"
                   >
-                    {copied ? (
-                      <>
-                        <Check className="w-5 h-5 mr-2 text-green-600" />
-                        {t('Link copiado!')}
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-5 h-5 mr-2" />
-                        {t('Copiar Link')}
-                      </>
-                    )}
+                    <div className="flex items-center justify-center gap-2">
+                      {copied ? (
+                        <>
+                          <Check className="w-5 h-5 text-green-600 flex-shrink-0" />
+                          <span className="text-sm sm:text-base leading-tight">{t('Link copiado!')}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-5 h-5 flex-shrink-0" />
+                          <span className="text-sm sm:text-base leading-tight">{t('Copiar Link')}</span>
+                        </>
+                      )}
+                    </div>
                   </Button>
 
                   <Button
                     onClick={handleWhatsApp}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white py-4 min-h-[3.5rem] h-auto"
                     size="lg"
                   >
-                    <MessageCircle className="w-5 h-5 mr-2" />
-                    {t('Compartilhar no WhatsApp')}
+                    <div className="flex items-center justify-center gap-2">
+                      <MessageCircle className="w-5 h-5 flex-shrink-0" />
+                      <span className="text-sm sm:text-base leading-tight">{t('Compartilhar no WhatsApp')}</span>
+                    </div>
                   </Button>
                 </div>
               </>
@@ -305,10 +309,12 @@ export function ShareQuizButton({ questions, subjects = [], score, variant = 'de
         onOpen?.();
       }}
       size="lg"
-      className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-8 py-4 rounded-xl text-lg font-bold shadow-lg"
+      className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white px-4 py-4 rounded-xl font-bold shadow-lg min-h-[3.5rem] h-auto"
     >
-      <Share2 className="w-5 h-5 mr-2" />
-      {t('Compartilhar Quiz')}
+      <div className="flex items-center justify-center gap-2">
+        <Share2 className="w-5 h-5 flex-shrink-0" />
+        <span className="text-base sm:text-lg leading-tight">{t('Compartilhar Quiz')}</span>
+      </div>
     </Button>
   );
 }
