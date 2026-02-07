@@ -100,7 +100,7 @@ export function MultiplayerResultsPage() {
             return (
               <Card
                 key={id}
-                className={`p-6 transition-all ${
+                className={`p-4 md:p-6 transition-all ${
                   isCurrentPlayer ? 'ring-4 ring-primary-500 scale-105' : ''
                 } ${position <= 3 ? 'border-2' : ''} ${
                   position === 1 ? 'border-yellow-400' : ''
@@ -110,56 +110,60 @@ export function MultiplayerResultsPage() {
                   position === 3 ? 'border-orange-400' : ''
                 }`}
               >
-                <div className="flex items-center gap-4">
+                <div className="flex items-start md:items-center gap-3 md:gap-4">
                   {/* Position Badge */}
                   <div
-                    className={`w-16 h-16 rounded-full flex items-center justify-center text-2xl font-bold text-white bg-gradient-to-br ${getMedalColor(position)} flex-shrink-0`}
+                    className={`w-12 h-12 md:w-16 md:h-16 rounded-full flex items-center justify-center text-xl md:text-2xl font-bold text-white bg-gradient-to-br ${getMedalColor(position)} flex-shrink-0`}
                   >
                     {position <= 3 ? getMedalEmoji(position) : position + 'º'}
                   </div>
 
                   {/* Player Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-xl font-bold text-gray-900 dark:text-white truncate">
+                    {/* Nome e badges - stacked em mobile */}
+                    <div className="mb-2">
+                      <h3 className="text-lg md:text-xl font-bold text-gray-900 dark:text-white mb-1">
                         {player.name}
                       </h3>
-                      {isCurrentPlayer && (
-                        <span className="px-2 py-0.5 text-xs bg-primary-500 text-white rounded font-bold">
-                          {t('VOCÊ')}
-                        </span>
-                      )}
-                      {id === room.host && (
-                        <span className="px-2 py-0.5 text-xs bg-yellow-500 text-white rounded font-bold">
-                          {t('HOST')}
-                        </span>
-                      )}
+                      <div className="flex flex-wrap items-center gap-2">
+                        {isCurrentPlayer && (
+                          <span className="px-2 py-0.5 text-xs bg-primary-500 text-white rounded font-bold">
+                            {t('VOCÊ')}
+                          </span>
+                        )}
+                        {id === room.host && (
+                          <span className="px-2 py-0.5 text-xs bg-yellow-500 text-white rounded font-bold">
+                            {t('HOST')}
+                          </span>
+                        )}
+                      </div>
                     </div>
 
-                    <div className="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <Trophy className="w-4 h-4" />
+                    {/* Stats - wrappable em mobile */}
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-xs md:text-sm text-gray-600 dark:text-gray-400">
+                      <span className="flex items-center gap-1 whitespace-nowrap">
+                        <Trophy className="w-3 h-3 md:w-4 md:h-4" />
                         <strong className="text-primary-600 dark:text-primary-400">
                           {player.score}
                         </strong>{' '}
-                        {t('Pontos').toLowerCase()}
+                        pts
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Medal className="w-4 h-4" />
+                      <span className="flex items-center gap-1 whitespace-nowrap">
+                        <Medal className="w-3 h-3 md:w-4 md:h-4" />
                         <strong className="text-green-600 dark:text-green-400">
                           {correctAnswers}
                         </strong>{' '}
                         {t('Acertos').toLowerCase()}
                       </span>
-                      <span>
-                        <strong>{accuracy}%</strong> {t('PRECISÃO').toLowerCase()}
+                      <span className="whitespace-nowrap">
+                        <strong>{accuracy}%</strong> precisão
                       </span>
                     </div>
                   </div>
 
-                  {/* Score Display */}
-                  <div className="text-right">
-                    <div className="text-3xl font-bold text-primary-600 dark:text-primary-400">
+                  {/* Score Display - hide em mobile muito pequeno */}
+                  <div className="hidden sm:block text-right flex-shrink-0">
+                    <div className="text-2xl md:text-3xl font-bold text-primary-600 dark:text-primary-400">
                       {player.score}
                     </div>
                     <div className="text-xs text-gray-500 dark:text-gray-400">
