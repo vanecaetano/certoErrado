@@ -1,110 +1,157 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
 import { useGameStore } from '@/store/gameStore';
 import { dbService } from '@/services/database';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Home } from 'lucide-react';
-import type { PerformanceData } from '@/types';
-
-
+import { ShareQuizButton } from '@/components/ui/ShareQuizButton';
+import { Home, Trophy, Target, Zap, Users } from 'lucide-react';
+import type { GameQuestion } from '@/types';
 
 export function ResultsPage() {
-    const { t } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const { questions, config, resetGame } = useGameStore();
+  const { questions, score, questionResults, config, resetGame } = useGameStore();
 
-  const [performanceData, setPerformanceData] = useState<PerformanceData[]>([]);
+  // Salvar dados localmente antes de resetar
+  const [savedQuestions, setSavedQuestions] = useState<GameQuestion[]>([]);
+  const [savedScore, setSavedScore] = useState(0);
+  const [savedResults, setSavedResults] = useState<Map<number, boolean>>(new Map());
+  const [subjectNames, setSubjectNames] = useState<string[]>([]);
 
-  // Se houver dados da sessão atual, use-os para o gráfico e placar
-  let totalQuestions = questions.length;
+  // Capturar dados no mount
   useEffect(() => {
-    const loadPerformanceData = async () => {
-      const data: PerformanceData[] = [];
+    setSavedQuestions(questions);
+    setSavedScore(score);
+    setSavedResults(new Map(questionResults));
+  }, []);
 
+  const totalQuestions = savedQuestions.length;
+  const correctAnswers = Array.from(savedResults.values()).filter(result => result).length;
+  const accuracy = totalQuestions > 0 ? (correctAnswers / totalQuestions) * 100 : 0;
+
+  // Mensagem provocativa baseada no desempenho
+  const getChallengeMessage = () => {
+    if (accuracy >= 90) {
+      return t('🔥 Você é um mestre! Seus amigos conseguem chegar perto?');
+    } else if (accuracy >= 70) {
+      return t('👏 Muito bem! Será que seus amigos superam isso?');
+    } else if (accuracy >= 50) {
+      return t('💪 Bom resultado! Desafie seus amigos a fazer melhor!');
+    } else {
+      return t('😅 Desafie seus amigos e vejam quem se sai melhor!');
+    }
+  };
+
+  useEffect(() => {
+    const loadSubjectNames = async () => {
+      const names: string[] = [];
       for (const { subjectId } of config.subjects) {
         const subject = await dbService.getSubjectByIdAsync(subjectId);
-        if (!subject) continue;
-
-        const stats = await dbService.getPerformanceBySubject(subjectId);
-        data.push({
-          subjectId,
-          subjectName: subject.name,
-          ...stats,
-        });
+        if (subject) names.push(subject.name);
       }
-
-      setPerformanceData(data);
+      setSubjectNames(names);
     };
 
-    loadPerformanceData();
+    loadSubjectNames();
   }, [config]);
 
-
-  // Se não houver dados da sessão atual, use o agregado do banco
-  if (totalQuestions === 0 && performanceData.length > 0) {
-    totalQuestions = performanceData.reduce((sum, d) => sum + d.totalQuestions, 0);
-    // sessionAccuracy e sessionScore removidos, não são mais usados
-  }
-
-  const chartData = performanceData.map((d) => ({
-    name: d.subjectName,
-    Acertos: d.correctAnswers,
-    Erros: d.totalQuestions - d.correctAnswers,
-    Total: d.totalQuestions,
-    Precisao: Number(d.accuracy.toFixed(1)),
-  }));
-
-  // Paleta moderna e vibrante
-  const MODERN_COLORS = [
-    '#0ea5e9', // azul
-    '#22c55e', // verde
-    '#f43f5e', // rosa
-    '#f59e42', // laranja
-    '#a21caf', // roxo
-    '#fbbf24', // amarelo
-  ];
-
   useEffect(() => {
-    resetGame();
+    // Resetar apenas ao desmontar o componente
+    return () => {
+      resetGame();
+    };
   }, [resetGame]);
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-3xl">
-      <div className="flex justify-center mb-8">
-        <Button size="lg" onClick={() => navigate('/')}
-          className="bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white px-8 py-3 rounded-xl text-lg font-bold shadow-xl border-0">
-          <Home className="w-5 h-5 mr-2 inline" /> {t('Voltar ao Início')}
-        </Button>
+    <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="text-center mb-8">
+        {/* Ícone de Troféu */}
+        <div className="flex justify-center mb-4">
+          <div className="bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full p-6 shadow-xl">
+            <Trophy className="w-16 h-16 text-white" />
+          </div>
+        </div>
+
+        {/* Título */}
+        <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-primary-600 to-indigo-600 text-transparent bg-clip-text">
+          {t('Resultado Final')}
+        </h1>
       </div>
-      <Card className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl p-6 border-0">
-        <h3 className="text-xl font-semibold mb-4 text-center">{t('Desempenho por Assunto')}</h3>
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart
-            data={chartData}
-            margin={{ top: 24, right: 24, left: 0, bottom: 8 }}
-            barCategoryGap={32}
-          >
-            <XAxis dataKey="name" tick={{ fontSize: 16, fontWeight: 700, fill: '#334155' }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fontSize: 16, fill: '#64748b' }} axisLine={false} tickLine={false} />
-            <Tooltip
-              contentStyle={{ background: '#18181b', borderRadius: 12, color: '#fff', border: 'none' }}
-              labelStyle={{ color: '#fff', fontWeight: 700 }}
-              itemStyle={{ fontWeight: 600 }}
-              cursor={{ fill: '#6366f1', opacity: 0.08 }}
-            />
-            <Legend wrapperStyle={{ fontWeight: 700, fontSize: 16 }} />
-            <Bar dataKey="Acertos" radius={[8,8,0,0]}>
-              {chartData.map((_, idx) => (
-                <Cell key={`cell-acertos-${idx}`} fill={MODERN_COLORS[idx % MODERN_COLORS.length]} />
-              ))}
-            </Bar>
-            <Bar dataKey="Erros" radius={[8,8,0,0]} fill="#ef4444" />
-          </BarChart>
-        </ResponsiveContainer>
+
+      {/* Card de Estatísticas */}
+      <Card className="mb-6 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          {/* Pontuação */}
+          <div className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl p-6 border-2 border-cyan-200 dark:border-cyan-800 text-center">
+            <Zap className="w-10 h-10 text-cyan-600 dark:text-cyan-400 mx-auto mb-2" />
+            <div className="text-cyan-700 dark:text-cyan-400 text-sm font-bold mb-1">{t('PONTUAÇÃO')}</div>
+            <div className="text-5xl font-bold text-cyan-900 dark:text-cyan-300">{savedScore}</div>
+          </div>
+
+          {/* Acertos */}
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6 border-2 border-green-200 dark:border-green-800 text-center">
+            <Target className="w-10 h-10 text-green-600 dark:text-green-400 mx-auto mb-2" />
+            <div className="text-green-700 dark:text-green-400 text-sm font-bold mb-1">{t('ACERTOS')}</div>
+            <div className="text-5xl font-bold text-green-900 dark:text-green-300">
+              {correctAnswers}/{totalQuestions}
+            </div>
+          </div>
+
+          {/* Precisão */}
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border-2 border-purple-200 dark:border-purple-800 text-center">
+            <Trophy className="w-10 h-10 text-purple-600 dark:text-purple-400 mx-auto mb-2" />
+            <div className="text-purple-700 dark:text-purple-400 text-sm font-bold mb-1">{t('PRECISÃO')}</div>
+            <div className="text-5xl font-bold text-purple-900 dark:text-purple-300">{accuracy.toFixed(0)}%</div>
+          </div>
+        </div>
+
+        {/* Barra de Progresso */}
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div 
+            className="h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transition-all duration-1000 ease-out"
+            style={{ width: `${accuracy}%` }}
+          />
+        </div>
       </Card>
+
+      {/* Card de Provocação */}
+      <Card className="mb-6 p-6 bg-gradient-to-r from-orange-50 to-pink-50 dark:from-orange-900/20 dark:to-pink-900/20 border-2 border-orange-200 dark:border-orange-800">
+        <div className="flex items-start gap-4">
+          <Users className="w-10 h-10 text-orange-600 dark:text-orange-400 flex-shrink-0 mt-1" />
+          <div>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{t('Desafio Lançado!')}</h3>
+            <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">{getChallengeMessage()}</p>
+          </div>
+        </div>
+      </Card>
+
+      {/* Botões de Ação */}
+      <div className="flex flex-col sm:flex-row gap-4">
+        <Button 
+          size="lg" 
+          onClick={() => navigate('/')}
+          className="flex-1 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-8 py-4 rounded-xl text-lg font-bold shadow-lg"
+        >
+          <Home className="w-5 h-5 mr-2" /> {t('Voltar ao Início')}
+        </Button>
+        
+        {savedQuestions.length > 0 && (
+          <div className="flex-1">
+            <ShareQuizButton 
+              questions={savedQuestions} 
+              subjects={subjectNames}
+              score={savedScore}
+            />
+          </div>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="text-center text-gray-600 dark:text-gray-400 text-sm mt-8">
+        {t('Continue praticando e melhore seus resultados!')} 🚀
+      </div>
     </div>
   );
 }

@@ -62,3 +62,29 @@ export interface PerformanceData {
   accuracy: number;
   averageScore: number;
 }
+
+// Shared Quiz Types
+export interface SharedQuizQuestion {
+  text: string;
+  options: string[];
+  correctIndex: number;
+}
+
+export interface SharedQuiz {
+  id: string;
+  topics: string[];
+  questions: SharedQuizQuestion[];
+  createdAt: string;
+  modelVersion?: string;
+}
+
+export interface ShareQuizRequest {
+  topics: string[];
+  questions: SharedQuizQuestion[];
+}
+
+export interface ShareQuizResponse {
+  id: string;
+  success: boolean;
+  error?: string;
+}

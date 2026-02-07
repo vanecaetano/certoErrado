@@ -21,6 +21,7 @@ export function GamePage() {
     selectedAnswerId,
     isAnswered,
     isCorrect,
+    isPaused,
     selectAnswer,
     nextQuestion,
     finishGame,
@@ -94,8 +95,8 @@ export function GamePage() {
   }, [currentQuestionIndex]);
 
   useEffect(() => {
-    if (isAnswered || questions.length === 0) {
-      return; // Stop timer if already answered
+    if (isAnswered || questions.length === 0 || isPaused) {
+      return; // Stop timer if already answered or paused
     }
 
     const timer = setInterval(() => {
@@ -110,7 +111,7 @@ export function GamePage() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [isAnswered, questions.length, nextQuestion]);
+  }, [isAnswered, questions.length, nextQuestion, isPaused]);
 
   useEffect(() => {
     if (isAnswered && isCorrect !== null) {

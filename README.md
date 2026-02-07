@@ -8,7 +8,8 @@ Aplicativo de perguntas e respostas estilo "Show do Milhão" desenvolvido em Rea
 - 🎨 **Temas**: Modo claro e escuro (ideal para desenvolvedores)
 - 🧠 **IA Integrada**: Geração automática de perguntas usando Google Gemini (GRATUITA)
 - 💾 **Offline**: Banco de dados SQLite local
-- 📊 **Estatísticas**: Gráficos de performance por assunto
+- � **Compartilhamento**: Envie quizzes para amigos via link único (requer Firebase)
+- �📊 **Estatísticas**: Gráficos de performance por assunto
 - 🔊 **Feedback**: Sons e vibração para respostas corretas/erradas
 - 📱 **Pronto para Monetização**: Espaços reservados para anúncios
 
@@ -48,6 +49,25 @@ VITE_GEMINI_API_KEY=sua_chave_aqui
 4. Copie a chave e cole no arquivo `.env`
 
 **Limite gratuito:** 1,500 requisições/dia, 1 milhão de tokens/minuto (mais que suficiente!)
+
+4. **(Opcional) Configure Firebase para Compartilhamento de Quizzes:**
+
+Se quiser que usuários possam compartilhar quizzes com amigos:
+
+```bash
+# Veja instruções detalhadas em:
+SETUP_FIREBASE.md (5 minutos, configuração única)
+```
+
+**Resumo rápido:**
+1. Crie projeto no Firebase Console
+2. Ative Firestore Database
+3. Configure credenciais em `.env` ou `src/services/firebase.ts`
+
+**Importante:** 
+- ✅ Configure UMA VEZ e funciona para todos os usuários
+- ✅ Completamente GRÁTIS (plano Firebase free)
+- ⚠️ Sem Firebase = jogo funciona normalmente, só não pode compartilhar quizzes
 
 ## 🎮 Como Usar
 
@@ -125,7 +145,12 @@ Para integrar anúncios, substitua o componente `AdSpace` pela sua solução pre
 Recomendações rápidas para publicar gratuitamente:
 
 - Vercel: ideal para aplicações Vite/React. Conecte seu repositório, crie um projeto e defina as variáveis de ambiente (VITE_ADSENSE_CLIENT, VITE_ADSENSE_SLOT). URL padrão: `https://seu-projeto.vercel.app`.
-- Netlify: funciona igualmente bem; configure build command `npm run build` e `publish` como `dist/`.
+- Compartilhamento de Quizzes:**
+- Usa Firebase Firestore (nuvem) para salvar quizzes compartilhados
+- Configure uma vez em `SETUP_FIREBASE.md` (5 minutos)
+- Grátis até 50.000 leituras/dia
+
+**Nota**: Para uso em produção web, considere migrar o banco local para IndexedDBcomo `dist/`.
 - Cloudflare Pages: também suporta builds Vite rapidamente.
 
 Passos gerais:

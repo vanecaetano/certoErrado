@@ -11,8 +11,10 @@ import { GamePage } from '@/features/game/GamePage';
 import GameGuard from '@/components/layout/GameGuard';
 import { ResultsPage } from '@/features/results/ResultsPage';
 import { PrivacyPage } from '@/features/privacy/PrivacyPage';
+import { SharedQuizPage } from '@/features/shared/SharedQuizPage';
 import { useThemeStore } from '@/store/themeStore';
 import { dbService } from '@/services/database';
+import { initializeFirebase } from '@/services/firebase';
 import '@/styles/index.css';
 import backgroundMusic from '@/assets/background.mp3';
 
@@ -48,6 +50,8 @@ function App() {
     // Inicializar banco de dados, tema, etc
     dbService.initialize().catch(console.error);
     dbService.createDefaultSubject().catch(console.error);
+    // Inicializar Firebase para compartilhamento de quizzes
+    initializeFirebase();
     document.documentElement.classList.toggle('dark', theme === 'dark');
     window.dispatchEvent(new CustomEvent('music-toggle', { detail: true }));
     return () => {
@@ -72,6 +76,7 @@ function App() {
                   <GamePage />
                 </GameGuard>
               } />
+              <Route path="/quiz/:id" element={<SharedQuizPage />} />
               <Route path="/results" element={<ResultsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
             </Routes>

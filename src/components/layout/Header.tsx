@@ -1,13 +1,19 @@
 import { useState, useEffect } from 'react';
 import { Moon, Sun, Volume2, VolumeX, Menu, X } from 'lucide-react';
 import { useThemeStore } from '@/store/themeStore';
+import { useGameStore } from '@/store/gameStore';
+import { ShareQuizButton } from '@/components/ui/ShareQuizButton';
+import { dbService } from '@/services/database';
 import logoUrl from '@/assets/logo.svg';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export function Header() {
   const { t, i18n } = useTranslation();
+  const { questions, config, score, pauseGame, resumeGame } = useGameStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [subjectNames, setSubjectNames] = useState<string[]>([]);
+  const [showShareButton, setShowShareButton] = useState(false);
   
   // Detectar idioma do navegador
   const getBrowserLanguage = () => {
@@ -27,9 +33,28 @@ export function Header() {
   }, [lang, i18n]);
   const { theme, toggleTheme } = useThemeStore();
   const [musicOn, setMusicOn] = useState(true);
+  
   useEffect(() => {
     window.dispatchEvent(new CustomEvent('music-toggle', { detail: musicOn }));
   }, [musicOn]);
+
+  // Carregar nomes dos assuntos quando houver quiz ativo
+  useEffect(() => {
+    const loadSubjects = async () => {
+      if (questions.length > 0 && config.subjects.length > 0) {
+        const names: string[] = [];
+        for (const { subjectId } of config.subjects) {
+          const subject = await dbService.getSubjectByIdAsync(subjectId);
+          if (subject) names.push(subject.name);
+        }
+        setSubjectNames(names);
+        setShowShareButton(true);
+      } else {
+        setShowShareButton(false);
+      }
+    };
+    loadSubjects();
+  }, [questions.length, config.subjects]);
 
   // Função para garantir play direto no clique
   function handleMusicToggle() {
@@ -76,6 +101,20 @@ export function Header() {
             <option value="fr">🇫🇷</option>
             <option value="de">🇩🇪</option>
           </select>
+
+          {/* Botão Compartilhar (se quiz ativo) */}
+          {showShareButton && (
+            <div className="flex-shrink-0">
+              <ShareQuizButton 
+                questions={questions} 
+                subjects={subjectNames} 
+                score={score} 
+                variant="compact" 
+                onOpen={pauseGame}
+                onClose={resumeGame}
+              />
+            </div>
+          )}
 
           {/* Links de Navegação */}
           <Link 
@@ -147,6 +186,19 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 animate-fade-in">
           <div className="container mx-auto px-4 py-3 flex flex-col gap-3">
+            {/* Botão Compartilhar Mobile */}
+            {showShareButton && (
+              <div className="pb-2 border-b border-gray-200 dark:border-gray-700">
+                <ShareQuizButton 
+                  questions={questions} 
+                  subjects={subjectNames} 
+                  score={score} 
+                  variant="compact" 
+                  onOpen={pauseGame}
+                  onClose={resumeGame}
+                />
+              </div>
+            )}
             <Link 
               to="/play" 
               className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:underline py-2" 

@@ -3,11 +3,14 @@ import type { GameState, GameConfig, GameQuestion } from '@/types';
 import { dbService } from '@/services/database';
 
 interface GameStore extends GameState {
+  isPaused: boolean;
   initializeGame: (config: GameConfig) => Promise<void>;
   selectAnswer: (answerId: number) => void;
   nextQuestion: () => void;
   resetGame: () => void;
   finishGame: () => Promise<void>;
+  pauseGame: () => void;
+  resumeGame: () => void;
 }
 
 const initialState: GameState = {
@@ -23,15 +26,24 @@ const initialState: GameState = {
 
 export const useGameStore = create<GameStore>((set, get) => ({
   ...initialState,
+  isPaused: false,
 
   initializeGame: async (config: any) => {
     let questions: GameQuestion[] = [];
     if (config.allQuestions) {
-      // Recebeu todas as perguntas já embaralhadas
+      // Recebeu todas as perguntas já preparadas
       for (const q of config.allQuestions) {
-        const answers = await dbService.getAnswersByQuestionId(q.id);
-        const shuffledAnswers = [...answers].sort(() => Math.random() - 0.5);
-        questions.push({ question: q, answers: shuffledAnswers });
+        // Verificar se já vem no formato GameQuestion (com question e answers)
+        if (q.question && q.answers) {
+          // Já está no formato correto, apenas embaralhar respostas
+          const shuffledAnswers = [...q.answers].sort(() => Math.random() - 0.5);
+          questions.push({ question: q.question, answers: shuffledAnswers });
+        } else {
+          // Formato antigo: buscar respostas no banco local
+          const answers = await dbService.getAnswersByQuestionId(q.id);
+          const shuffledAnswers = [...answers].sort(() => Math.random() - 0.5);
+          questions.push({ question: q, answers: shuffledAnswers });
+        }
       }
     } else {
       // Modo antigo: buscar por assunto
@@ -144,5 +156,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
         stats.score
       );
     }
+  },
+
+  pauseGame: () => {
+    set({ isPaused: true });
+  },
+
+  resumeGame: () => {
+    set({ isPaused: false });
   },
 }));
