@@ -265,12 +265,12 @@ export function ShareQuizButton({ questions, subjects = [], score, variant = 'de
 
                   <Button
                     onClick={handleWhatsApp}
-                    className="w-full bg-green-600 hover:bg-green-700 text-white py-4 min-h-[3.5rem] h-auto"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white py-3 min-h-[3rem]"
                     size="lg"
                   >
                     <div className="flex items-center justify-center gap-2">
                       <MessageCircle className="w-5 h-5 flex-shrink-0" />
-                      <span className="text-sm sm:text-base leading-tight">{t('Compartilhar no WhatsApp')}</span>
+                      <span className="text-sm sm:text-base font-semibold">{t('WhatsApp')}</span>
                     </div>
                   </Button>
                 </div>
