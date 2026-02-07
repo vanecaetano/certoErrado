@@ -8,8 +8,9 @@ Aplicativo de perguntas e respostas estilo "Show do Milhão" desenvolvido em Rea
 - 🎨 **Temas**: Modo claro e escuro (ideal para desenvolvedores)
 - 🧠 **IA Integrada**: Geração automática de perguntas usando Google Gemini (GRATUITA)
 - 💾 **Offline**: Banco de dados SQLite local
-- � **Compartilhamento**: Envie quizzes para amigos via link único (requer Firebase)
-- �📊 **Estatísticas**: Gráficos de performance por assunto
+- 🔗 **Compartilhamento**: Envie quizzes para amigos via link único (requer Firebase)
+- 👥 **Multiplayer**: Jogue em tempo real com amigos online (requer Firebase Realtime Database)
+- 📊 **Estatísticas**: Gráficos de performance por assunto
 - 🔊 **Feedback**: Sons e vibração para respostas corretas/erradas
 - 📱 **Pronto para Monetização**: Espaços reservados para anúncios
 
