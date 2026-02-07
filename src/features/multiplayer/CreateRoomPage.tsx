@@ -101,9 +101,13 @@ export function CreateRoomPage() {
         
         for (const question of questions) {
           const answers = await dbService.getAnswersByQuestionId(question.id);
+          
+          // Embaralhar as respostas para cada pergunta
+          const shuffledAnswers = answers.sort(() => Math.random() - 0.5);
+          
           allQuestions.push({
             question,
-            answers
+            answers: shuffledAnswers
           });
         }
       }
