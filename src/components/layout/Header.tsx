@@ -75,7 +75,7 @@ export function Header() {
     <header className="app-header sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
         {/* Logo e Título */}
-        <div className="flex items-center gap-3 min-w-0 flex-shrink">
+        <Link to="/" className="flex items-center gap-3 min-w-0 flex-shrink hover:opacity-80 transition-opacity">
           <img 
             src={logoUrl} 
             alt="Certo ou Errado logo" 
@@ -84,7 +84,7 @@ export function Header() {
           <span className="site-title text-base md:text-xl truncate">
             {t('Certo ou Errado?')}
           </span>
-        </div>
+        </Link>
 
         {/* Navigation e Controles - Desktop */}
         <div className="hidden md:flex items-center gap-4 flex-shrink-0">
@@ -117,6 +117,16 @@ export function Header() {
           )}
 
           {/* Links de Navegação */}
+          <Link 
+            to="/" 
+            className="text-sm font-semibold text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 hover:underline whitespace-nowrap" 
+            onClick={() => {
+              const evt = new Event('click');
+              window.dispatchEvent(evt);
+            }}
+          >
+            {t('Início')}
+          </Link>
           <Link 
             to="/play" 
             className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:underline whitespace-nowrap" 
@@ -199,6 +209,17 @@ export function Header() {
                 />
               </div>
             )}
+            <Link 
+              to="/" 
+              className="text-sm font-semibold text-gray-700 dark:text-gray-200 hover:text-primary-600 dark:hover:text-primary-400 hover:underline py-2" 
+              onClick={() => {
+                setMobileMenuOpen(false);
+                const evt = new Event('click');
+                window.dispatchEvent(evt);
+              }}
+            >
+              {t('Início')}
+            </Link>
             <Link 
               to="/play" 
               className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:underline py-2" 

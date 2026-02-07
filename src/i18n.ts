@@ -15,6 +15,7 @@ const resources = {
       'Voltar': 'Voltar',
       'Ir para Início': 'Ir para Início',
       'Voltar ao Início': 'Voltar ao Início',
+      'Início': 'Início',
       'Pontos': 'Pontos',
       
       // Navigation
@@ -167,6 +168,7 @@ const resources = {
       'Voltar': 'Back',
       'Ir para Início': 'Go to Home',
       'Voltar ao Início': 'Back to Home',
+      'Início': 'Home',
       'Pontos': 'Points',
       
       // Navigation
@@ -319,6 +321,7 @@ const resources = {
       'Voltar': 'Volver',
       'Ir para Início': 'Ir a Inicio',
       'Voltar ao Início': 'Volver al Inicio',
+      'Início': 'Inicio',
       'Pontos': 'Puntos',
       
       // Navigation
@@ -472,6 +475,7 @@ const resources = {
       'Voltar': 'Retour',
       'Ir para Início': 'Aller à l\'Accueil',
       'Voltar ao Início': 'Retour à l\'Accueil',
+      'Início': 'Accueil',
       'Pontos': 'Points',
       
       // Navigation
@@ -624,6 +628,7 @@ const resources = {
       'Voltar': 'Zurück',
       'Ir para Início': 'Zur Startseite',
       'Voltar ao Início': 'Zurück zur Startseite',
+      'Início': 'Startseite',
       'Pontos': 'Punkte',
       
       // Navigation
