@@ -29,7 +29,7 @@ export function PlayerList({ players, hostId, currentPlayerId, isHost, onRemoveP
         {playerList.map(([id, player]) => (
           <div
             key={id}
-            className={`flex items-center justify-between p-3 rounded-lg border-2 transition-all ${
+            className={`flex items-center justify-between gap-2 p-3 rounded-lg border-2 transition-all ${
               player.isReady
                 ? 'border-green-500 bg-green-50 dark:bg-green-900/20'
                 : 'border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800'
@@ -37,48 +37,50 @@ export function PlayerList({ players, hostId, currentPlayerId, isHost, onRemoveP
               id === currentPlayerId ? 'ring-2 ring-primary-500' : ''
             }`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3 min-w-0 flex-1">
               {/* Avatar */}
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-white ${
+              <div className={`w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 ${
                 player.isReady ? 'bg-green-500' : 'bg-gray-400'
               }`}>
                 {player.name.charAt(0).toUpperCase()}
               </div>
 
-              {/* Nome */}
-              <div>
-                <p className="font-semibold text-gray-900 dark:text-white flex items-center gap-2 flex-wrap">
+              {/* Nome e Badges */}
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-sm md:text-base text-gray-900 dark:text-white truncate">
                   {player.name}
+                </p>
+                <div className="flex items-center gap-1 flex-wrap mt-0.5">
                   {id === hostId && (
-                    <span className="text-xs bg-yellow-500 text-white px-2 py-0.5 rounded font-bold">
+                    <span className="text-xs bg-yellow-500 text-white px-1.5 py-0.5 rounded font-bold">
                       {t('HOST')}
                     </span>
                   )}
                   {id === currentPlayerId && (
-                    <span className="text-xs bg-primary-500 text-white px-2 py-0.5 rounded font-bold">
+                    <span className="text-xs bg-primary-500 text-white px-1.5 py-0.5 rounded font-bold">
                       {t('VOCÊ')}
                     </span>
                   )}
                   {!player.isOnline && (
-                    <span className="text-xs bg-red-500 text-white px-2 py-0.5 rounded">
+                    <span className="text-xs bg-red-500 text-white px-1.5 py-0.5 rounded">
                       {t('Offline')}
                     </span>
                   )}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {player.score} {t('Pontos').toLowerCase()}
-                </p>
+                  <span className="text-xs text-gray-600 dark:text-gray-400">
+                    {player.score} pts
+                  </span>
+                </div>
               </div>
             </div>
 
             {/* Status */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 md:gap-2 flex-shrink-0">
               {player.isReady ? (
-                <span className="text-green-600 dark:text-green-400 font-semibold text-sm">
+                <span className="text-green-600 dark:text-green-400 font-semibold text-xs md:text-sm whitespace-nowrap">
                   ✓ {t('Pronto')}
                 </span>
               ) : (
-                <span className="text-gray-500 text-sm">{t('Aguardando')}...</span>
+                <span className="text-gray-500 text-xs md:text-sm whitespace-nowrap">{t('Aguardando')}...</span>
               )}
               
               {/* Botão de remover (apenas para host, não pode remover a si mesmo) */}
@@ -92,10 +94,10 @@ export function PlayerList({ players, hostId, currentPlayerId, isHost, onRemoveP
                       onRemovePlayer(id);
                     }
                   }}
-                  className="p-1 h-7 w-7 bg-red-500 hover:bg-red-600 text-white"
+                  className="p-1 h-6 w-6 md:h-7 md:w-7 bg-red-500 hover:bg-red-600 text-white flex-shrink-0"
                   title={t('Remover jogador')}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3 h-3 md:w-4 md:h-4" />
                 </Button>
               )}
             </div>
