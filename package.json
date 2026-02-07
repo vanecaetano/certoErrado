@@ -1,7 +1,7 @@
 {
   "name": "certo-ou-errado",
-  "version": "1.0.0",
-  "description": "Aplicativo de perguntas e respostas estilo Show do Milhão",
+  "version": "1.1.0",
+  "description": "Aplicativo de perguntas e respostas estilo Show do Milhão com Multiplayer",
   "private": true,
   "type": "module",
   "scripts": {
