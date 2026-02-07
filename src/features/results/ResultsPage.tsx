@@ -6,7 +6,7 @@ import { dbService } from '@/services/database';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ShareQuizButton } from '@/components/ui/ShareQuizButton';
-import { Home, Trophy, Target, Zap, Users } from 'lucide-react';
+import { Home, Trophy, Target, Users } from 'lucide-react';
 import type { GameQuestion } from '@/types';
 
 export function ResultsPage() {
@@ -82,37 +82,15 @@ export function ResultsPage() {
 
       {/* Card de Estatísticas */}
       <Card className="mb-6 p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-          {/* Pontuação */}
-          <div className="bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 rounded-xl p-6 border-2 border-cyan-200 dark:border-cyan-800 text-center">
-            <Zap className="w-10 h-10 text-cyan-600 dark:text-cyan-400 mx-auto mb-2" />
-            <div className="text-cyan-700 dark:text-cyan-400 text-sm font-bold mb-1">{t('PONTUAÇÃO')}</div>
-            <div className="text-5xl font-bold text-cyan-900 dark:text-cyan-300">{savedScore}</div>
-          </div>
-
+        <div className="flex justify-center mb-6">
           {/* Acertos */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6 border-2 border-green-200 dark:border-green-800 text-center">
-            <Target className="w-10 h-10 text-green-600 dark:text-green-400 mx-auto mb-2" />
-            <div className="text-green-700 dark:text-green-400 text-sm font-bold mb-1">{t('ACERTOS')}</div>
-            <div className="text-5xl font-bold text-green-900 dark:text-green-300">
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-8 border-2 border-green-200 dark:border-green-800 text-center max-w-sm w-full">
+            <Target className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-3" />
+            <div className="text-green-700 dark:text-green-400 text-sm font-bold mb-2">{t('ACERTOS')}</div>
+            <div className="text-6xl font-bold text-green-900 dark:text-green-300">
               {correctAnswers}/{totalQuestions}
             </div>
           </div>
-
-          {/* Precisão */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-6 border-2 border-purple-200 dark:border-purple-800 text-center">
-            <Trophy className="w-10 h-10 text-purple-600 dark:text-purple-400 mx-auto mb-2" />
-            <div className="text-purple-700 dark:text-purple-400 text-sm font-bold mb-1">{t('PRECISÃO')}</div>
-            <div className="text-5xl font-bold text-purple-900 dark:text-purple-300">{accuracy.toFixed(0)}%</div>
-          </div>
-        </div>
-
-        {/* Barra de Progresso */}
-        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-          <div 
-            className="h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transition-all duration-1000 ease-out"
-            style={{ width: `${accuracy}%` }}
-          />
         </div>
       </Card>
 

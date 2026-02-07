@@ -192,18 +192,18 @@ export function ShareQuizButton({ questions, subjects = [], score, variant = 'de
                 <Button
                   onClick={handleShare}
                   disabled={isSharing || !firebaseAvailable}
-                  className="w-full bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white"
+                  className="w-full bg-gradient-to-r from-primary-600 to-indigo-600 hover:from-primary-700 hover:to-indigo-700 text-white text-sm sm:text-base"
                   size="lg"
                 >
                   {isSharing ? (
                     <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      {t('Compartilhando...')}
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin flex-shrink-0" />
+                      <span className="truncate">{t('Compartilhando...')}</span>
                     </>
                   ) : (
                     <>
-                      <Share2 className="w-5 h-5 mr-2" />
-                      {t('Gerar Link de Compartilhamento')}
+                      <Share2 className="w-5 h-5 mr-2 flex-shrink-0" />
+                      <span className="truncate">{t('Gerar Link de Compartilhamento')}</span>
                     </>
                   )}
                 </Button>
