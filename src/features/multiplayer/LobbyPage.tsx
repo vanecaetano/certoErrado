@@ -279,9 +279,10 @@ export function LobbyPage() {
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <Button variant="secondary" onClick={handleLeave} className="gap-2">
+          <Button variant="secondary" onClick={handleLeave} className="gap-2 text-sm">
             <ArrowLeft className="w-4 h-4" />
-            {t('Sair da Sala')}
+            <span className="hidden sm:inline">{t('Sair da Sala')}</span>
+            <span className="sm:hidden">{t('Sair')}</span>
           </Button>
         </div>
 
@@ -374,16 +375,21 @@ export function LobbyPage() {
 
         {/* Botões de Ação */}
         {room && playerId && room.players[playerId] && (
-          <Card className="p-6">
-            <div className="space-y-4">
+          <Card className="p-4 md:p-6">
+            <div className="space-y-3 md:space-y-4">
               {/* Botão Ready para jogadores */}
               {!isHost && (
                 <Button
                   onClick={handleToggleReady}
                   variant={room.players[playerId]?.isReady ? 'secondary' : 'primary'}
-                  className="w-full"
+                  className="w-full text-sm md:text-base"
                 >
-                  {room.players[playerId]?.isReady ? t('Aguardar Mais Jogadores') : t('Estou Pronto!')}
+                  {room.players[playerId]?.isReady ? (
+                    <>
+                      <span className="hidden sm:inline">{t('Aguardar Mais Jogadores')}</span>
+                      <span className="sm:hidden">{t('Aguardando')}...</span>
+                    </>
+                  ) : t('Estou Pronto!')}
                 </Button>
               )}
 
@@ -393,22 +399,27 @@ export function LobbyPage() {
                   <Button
                     onClick={handleToggleReady}
                     variant={room.players[playerId]?.isReady ? 'secondary' : 'primary'}
-                    className="w-full"
+                    className="w-full text-sm md:text-base"
                   >
-                    {room.players[playerId]?.isReady ? t('Aguardar Mais Jogadores') : t('Estou Pronto!')}
+                    {room.players[playerId]?.isReady ? (
+                      <>
+                        <span className="hidden sm:inline">{t('Aguardar Mais Jogadores')}</span>
+                        <span className="sm:hidden">{t('Aguardando')}...</span>
+                      </>
+                    ) : t('Estou Pronto!')}
                   </Button>
                   
                   <Button
                     onClick={handleStartGame}
                     disabled={!canStart}
-                    className="w-full gap-2"
+                    className="w-full gap-2 text-sm md:text-base"
                   >
-                    <Play className="w-5 h-5" />
+                    <Play className="w-4 h-4 md:w-5 md:h-5" />
                     {t('Iniciar Jogo')}
                   </Button>
 
                   {!allPlayersReady && (
-                    <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                    <p className="text-xs md:text-sm text-center text-gray-600 dark:text-gray-400">
                       {Object.keys(room.players).length < 2
                         ? t('Pelo menos 2 jogadores necessários')
                         : t('Todos os jogadores devem estar prontos')}
@@ -419,7 +430,7 @@ export function LobbyPage() {
 
               {/* Mensagem para não-host */}
               {!isHost && (
-                <p className="text-sm text-center text-gray-600 dark:text-gray-400">
+                <p className="text-xs md:text-sm text-center text-gray-600 dark:text-gray-400">
                   {t('Aguarde o host iniciar o jogo...')}
                 </p>
               )}
