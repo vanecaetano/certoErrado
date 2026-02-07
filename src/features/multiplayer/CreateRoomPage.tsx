@@ -302,20 +302,25 @@ export function CreateRoomPage() {
           )}
 
           {/* Buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <Button
               variant="secondary"
               onClick={() => navigate('/')}
-              className="flex-1"
+              className="w-full sm:flex-1"
             >
               {t('Voltar')}
             </Button>
             <Button
               onClick={handleCreateRoom}
               disabled={isCreating}
-              className="flex-1"
+              className="w-full sm:flex-1 text-sm sm:text-base"
             >
-              {isCreating ? t('Criando sala...') : t('Criar e Compartilhar')}
+              {isCreating ? t('Criando sala...') : (
+                <>
+                  <span className="hidden sm:inline">{t('Criar e Compartilhar')}</span>
+                  <span className="sm:hidden">{t('Criar Sala')}</span>
+                </>
+              )}
             </Button>
           </div>
         </Card>
