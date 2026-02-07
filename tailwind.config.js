@@ -51,12 +51,24 @@ export default {
       },
       keyframes: {
         'pulse-green': {
-          '0%, 100%': { backgroundColor: 'transparent' },
-          '50%': { backgroundColor: 'rgba(34, 197, 94, 0.3)' },
+          '0%, 100%': { 
+            backgroundColor: 'transparent',
+            transform: 'scale(1)',
+          },
+          '50%': { 
+            backgroundColor: 'rgba(34, 197, 94, 0.5)',
+            transform: 'scale(1.02)',
+          },
         },
         'pulse-red': {
-          '0%, 100%': { backgroundColor: 'transparent' },
-          '50%': { backgroundColor: 'rgba(239, 68, 68, 0.3)' },
+          '0%, 100%': { 
+            backgroundColor: 'transparent',
+            transform: 'scale(1)',
+          },
+          '50%': { 
+            backgroundColor: 'rgba(239, 68, 68, 0.5)',
+            transform: 'scale(1.02)',
+          },
         },
       },
     },

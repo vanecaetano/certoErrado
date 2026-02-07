@@ -1,5 +1,6 @@
 import { initializeApp, FirebaseApp } from 'firebase/app';
 import { getFirestore, Firestore } from 'firebase/firestore';
+import { getDatabase, Database } from 'firebase/database';
 
 // Configuração do Firebase - SUBSTITUA com suas credenciais
 // Obtenha em: https://console.firebase.google.com/ → Configurações do Projeto → Seus aplicativos
@@ -10,10 +11,16 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET || "seu-projeto.appspot.com",
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "123456789",
   appId: import.meta.env.VITE_FIREBASE_APP_ID || "1:123456789:web:abcdef",
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL || "https://seu-projeto.firebaseio.com",
 };
+
+// Debug: verificar se a URL está sendo lida corretamente
+console.log('🔥 Firebase Database URL:', import.meta.env.VITE_FIREBASE_DATABASE_URL);
+console.log('🔥 Firebase Config:', firebaseConfig.databaseURL);
 
 let app: FirebaseApp | null = null;
 let db: Firestore | null = null;
+let realtimeDb: Database | null = null;
 
 /**
  * Inicializa o Firebase
@@ -44,6 +51,7 @@ export const initializeFirebase = (): { app: FirebaseApp | null; db: Firestore |
   try {
     if (!app) {
       app = initializeApp(firebaseConfig);
+      realtimeDb = getDatabase(app);
       db = getFirestore(app);
       console.log('✅ Firebase inicializado com sucesso! Compartilhamento de quizzes ativado.');
     }
@@ -63,6 +71,16 @@ export const getFirestoreInstance = (): Firestore | null => {
     return newDb;
   }
   return db;
+};
+
+/**
+ * Retorna a instância do Realtime Database
+ */
+export const getRealtimeDatabaseInstance = (): Database | null => {
+  if (!realtimeDb) {
+    initializeFirebase();
+  }
+  return realtimeDb;
 };
 
 /**

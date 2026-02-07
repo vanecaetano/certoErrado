@@ -12,6 +12,10 @@ import GameGuard from '@/components/layout/GameGuard';
 import { ResultsPage } from '@/features/results/ResultsPage';
 import { PrivacyPage } from '@/features/privacy/PrivacyPage';
 import { SharedQuizPage } from '@/features/shared/SharedQuizPage';
+import { CreateRoomPage } from '@/features/multiplayer/CreateRoomPage';
+import { LobbyPage } from '@/features/multiplayer/LobbyPage';
+import { MultiplayerGamePage } from '@/features/multiplayer/MultiplayerGamePage';
+import { MultiplayerResultsPage } from '@/features/multiplayer/MultiplayerResultsPage';
 import { useThemeStore } from '@/store/themeStore';
 import { dbService } from '@/services/database';
 import { initializeFirebase } from '@/services/firebase';
@@ -79,6 +83,12 @@ function App() {
               <Route path="/quiz/:id" element={<SharedQuizPage />} />
               <Route path="/results" element={<ResultsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
+              
+              {/* Multiplayer Routes */}
+              <Route path="/multiplayer/create" element={<CreateRoomPage />} />
+              <Route path="/multiplayer/:roomId" element={<LobbyPage />} />
+              <Route path="/multiplayer/:roomId/play" element={<MultiplayerGamePage />} />
+              <Route path="/multiplayer/:roomId/results" element={<MultiplayerResultsPage />} />
             </Routes>
           </main>
           <SpeedInsights />

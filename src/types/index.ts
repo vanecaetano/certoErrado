@@ -88,3 +88,29 @@ export interface ShareQuizResponse {
   success: boolean;
   error?: string;
 }
+
+// Multiplayer Types
+export interface MultiplayerRoom {
+  host: string;
+  hostName: string;
+  roomName?: string;
+  subjects?: string[];
+  status: 'waiting' | 'playing' | 'finished';
+  createdAt: number;
+  startedAt?: number;
+  currentQuestion: number;
+  questionStartTime?: number;
+  maxPlayers: number;
+  questions: GameQuestion[];
+  players: Record<string, MultiplayerPlayer>;
+}
+
+export interface MultiplayerPlayer {
+  name: string;
+  isReady: boolean;
+  score: number;
+  currentQuestion: number;
+  answers?: Record<number, boolean>;
+  lastSeen: number;
+  isOnline: boolean;
+}

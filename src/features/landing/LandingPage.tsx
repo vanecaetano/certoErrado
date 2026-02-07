@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Zap, Brain, Trophy, Shield } from 'lucide-react';
+import { Zap, Brain, Trophy, Shield, Users } from 'lucide-react';
 import { dbService } from '@/services/database';
 import startSound from '@/assets/start.mp3';
 
@@ -33,8 +33,8 @@ export function LandingPage() {
           {t('Escolha entre qualquer assunto que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!')}
         </p>
 
-        {/* Cards de Destaque: Relâmpago, Personalizado e Iniciar Jogo */}
-        <div className="mb-16 grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        {/* Cards de Destaque: Relâmpago, Personalizado e Multiplayer */}
+        <div className="mb-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
   {/* Modo Relâmpago Card */}
   <Card className="border-2 border-primary-600 p-8 flex flex-col justify-between items-stretch">
     <div className="flex justify-center mb-6">
@@ -109,22 +109,22 @@ export function LandingPage() {
     </div>
   </Card>
 
-  {/* Iniciar Jogo Card */}
-  <Card className="border-2 border-warning-600 p-8 flex flex-col justify-between items-stretch">
+  {/* Multiplayer Card */}
+  <Card className="border-2 border-purple-600 p-8 flex flex-col justify-between items-stretch">
     <div className="flex justify-center mb-6">
-      <Trophy className="w-16 h-16 text-warning-600" />
+      <Users className="w-16 h-16 text-purple-600" />
     </div>
-    <h3 className="text-2xl font-bold mb-3 text-warning-600 text-center">{t('Iniciar Jogo')}</h3>
+    <h3 className="text-2xl font-bold mb-3 text-purple-600 text-center">{t('Jogar com Amigos')}</h3>
     <p className="text-gray-600 dark:text-gray-400 mb-6 text-center">
-      {t('Selecione seus assuntos favoritos e comece a jogar agora mesmo!')}
+      {t('Jogue simultaneamente com seus amigos e veja quem sabe mais!')}
     </p>
     <div className="mt-auto">
       <Button
         size="lg"
-        className="w-full h-14 text-lg font-semibold rounded-xl bg-primary-600 hover:bg-primary-700 text-white"
-        onClick={() => navigate('/play')}
+        className="w-full h-14 text-lg font-semibold rounded-xl bg-purple-600 hover:bg-purple-700"
+        onClick={() => navigate('/multiplayer/create')}
       >
-        🎮 {t('Iniciar Jogo')}
+        {t('Jogar Online')}
       </Button>
     </div>
   </Card>
