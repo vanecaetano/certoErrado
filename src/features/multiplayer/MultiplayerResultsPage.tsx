@@ -73,6 +73,22 @@ export function MultiplayerResultsPage() {
     return 'from-gray-200 to-gray-400';
   };
 
+  // Calcular bônus de velocidade (1 ponto por segundo economizado)
+  const calculateSpeedBonus = (player: MultiplayerPlayer) => {
+    const totalQuestions = room?.questions.length || 0;
+    const maxTimePerQuestion = 15; // segundos
+    const maxTotalTime = totalQuestions * maxTimePerQuestion;
+    const actualTime = player.totalResponseTime || 0;
+    const timeSaved = Math.max(0, maxTotalTime - actualTime);
+    return Math.floor(timeSaved);
+  };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8 px-4">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -96,6 +112,8 @@ export function MultiplayerResultsPage() {
             const correctAnswers = player.answers ? Object.values(player.answers).filter(Boolean).length : 0;
             const totalQuestions = room.questions.length;
             const accuracy = totalQuestions > 0 ? Math.round((correctAnswers / totalQuestions) * 100) : 0;
+            const speedBonus = calculateSpeedBonus(player);
+            const totalTime = player.totalResponseTime || 0;
 
             return (
               <Card
@@ -158,6 +176,21 @@ export function MultiplayerResultsPage() {
                       <span className="whitespace-nowrap">
                         <strong>{accuracy}%</strong> precisão
                       </span>
+                      <span className="flex items-center gap-1 whitespace-nowrap">
+                        ⏱️
+                        <strong className="text-blue-600 dark:text-blue-400">
+                          {formatTime(totalTime)}
+                        </strong>
+                      </span>
+                      {speedBonus > 0 && (
+                        <span className="flex items-center gap-1 whitespace-nowrap">
+                          ⚡
+                          <strong className="text-yellow-600 dark:text-yellow-400">
+                            +{speedBonus}
+                          </strong>{' '}
+                          bônus
+                        </span>
+                      )}
                     </div>
                   </div>
 

@@ -191,6 +191,10 @@ export function MultiplayerGamePage() {
   const handleAnswerSelect = (answerId: number) => {
     if (hasAnswered || !room || !currentQuestion || !roomId) return;
 
+    // Calcular tempo de resposta
+    const questionStartTime = room.questionStartTime || Date.now();
+    const responseTime = Math.floor((Date.now() - questionStartTime) / 1000); // em segundos
+
     // Verificar se está correto
     const correctAnswer = currentQuestion.answers.find(a => a.isCorrect);
     const correct = answerId === correctAnswer?.id;
@@ -232,7 +236,8 @@ export function MultiplayerGamePage() {
       roomId,
       playerId,
       room.currentQuestion,
-      correct
+      correct,
+      responseTime // passar tempo de resposta
     ).catch((err) => {
       console.error('Error submitting answer:', err);
     });

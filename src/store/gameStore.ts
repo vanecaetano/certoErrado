@@ -4,6 +4,7 @@ import { dbService } from '@/services/database';
 
 interface GameStore extends GameState {
   isPaused: boolean;
+  questionStartTime: number; // timestamp do início da pergunta atual
   initializeGame: (config: GameConfig) => Promise<void>;
   selectAnswer: (answerId: number) => void;
   nextQuestion: () => void;
@@ -22,8 +23,12 @@ const initialState: GameState = {
   isCorrect: null,
   config: { subjects: [] },
   questionResults: new Map(),
+  responseTimes: [],
+  totalResponseTime: 0,
+  speedBonus: 0,
 };
 
+  questionStartTime: Date.now(),
 export const useGameStore = create<GameStore>((set, get) => ({
   ...initialState,
   isPaused: false,
@@ -62,6 +67,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       ...initialState,
       questions,
       config,
+      questionStartTime: Date.now(),
     });
   },
 
@@ -96,6 +102,11 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const selectedAnswer = currentQuestion.answers.find(a => a.id === answerId);
     const isCorrect = selectedAnswer?.isCorrect || false;
 
+    // Calcular tempo de resposta em segundos
+    const responseTime = Math.floor((Date.now() - (get() as GameStore).questionStartTime) / 1000);
+    const newResponseTimes = [...state.responseTimes, responseTime];
+    const newTotalResponseTime = state.totalResponseTime + responseTime;
+
     const newResults = new Map(state.questionResults);
     newResults.set(currentQuestion.question.id, isCorrect);
 
@@ -105,6 +116,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
       isCorrect,
       score: isCorrect ? state.score + 10 : state.score,
       questionResults: newResults,
+      responseTimes: newResponseTimes,
+      totalResponseTime: newTotalResponseTime,
     });
   },
 
@@ -116,16 +129,26 @@ export const useGameStore = create<GameStore>((set, get) => ({
         selectedAnswerId: null,
         isAnswered: false,
         isCorrect: null,
+        questionStartTime: Date.now(), // Redefinir timestamp para nova pergunta
       });
     }
   },
 
   resetGame: () => {
-    set(initialState);
+    set({ ...initialState, questionStartTime: Date.now() });
   },
 
   finishGame: async () => {
     const state = get();
+    
+    // Calcular bônus de velocidade (1 ponto por segundo economizado)
+    const totalQuestions = state.questions.length;
+    const maxTimePerQuestion = 15; // segundos
+    const maxTotalTime = totalQuestions * maxTimePerQuestion;
+    const timeSaved = Math.max(0, maxTotalTime - state.totalResponseTime);
+    const speedBonus = Math.floor(timeSaved);
+
+    set({ speedBonus });
     
     // Salvar sessões de jogo por assunto
     const subjectStats = new Map<number, { answered: number; correct: number; score: number }>();

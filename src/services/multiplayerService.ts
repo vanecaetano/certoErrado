@@ -182,7 +182,8 @@ export const multiplayerService = {
     roomId: string,
     playerId: string,
     questionIndex: number,
-    isCorrect: boolean
+    isCorrect: boolean,
+    responseTime?: number // tempo de resposta em segundos
   ): Promise<void> {
     const db = getRealtimeDatabaseInstance();
     if (!db) throw new Error('Firebase Realtime Database not initialized');
@@ -194,6 +195,12 @@ export const multiplayerService = {
 
     if (isCorrect) {
       updates[`game-rooms/${roomId}/players/${playerId}/score`] = increment(10);
+    }
+
+    // Armazenar tempo de resposta se fornecido
+    if (responseTime !== undefined) {
+      updates[`game-rooms/${roomId}/players/${playerId}/responseTimes/${questionIndex}`] = responseTime;
+      updates[`game-rooms/${roomId}/players/${playerId}/totalResponseTime`] = increment(responseTime);
     }
 
     await update(ref(db), updates);

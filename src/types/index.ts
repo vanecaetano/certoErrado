@@ -52,6 +52,9 @@ export interface GameState {
   isCorrect: boolean | null;
   config: GameConfig;
   questionResults: Map<number, boolean>; // questionId -> isCorrect
+  responseTimes: number[]; // tempo de resposta em segundos para cada pergunta
+  totalResponseTime: number; // tempo total em segundos
+  speedBonus: number; // pontos extras por velocidade
 }
 
 export interface PerformanceData {
@@ -111,6 +114,9 @@ export interface MultiplayerPlayer {
   score: number;
   currentQuestion: number;
   answers?: Record<number, boolean>;
+  responseTimes?: Record<number, number>; // questionIndex -> tempo em segundos
+  totalResponseTime?: number; // tempo total em segundos
+  speedBonus?: number; // pontos extras por velocidade
   lastSeen: number;
   isOnline: boolean;
 }

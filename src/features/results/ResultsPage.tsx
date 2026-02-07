@@ -12,12 +12,14 @@ import type { GameQuestion } from '@/types';
 export function ResultsPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { questions, score, questionResults, config, resetGame } = useGameStore();
+  const { questions, score, questionResults, config, resetGame, totalResponseTime, speedBonus } = useGameStore();
 
   // Salvar dados localmente antes de resetar
   const [savedQuestions, setSavedQuestions] = useState<GameQuestion[]>([]);
   const [savedScore, setSavedScore] = useState(0);
   const [savedResults, setSavedResults] = useState<Map<number, boolean>>(new Map());
+  const [savedTotalTime, setSavedTotalTime] = useState(0);
+  const [savedSpeedBonus, setSavedSpeedBonus] = useState(0);
   const [subjectNames, setSubjectNames] = useState<string[]>([]);
 
   // Capturar dados no mount
@@ -25,7 +27,16 @@ export function ResultsPage() {
     setSavedQuestions(questions);
     setSavedScore(score);
     setSavedResults(new Map(questionResults));
+    setSavedTotalTime(totalResponseTime);
+    setSavedSpeedBonus(speedBonus);
   }, []);
+
+  // Formatar tempo
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+  };
 
   const totalQuestions = savedQuestions.length;
   const correctAnswers = Array.from(savedResults.values()).filter(result => result).length;
@@ -75,16 +86,43 @@ export function ResultsPage() {
         </div>
 
         {/* Título */}
-        <h1 className="text-4xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-primary-600 to-indigo-600 text-transparent bg-clip-text">
-          {t('Resultado Final')}
-        </h1>
-      </div>
-
-      {/* Card de Estatísticas */}
-      <Card className="mb-6 p-6">
-        <div className="flex justify-center mb-6">
+        <h1 className="text-4flex-col md:flex-row justify-center gap-4 mb-6">
           {/* Acertos */}
-          <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-8 border-2 border-green-200 dark:border-green-800 text-center max-w-sm w-full">
+          <div className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-8 border-2 border-green-200 dark:border-green-800 text-center flex-1 max-w-sm">
+            <Target className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-3" />
+            <div className="text-green-700 dark:text-green-400 text-sm font-bold mb-2">{t('ACERTOS')}</div>
+            <div className="text-6xl font-bold text-green-900 dark:text-green-300">
+              {correctAnswers}/{totalQuestions}
+            </div>
+          </div>
+
+          {/* Tempo Total */}
+          <div className="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-8 border-2 border-blue-200 dark:border-blue-800 text-center flex-1 max-w-sm">
+            <div className="text-4xl mb-3">⏱️</div>
+            <div className="text-blue-700 dark:text-blue-400 text-sm font-bold mb-2">{t('TEMPO TOTAL')}</div>
+            <div className="text-4xl font-bold text-blue-900 dark:text-blue-300">
+              {formatTime(savedTotalTime)}
+            </div>
+          </div>
+        </div>
+
+        {/* Bônus de Velocidade */}
+        {savedSpeedBonus > 0 && (
+          <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-900/20 dark:to-orange-900/20 rounded-xl p-6 border-2 border-yellow-300 dark:border-yellow-700">
+            <div className="flex items-center justify-center gap-3">
+              <span className="text-4xl">⚡</span>
+              <div>
+                <div className="text-yellow-700 dark:text-yellow-400 text-sm font-bold">{t('BÔNUS DE VELOCIDADE')}</div>
+                <div className="text-3xl font-bold text-yellow-900 dark:text-yellow-300">
+                  +{savedSpeedBonus} {t('pontos')}
+                </div>
+              </div>
+            </div>
+            <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-3">
+              {t('Você economizou tempo nas respostas!')}
+            </p>
+          </div>
+        )} className="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-8 border-2 border-green-200 dark:border-green-800 text-center max-w-sm w-full">
             <Target className="w-12 h-12 text-green-600 dark:text-green-400 mx-auto mb-3" />
             <div className="text-green-700 dark:text-green-400 text-sm font-bold mb-2">{t('ACERTOS')}</div>
             <div className="text-6xl font-bold text-green-900 dark:text-green-300">
