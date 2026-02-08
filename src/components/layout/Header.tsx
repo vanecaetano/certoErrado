@@ -5,7 +5,7 @@ import { useGameStore } from '@/store/gameStore';
 import { ShareQuizButton } from '@/components/ui/ShareQuizButton';
 import { RankingWidget } from '@/components/layout/RankingWidget';
 import { dbService } from '@/services/database';
-import logoUrl from '@/assets/logo.jpeg';
+import logoUrl from '@/assets/logo.png';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -77,11 +77,16 @@ export function Header() {
       <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4 max-w-full">
         {/* Logo e Título */}
         <Link to="/" className="flex items-center gap-3 min-w-0 flex-shrink hover:opacity-80 transition-opacity relative">
-          <div className="w-16 h-12 relative">
+          <div className="w-24 h-12 relative overflow-visible">
             <img 
               src={logoUrl} 
               alt="Certo ou Errado logo" 
-              className="w-14 h-14 md:w-20 md:h-20 absolute top-1/2 -translate-y-1/2 left-0 flex-shrink-0 object-contain rounded-lg" 
+              className="header-logo absolute left-0 flex-shrink-0 object-contain drop-shadow-2xl"
+              style={{
+                top: '120%',
+                transform: 'translateY(-50%)',
+                zIndex: 1000
+              }}
             />
           </div>
         </Link>
