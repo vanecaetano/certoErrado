@@ -248,6 +248,10 @@ const resources = {
       'O multiplayer usa Desafios personalizados. Crie pelo menos um assunto nas Configurações para continuar.': 'O multiplayer usa Desafios personalizados. Crie pelo menos um assunto nas Configurações para continuar.',
       'Selecione pelo menos um desafio': 'Selecione pelo menos um desafio',
       'selecionados': 'selecionados',
+      'Jogando como': 'Jogando como',
+      'Entrando na Sala': 'Entrando na Sala',
+      'Como': 'Como',
+      'Por favor, defina seu nome nas configurações': 'Por favor, defina seu nome nas configurações',
       'Você foi removido da sala pelo anfitrião.': 'Você foi removido da sala pelo anfitrião.'
     }
   },
@@ -487,6 +491,10 @@ const resources = {
       'O multiplayer usa Desafios personalizados. Crie pelo menos um assunto nas Configurações para continuar.': 'Multiplayer uses custom topics. Create at least one topic in Settings to continue.',
       'Selecione pelo menos um desafio': 'Select at least one topic',
       'selecionados': 'selected',
+      'Jogando como': 'Playing as',
+      'Entrando na Sala': 'Joining Room',
+      'Como': 'As',
+      'Por favor, defina seu nome nas configurações': 'Please set your name in settings',
       'Você foi removido da sala pelo anfitrião.': 'You were removed from the room by the host.'
     }
   },
@@ -737,6 +745,10 @@ const resources = {
       'O multiplayer usa Desafios personalizados. Crie pelo menos um assunto nas Configurações para continuar.': 'El multijugador usa temas personalizados. Crea al menos un tema en Configuración para continuar.',
       'Selecione pelo menos um desafio': 'Selecciona al menos un tema',
       'selecionados': 'seleccionados',
+      'Jogando como': 'Jugando como',
+      'Entrando na Sala': 'Entrando en la Sala',
+      'Como': 'Como',
+      'Por favor, defina seu nome nas configurações': 'Por favor, configura tu nombre en ajustes',
       'Você foi removido da sala pelo anfitrião.': 'Fuiste eliminado de la sala por el anfitrión.'
     }
   },
@@ -986,6 +998,10 @@ const resources = {
       'O multiplayer usa Desafios personalizados. Crie pelo menos um assunto nas Configurações para continuar.': 'Le multijoueur utilise des sujets personnalisés. Créez au moins un sujet dans les Paramètres pour continuer.',
       'Selecione pelo menos um desafio': 'Sélectionnez au moins un sujet',
       'selecionados': 'sélectionnés',
+      'Jogando como': 'Jouant en tant que',
+      'Entrando na Sala': 'Rejoindre la Salle',
+      'Como': 'En tant que',
+      'Por favor, defina seu nome nas configurações': 'Veuillez définir votre nom dans les paramètres',
       'Você foi removido da sala pelo anfitrião.': 'Vous avez été retiré de la salle par l\'hôte.'
     }
   },
@@ -1236,6 +1252,10 @@ const resources = {
       'O multiplayer usa Desafios personalizados. Crie pelo menos um assunto nas Configurações para continuar.': 'Mehrspieler verwendet benutzerdefinierte Themen. Erstellen Sie mindestens ein Thema in den Einstellungen, um fortzufahren.',
       'Selecione pelo menos um desafio': 'Wählen Sie mindestens ein Thema aus',
       'selecionados': 'ausgewählt',
+      'Jogando como': 'Spielend als',
+      'Entrando na Sala': 'Raum beitreten',
+      'Como': 'Als',
+      'Por favor, defina seu nome nas configurações': 'Bitte legen Sie Ihren Namen in den Einstellungen fest',
       'Você foi removido da sala pelo anfitrião.': 'Sie wurden vom Gastgeber aus dem Raum entfernt.'
     }
   }

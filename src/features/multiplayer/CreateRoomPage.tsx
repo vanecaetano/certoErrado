@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { multiplayerService } from '@/services/multiplayerService';
+import { rankingService } from '@/services/rankingService';
 import { dbService } from '@/services/database';
 import type { GameQuestion, Subject } from '@/types';
 
@@ -24,6 +25,19 @@ export function CreateRoomPage() {
   const [selectedSubjects, setSelectedSubjects] = useState<number[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  // Carregar nome do jogador do localStorage ou ranking
+  useEffect(() => {
+    let storedPlayerName = localStorage.getItem('multiplayerPlayerName');
+    
+    if (!storedPlayerName) {
+      storedPlayerName = rankingService.getPlayerName();
+    }
+    
+    if (storedPlayerName) {
+      setPlayerName(storedPlayerName);
+    }
+  }, []);
 
   // Carregar assuntos disponíveis
   useEffect(() => {
@@ -84,7 +98,7 @@ export function CreateRoomPage() {
       return;
     }
     if (!playerName.trim()) {
-      setError(t('Digite seu nome para entrar'));
+      setError(t('Por favor, defina seu nome nas configurações'));
       return;
     }
     if (selectedSubjects.length === 0) {
@@ -232,23 +246,22 @@ export function CreateRoomPage() {
             </div>
           </div>
 
-          {/* Seu Nome */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t('Seu Nome')}
-            </label>
-            <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                type="text"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value.replace(/[^a-zA-Z0-9\u00C0-\u017F\s]/g, ''))}
-                placeholder={t('Ex: João')}
-                className="pl-10"
-                maxLength={30}
-              />
+          {/* Nome do Jogador (exibição apenas) */}
+          {playerName && (
+            <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4 border border-primary-200 dark:border-primary-800">
+              <div className="flex items-center gap-2">
+                <User className="w-5 h-5 text-primary-600 dark:text-primary-400" />
+                <div>
+                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                    {t('Jogando como')}:
+                  </p>
+                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                    {playerName}
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Número de Jogadores */}
           <div>

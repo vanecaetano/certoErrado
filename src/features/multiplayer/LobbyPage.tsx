@@ -28,8 +28,10 @@ export function LobbyPage() {
   const allPlayersReady = room ? multiplayerService.areAllPlayersReady(room) : false;
   const canStart = isHost && allPlayersReady;
 
-  // Carregar nome do jogador do localStorage ou ranking
+  // Carregar nome do jogador do localStorage ou ranking e entrar automaticamente
   useEffect(() => {
+    if (hasJoined || !roomId) return;
+
     // Primeiro tenta pegar do multiplayer localStorage
     let storedPlayerName = localStorage.getItem('multiplayerPlayerName');
     
@@ -40,8 +42,10 @@ export function LobbyPage() {
     
     if (storedPlayerName) {
       setPlayerName(storedPlayerName);
+      // Entrar automaticamente na sala
+      handleAutoJoin(storedPlayerName);
     }
-  }, []);
+  }, [roomId, hasJoined]);
 
   // Listener para mudanças na sala
   useEffect(() => {
@@ -100,28 +104,9 @@ export function LobbyPage() {
     return () => clearInterval(interval);
   }, [roomId, playerId, hasJoined]);
 
-  // Cleanup ao sair da página
-  useEffect(() => {
-    if (!roomId || !playerId || !hasJoined) return;
-
-    const handleBeforeUnload = () => {
-      // Remover jogador ao fechar navegador/aba
-      multiplayerService.removePlayer(roomId, playerId);
-      localStorage.removeItem('multiplayerCurrentRoomId');
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [roomId, playerId, hasJoined]);
-
-  const handleJoinRoom = async () => {
-    if (!playerName.trim() || !roomId) {
-      setError(t('Digite seu nome para entrar'));
-      return;
-    }
+  // Função para entrar automaticamente na sala
+  const handleAutoJoin = async (name: string) => {
+    if (!name.trim() || !roomId || isJoining) return;
 
     setIsJoining(true);
     setError('');
@@ -135,13 +120,13 @@ export function LobbyPage() {
 
       const newPlayerId = multiplayerService.generatePlayerId();
       
-      await multiplayerService.joinRoom(roomId, newPlayerId, playerName.trim());
+      await multiplayerService.joinRoom(roomId, newPlayerId, name.trim());
       
       setPlayerId(newPlayerId);
       setHasJoined(true);
       
       localStorage.setItem('multiplayerPlayerId', newPlayerId);
-      localStorage.setItem('multiplayerPlayerName', playerName.trim());
+      localStorage.setItem('multiplayerPlayerName', name.trim());
       localStorage.setItem('multiplayerCurrentRoomId', roomId);
     } catch (err: any) {
       console.error('Error joining room:', err);
@@ -158,6 +143,23 @@ export function LobbyPage() {
       setIsJoining(false);
     }
   };
+
+  // Cleanup ao sair da página
+  useEffect(() => {
+    if (!roomId || !playerId || !hasJoined) return;
+
+    const handleBeforeUnload = () => {
+      // Remover jogador ao fechar navegador/aba
+      multiplayerService.removePlayer(roomId, playerId);
+      localStorage.removeItem('multiplayerCurrentRoomId');
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [roomId, playerId, hasJoined]);
 
   const handleToggleReady = async () => {
     if (!roomId || !playerId || !room) {
@@ -219,45 +221,36 @@ export function LobbyPage() {
     }
   };
 
-  // Tela de entrada - quando ainda não entrou na sala
+  // Tela de entrada - quando ainda não entrou na sala (loading)
   if (!hasJoined) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex items-center justify-center p-4">
         <Card className="max-w-md w-full p-8">
-          <div className="text-center mb-6">
+          <div className="text-center">
             <UserPlus className="w-16 h-16 text-primary-600 dark:text-primary-400 mx-auto mb-4" />
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {t('Entrar na Sala')}
+              {t('Entrando na Sala')}
             </h2>
-            <p className="text-gray-600 dark:text-gray-400">
-              {t('Digite seu nome para entrar')}
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <Input
-              type="text"
-              value={playerName}
-              onChange={(e) => setPlayerName(e.target.value.replace(/[^a-zA-Z0-9\u00C0-\u017F\s]/g, ''))}
-              placeholder={t('Ex: João')}
-              maxLength={30}
-              onKeyPress={(e) => e.key === 'Enter' && handleJoinRoom()}
-            />
-
+            {playerName && (
+              <p className="text-gray-600 dark:text-gray-400 mb-4">
+                {t('Como')}: <span className="font-semibold text-primary-600 dark:text-primary-400">{playerName}</span>
+              </p>
+            )}
+            
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            
             {error && (
-              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg mt-4">
                 <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                <Button 
+                  variant="secondary" 
+                  onClick={() => navigate('/')} 
+                  className="w-full mt-3"
+                >
+                  {t('Voltar ao Início')}
+                </Button>
               </div>
             )}
-
-            <div className="flex gap-3">
-              <Button variant="secondary" onClick={() => navigate('/')} className="flex-1">
-                {t('Voltar')}
-              </Button>
-              <Button onClick={handleJoinRoom} disabled={isJoining} className="flex-1">
-                {isJoining ? t('Aguardando') + '...' : t('Entrar')}
-              </Button>
-            </div>
           </div>
         </Card>
       </div>
