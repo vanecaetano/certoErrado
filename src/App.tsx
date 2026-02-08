@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import './i18n';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -28,12 +28,11 @@ const queryClient = new QueryClient();
 
 function App() {
   const { theme } = useThemeStore();
-  const [playerNameSet, setPlayerNameSet] = useState(false);
 
   const handlePlayerNameComplete = (name: string) => {
     console.log('✅ Nome do jogador definido:', name);
-    setPlayerNameSet(true);
   };
+  
   // Música de fundo global
   useEffect(() => {
     let audio: HTMLAudioElement | null = (window as any).backgroundAudio;
