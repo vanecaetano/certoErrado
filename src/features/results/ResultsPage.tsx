@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useGameStore } from '@/store/gameStore';
 import { dbService } from '@/services/database';
+import { rankingService } from '@/services/rankingService';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import { ShareQuizButton } from '@/components/ui/ShareQuizButton';
@@ -21,6 +22,7 @@ export function ResultsPage() {
   const [savedTotalTime, setSavedTotalTime] = useState(0);
   const [savedSpeedBonus, setSavedSpeedBonus] = useState(0);
   const [subjectNames, setSubjectNames] = useState<string[]>([]);
+  const [rankingUpdated, setRankingUpdated] = useState(false);
 
   // Capturar dados no mount
   useEffect(() => {
@@ -73,6 +75,51 @@ export function ResultsPage() {
 
     loadSubjectNames();
   }, [config]);
+
+  // Atualizar ranking apenas se o quiz foi completado
+  useEffect(() => {
+    if (rankingUpdated || savedQuestions.length === 0) return;
+
+    const updateRanking = async () => {
+      try {
+        const totalQuestions = savedQuestions.length;
+        const correctAnswers = Array.from(savedResults.values()).filter(result => result).length;
+        
+        // Calcular tempo das respostas corretas
+        let correctAnswersTime = 0;
+        savedQuestions.forEach((_, index) => {
+          if (savedResults.get(index)) {
+            // Estimativa: tempo médio por resposta correta
+            const avgTimePerQuestion = savedTotalTime / totalQuestions;
+            correctAnswersTime += avgTimePerQuestion;
+          }
+        });
+
+        // XP = score + speed bonus
+        const xpGained = savedScore;
+
+        console.log('🏆 Atualizando ranking (solo):', {
+          correctAnswers,
+          totalQuestions,
+          correctAnswersTime,
+          xpGained
+        });
+
+        await rankingService.updateAfterGame(
+          correctAnswers,
+          totalQuestions,
+          correctAnswersTime,
+          xpGained
+        );
+
+        setRankingUpdated(true);
+      } catch (error) {
+        console.error('Erro ao atualizar ranking:', error);
+      }
+    };
+
+    updateRanking();
+  }, [savedQuestions, savedResults, savedTotalTime, savedScore, rankingUpdated]);
 
   useEffect(() => {
     // Resetar apenas ao desmontar o componente

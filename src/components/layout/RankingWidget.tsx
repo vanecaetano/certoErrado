@@ -36,7 +36,7 @@ export function RankingWidget() {
   return (
     <button
       onClick={() => navigate('/ranking')}
-      className="flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-white/5 dark:bg-white/5 hover:bg-white/10 dark:hover:bg-white/10 border border-gray-300/20 dark:border-gray-600/30 transition-all hover:scale-[1.01] backdrop-blur-sm group lg:w-auto whitespace-nowrap"
+      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/5 dark:bg-white/5 hover:bg-white/10 dark:hover:bg-white/10 border border-gray-300/20 dark:border-gray-600/30 transition-all hover:scale-[1.01] backdrop-blur-sm group lg:w-auto whitespace-nowrap"
       title={t('Ver ranking completo')}
     >
       {/* Icon */}
@@ -47,8 +47,25 @@ export function RankingWidget() {
         )}
       </div>
 
-      {/* Stats - Horizontal inline layout */}
-      <div className="flex items-center gap-2.5 lg:gap-3">
+      {/* Stats - Versão Mobile (apenas posição e pontos) */}
+      <div className="flex md:hidden items-center gap-2">
+        <div className="flex items-center gap-1">
+          <span className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+            #{playerData.position}
+          </span>
+        </div>
+        
+        <div className="h-3 w-px bg-gray-300/30 dark:bg-gray-600/30"></div>
+        
+        <div className="flex items-center gap-1">
+          <span className="text-xs font-semibold text-primary-600 dark:text-primary-400">
+            {playerData.weeklyXP}
+          </span>
+        </div>
+      </div>
+
+      {/* Stats - Versão Desktop (com todos os dados) */}
+      <div className="hidden md:flex items-center gap-2.5 lg:gap-3">
         <div className="flex items-center gap-1.5">
           <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
             {t('Posição')}:

@@ -74,7 +74,7 @@ export function Header() {
 
   return (
     <header className="app-header sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4 max-w-full overflow-hidden">
         {/* Logo e Título */}
         <Link to="/" className="flex items-center gap-3 min-w-0 flex-shrink hover:opacity-80 transition-opacity">
           <img 
@@ -172,11 +172,9 @@ export function Header() {
         </div>
 
         {/* Mobile Controls */}
-        <div className="flex md:hidden items-center gap-2 max-w-full overflow-hidden">
-          {/* Ranking Widget - Mobile - com overflow controlado */}
-          <div className="flex-1 min-w-0 overflow-x-auto scrollbar-hide">
-            <RankingWidget />
-          </div>
+        <div className="flex md:hidden items-center gap-2 flex-shrink-0">
+          {/* Ranking Widget - Mobile */}
+          <RankingWidget />
           
           {/* Seletor de Idioma Compacto - Mobile */}
           <select
