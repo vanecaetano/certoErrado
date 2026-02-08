@@ -177,7 +177,7 @@ export function ShareQuizButton({ questions, subjects = [], score, variant = 'de
                   </p>
                   {subjects.length > 0 && (
                     <p className="text-sm text-gray-600 dark:text-gray-300">
-                      <strong>{t('Assuntos')}:</strong> {subjects.join(', ')}
+                      <strong>{t('Desafios')}:</strong> {subjects.join(', ')}
                     </p>
                   )}
                 </div>

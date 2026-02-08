@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Plus, Trash2, Loader2, ArrowLeft, Play } from 'lucide-react';
+import { Plus, Trash2, Loader2, Home, Play } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -31,7 +31,7 @@ export function SettingsPage() {
 
   const handleAddSubject = async () => {
     if (!newSubject.trim()) {
-      setError(t('Por favor, insira um nome para o assunto'));
+      setError(t('Por favor, insira um nome para o desafio'));
       return;
     }
 
@@ -53,7 +53,7 @@ export function SettingsPage() {
   };
 
   const handleDeleteSubject = async (id: number) => {
-    if (confirm(t('Tem certeza que deseja excluir este assunto e todas as suas perguntas?'))) {
+    if (confirm(t('Tem certeza que deseja excluir este desafio e todas as suas perguntas?'))) {
       await dbService.deleteSubject(id);
       await loadSubjects();
     }
@@ -61,7 +61,7 @@ export function SettingsPage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h2 className="text-3xl font-bold mb-6">{t('Configurações de Assuntos')}</h2>
+      <h2 className="text-3xl font-bold mb-6">{t('Configurações de Desafios')}</h2>
       {/* Botão Iniciar Jogo acima do card de adicionar assunto */}
       {subjects.length > 0 && (
         <div className="mb-6 flex justify-end">
@@ -75,17 +75,25 @@ export function SettingsPage() {
           </Button>
         </div>
       )}
+      
+      {/* Botão Voltar */}
+      <div className="mb-6">
+        <Button 
+          variant="secondary" 
+          size="sm" 
+          onClick={() => navigate('/')}
+          className="gap-2"
+        >
+          <Home className="w-4 h-4" />
+          {t('Voltar ao Início')}
+        </Button>
+      </div>
+
       <Card className="mb-6">
-        <div className="mb-4">
-          <Button variant="secondary" size="sm" onClick={() => navigate('/') }>
-            <ArrowLeft className="w-4 h-4 mr-2 inline" />
-            {t('Voltar')}
-          </Button>
-        </div>
-        <h3 className="text-xl font-semibold mb-4">{t('Adicionar Novo Assunto')}</h3>
+        <h3 className="text-xl font-semibold mb-4">{t('Adicionar Novo Desafio')}</h3>
         <div className="flex gap-4 items-end">
           <Input
-            label={t('Nome do Assunto')}
+            label={t('Nome do Desafio')}
             value={newSubject}
             onChange={(e) => setNewSubject(e.target.value)}
             placeholder={t('Ex: Filmes, Ciências, Esportes...')}
@@ -113,16 +121,16 @@ export function SettingsPage() {
           <div className="text-red-600 mt-2 text-sm">{error}</div>
         )}
         <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-          {t('Ao adicionar um assunto, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.')}
+          {t('Ao adicionar um desafio, serão geradas automaticamente 10 perguntas sobre o tema usando IA. Isso pode levar alguns minutos.')}
         </p>
       </Card>
 
       <div>
-        <h3 className="text-xl font-semibold mb-4">{t('Assuntos Cadastrados')}</h3>
+        <h3 className="text-xl font-semibold mb-4">{t('Desafios Cadastrados')}</h3>
         {subjects.length === 0 ? (
           <Card>
             <p className="text-gray-600 dark:text-gray-400 text-center py-8">
-              {t('Nenhum assunto cadastrado. Adicione um assunto para começar!')}
+              {t('Nenhum desafio cadastrado. Adicione um desafio para começar!')}
             </p>
           </Card>
         ) : (
@@ -144,7 +152,7 @@ export function SettingsPage() {
                     <button
                       onClick={() => handleDeleteSubject(subject.id)}
                       className="p-2 text-error-600 hover:bg-error-50 dark:hover:bg-error-900/20 rounded transition-colors"
-                      aria-label={t('Excluir assunto')}
+                      aria-label={t('Excluir desafio')}
                     >
                       <Trash2 className="w-5 h-5" />
                     </button>

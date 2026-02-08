@@ -24,6 +24,12 @@ export function ResultsPage() {
 
   // Capturar dados no mount
   useEffect(() => {
+    console.log('📋 ResultsPage carregando:', {
+      totalResponseTime,
+      speedBonus,
+      questions: questions.length
+    });
+    
     setSavedQuestions(questions);
     setSavedScore(score);
     setSavedResults(new Map(questionResults));
@@ -126,7 +132,7 @@ export function ResultsPage() {
               </div>
             </div>
             <p className="text-center text-sm text-gray-600 dark:text-gray-400 mt-3">
-              {t('Você economizou tempo nas respostas!')}
+              {t('Você foi rápido nas respostas corretas!')}
             </p>
           </div>
         )}

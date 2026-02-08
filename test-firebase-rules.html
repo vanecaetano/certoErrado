@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teste Firebase Realtime Database</title>
+    <script type="module">
+        // Importe o Firebase
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, set, get } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+        // Sua configuração
+        const firebaseConfig = {
+            apiKey: "AIzaSyBq9etT8tzX1kWW0lMExHPdlfawIu8QBPs",
+            authDomain: "certo-errado-quiz.firebaseapp.com",
+            databaseURL: "https://certo-errado-quiz-default-rtdb.firebaseio.com",
+            projectId: "certo-errado-quiz",
+            storageBucket: "certo-errado-quiz.firebasestorage.app",
+            messagingSenderId: "547815730052",
+            appId: "1:547815730052:web:2d5122a5be22e186bc8bd1"
+        };
+
+        // Inicializar
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        console.log('✅ Firebase inicializado');
+
+        // Teste 1: Tentar LER dados
+        async function testRead() {
+            try {
+                console.log('📖 Testando LEITURA em weekly-ranking...');
+                const rankingRef = ref(database, 'weekly-ranking');
+                const snapshot = await get(rankingRef);
+                console.log('✅ LEITURA OK! Dados:', snapshot.exists() ? snapshot.val() : 'Vazio');
+                document.getElementById('result').innerHTML += '<p style="color: green;">✅ LEITURA: OK</p>';
+            } catch (error) {
+                console.error('❌ ERRO NA LEITURA:', error);
+                document.getElementById('result').innerHTML += `<p style="color: red;">❌ LEITURA: ${error.message}</p>`;
+            }
+        }
+
+        // Teste 2: Tentar ESCREVER dados
+        async function testWrite() {
+            try {
+                console.log('✍️ Testando ESCRITA em weekly-ranking...');
+                const testRef = ref(database, 'weekly-ranking/test-user');
+                await set(testRef, {
+                    userId: 'test-user',
+                    playerName: 'Teste',
+                    weeklyXP: 100,
+                    gamesPlayed: 1
+                });
+                console.log('✅ ESCRITA OK!');
+                document.getElementById('result').innerHTML += '<p style="color: green;">✅ ESCRITA: OK</p>';
+            } catch (error) {
+                console.error('❌ ERRO NA ESCRITA:', error);
+                document.getElementById('result').innerHTML += `<p style="color: red;">❌ ESCRITA: ${error.message}</p>`;
+            }
+        }
+
+        // Executar testes
+        window.addEventListener('load', async () => {
+            await testRead();
+            await testWrite();
+        });
+    </script>
+</head>
+<body>
+    <h1>🧪 Teste Firebase Realtime Database Rules</h1>
+    <div id="result">
+        <p>Rodando testes... (Abra o Console F12 para ver detalhes)</p>
+    </div>
+</body>
+</html>

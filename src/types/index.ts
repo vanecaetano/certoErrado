@@ -120,3 +120,36 @@ export interface MultiplayerPlayer {
   lastSeen: number;
   isOnline: boolean;
 }
+
+// Weekly Ranking Types - Rolling 7 Days System
+export interface GameRecord {
+  timestamp: number; // Unix timestamp do jogo
+  xpGained: number;
+  correctAnswers: number;
+  totalQuestions: number;
+  correctResponseTime: number; // tempo total das respostas corretas em segundos
+}
+
+export interface WeeklyRankingPlayer {
+  userId: string;
+  playerName: string;
+  games: GameRecord[]; // Histórico de jogos (mantém últimos 14 dias)
+  lastUpdated: number; // timestamp da última atualização
+  // Campos calculados dinamicamente dos últimos 7 dias:
+  weeklyXP?: number; // Calculado on-the-fly
+  gamesPlayed?: number; // Calculado on-the-fly
+  totalCorrect?: number; // Calculado on-the-fly
+  totalQuestions?: number; // Calculado on-the-fly
+  totalResponseTime?: number; // Calculado on-the-fly
+}
+
+export interface RankingEntry extends WeeklyRankingPlayer {
+  position: number;
+  accuracy: number; // porcentagem de acertos dos últimos 7 dias
+  averageSpeed: number; // velocidade média em segundos por resposta correta dos últimos 7 dias
+  weeklyXP: number; // Obrigatório na entry (já calculado)
+  gamesPlayed: number; // Obrigatório na entry
+  totalCorrect: number; // Obrigatório na entry
+  totalQuestions: number; // Obrigatório na entry
+  totalResponseTime: number; // Obrigatório na entry
+}

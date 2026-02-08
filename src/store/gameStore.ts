@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { GameState, GameConfig, GameQuestion } from '@/types';
 import { dbService } from '@/services/database';
+import { rankingService } from '@/services/rankingService';
 
 interface GameStore extends GameState {
   isPaused: boolean;
@@ -107,6 +108,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     const newResponseTimes = [...state.responseTimes, responseTime];
     const newTotalResponseTime = state.totalResponseTime + responseTime;
 
+    console.log('📊 Tempo de resposta:', {
+      responseTime,
+      questionStartTime: (get() as GameStore).questionStartTime,
+      now: Date.now(),
+      totalResponseTime: newTotalResponseTime
+    });
+
     const newResults = new Map(state.questionResults);
     newResults.set(currentQuestion.question.id, isCorrect);
 
@@ -141,14 +149,64 @@ export const useGameStore = create<GameStore>((set, get) => ({
   finishGame: async () => {
     const state = get();
     
-    // Calcular bônus de velocidade (1 ponto por segundo economizado)
-    const totalQuestions = state.questions.length;
-    const maxTimePerQuestion = 15; // segundos
-    const maxTotalTime = totalQuestions * maxTimePerQuestion;
-    const timeSaved = Math.max(0, maxTotalTime - state.totalResponseTime);
+    console.log('🏁 Finalizando jogo:', {
+      totalQuestions: state.questions.length,
+      totalResponseTime: state.totalResponseTime,
+      responseTimes: state.responseTimes
+    });
+    
+    // Calcular bônus de velocidade APENAS para respostas corretas
+    let correctAnswersTime = 0;
+    let correctCount = 0;
+
+    for (let i = 0; i < state.questions.length && i < state.responseTimes.length; i++) {
+      const question = state.questions[i];
+      const wasCorrect = state.questionResults.get(question.question.id);
+      
+      if (wasCorrect) {
+        correctAnswersTime += state.responseTimes[i];
+        correctCount++;
+      }
+    }
+
+    // Bônus: 1 ponto por segundo economizado nas respostas CORRETAS
+    const maxTimeForCorrect = correctCount * 15; // 15 segundos por questão correta
+    const timeSaved = Math.max(0, maxTimeForCorrect - correctAnswersTime);
     const speedBonus = Math.floor(timeSaved);
 
+    console.log('⚡ Bônus calculado:', {
+      correctCount,
+      maxTimeForCorrect,
+      correctAnswersTime,
+      timeSaved,
+      speedBonus
+    });
+
     set({ speedBonus });
+    
+    // Atualizar ranking semanal
+    try {
+      const totalCorrect = Array.from(state.questionResults.values()).filter(Boolean).length;
+      const totalQuestions = state.questions.length;
+      const xpGained = state.score + speedBonus;
+      
+      console.log('🏆 Atualizando ranking:', {
+        correctAnswers: totalCorrect,
+        totalQuestions,
+        correctAnswersTime,
+        xpGained
+      });
+
+      await rankingService.updateAfterGame(
+        totalCorrect,
+        totalQuestions,
+        correctAnswersTime,
+        xpGained
+      );
+    } catch (error) {
+      console.error('Erro ao atualizar ranking:', error);
+      // Não bloquear o fluxo se houver erro no ranking
+    }
     
     // Salvar sessões de jogo por assunto
     const subjectStats = new Map<number, { answered: number; correct: number; score: number }>();

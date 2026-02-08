@@ -28,7 +28,17 @@ Você precisa configurar **UMA VEZ** e depois funciona para todos os usuários a
 5. Ativar
 ```
 
-### 3. Configurar Regras de Segurança (1 min)
+### 3. Ativar Realtime Database (1 min) - **OBRIGATÓRIO PARA RANKING**
+
+```bash
+1. Menu lateral → "Realtime Database"
+2. Clicar "Criar banco de dados"
+3. Localização: "United States (us-central1)" (padrão)
+4. Modo: "Modo de teste" (temporário)
+5. Ativar
+```
+
+### 4. Configurar Regras de Segurança Firestore (1 min)
 
 ```bash
 1. Firestore → Aba "Regras"
@@ -54,7 +64,51 @@ service cloud.firestore {
 3. Clicar "Publicar"
 ```
 
-### 4. Obter Credenciais (1 min)
+### 5. Configurar Regras de Segurança Realtime Database (1 min) - **OBRIGATÓRIO PARA RANKING**
+
+```bash
+1. Realtime Database → Aba "Regras"
+2. Cole este código (IMPORTANTE: Substitui qualquer regra existente):
+```
+
+```json
+{
+  "rules": {
+    "game-rooms": {
+      "$roomId": {
+        ".read": true,
+        ".write": true,
+        ".indexOn": ["createdAt", "status"]
+      }
+    },
+    "weekly-ranking": {
+      ".read": true,
+      ".write": false,
+      "$userId": {
+        ".write": true
+      }
+    },
+    "multiplayer-rooms": {
+      "$roomId": {
+        ".read": true,
+        ".write": true
+      }
+    }
+  }
+}
+```
+
+**✅ Essas regras permitem:**
+- Leitura pública de todo o ranking (necessário para Top 50)
+- Cada jogador pode atualizar apenas seu próprio registro
+- Multiplayer pode criar/atualizar salas
+
+```bash
+3. Clicar "Publicar"
+4. Aguardar 10-30 segundos para as regras serem aplicadas
+```
+
+### 6. Obter Credenciais (1 min)
 
 ```bash
 1. Ícone ⚙️ (Configurações) → "Configurações do projeto"
@@ -77,6 +131,28 @@ const firebaseConfig = {
 };
 ```
 
+**⚠️ IMPORTANTE:** Para o Realtime Database funcionar, você precisa adicionar o `databaseURL`:
+
+```bash
+6. Copiar o Database URL:
+   - Vá em "Realtime Database"
+   - Copie a URL que aparece no topo (algo como: https://seu-projeto-default-rtdb.firebaseio.com)
+```
+
+Seu config final deve ter:
+
+```javascript
+const firebaseConfig = {
+  apiKey: "AIzaSyAbc123...",
+  authDomain: "seu-projeto.firebaseapp.com",
+  databaseURL: "https://seu-projeto-default-rtdb.firebaseio.com",  // ← ADICIONE ESTA LINHA
+  projectId: "seu-projeto-123",
+  storageBucket: "seu-projeto.appspot.com",
+  messagingSenderId: "123456789",
+  appId: "1:123:web:abc123"
+};
+```
+
 -
 
 ## 🔧 Configure no Projeto
@@ -88,6 +164,7 @@ Crie arquivo `.env` na raiz do projeto:
 ```bash
 VITE_FIREBASE_API_KEY=AIzaSyAbc123...
 VITE_FIREBASE_AUTH_DOMAIN=seu-projeto.firebaseapp.com
+VITE_FIREBASE_DATABASE_URL=https://seu-projeto-default-rtdb.firebaseio.com
 VITE_FIREBASE_PROJECT_ID=seu-projeto-123
 VITE_FIREBASE_STORAGE_BUCKET=seu-projeto.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=123456789
@@ -104,6 +181,7 @@ Linha 5-10, substitua:
 const firebaseConfig = {
   apiKey: "AIzaSyAbc123...",  // ← Cole sua chave aqui
   authDomain: "seu-projeto.firebaseapp.com",  // ← Cole seu domain
+  databaseURL: "https://seu-projeto-default-rtdb.firebaseio.com",  // ← Cole seu database URL
   projectId: "seu-projeto-123",  // ← Cole seu project ID
   storageBucket: "seu-projeto.appspot.com",  // ← Cole seu bucket
   messagingSenderId: "123456789",  // ← Cole seu sender ID

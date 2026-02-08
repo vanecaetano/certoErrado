@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Users, User, BookOpen } from 'lucide-react';
+import { Users, User, BookOpen, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -22,6 +22,8 @@ export function CreateRoomPage() {
   const [error, setError] = useState('');
   const [availableSubjects, setAvailableSubjects] = useState<Subject[]>([]);
   const [selectedSubjects, setSelectedSubjects] = useState<number[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   // Carregar assuntos disponíveis
   useEffect(() => {
@@ -33,9 +35,9 @@ export function CreateRoomPage() {
         const filteredSubjects = subjects.filter(s => s.name !== 'Modo Relâmpago');
         setAvailableSubjects(filteredSubjects);
         
-        // Selecionar todos por padrão
+        // Selecionar apenas o primeiro desafio por padrão
         if (filteredSubjects.length > 0) {
-          setSelectedSubjects(filteredSubjects.map(s => s.id));
+          setSelectedSubjects([filteredSubjects[0].id]);
         }
       } catch (err) {
         console.error('Error loading subjects:', err);
@@ -56,6 +58,26 @@ export function CreateRoomPage() {
     );
   };
 
+  // Paginação
+  const totalPages = Math.ceil(availableSubjects.length / itemsPerPage);
+  const paginatedSubjects = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return availableSubjects.slice(startIndex, endIndex);
+  }, [availableSubjects, currentPage]);
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPrevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   const handleCreateRoom = async () => {
     if (!roomName.trim()) {
       setError(t('Digite o nome da sala'));
@@ -66,7 +88,7 @@ export function CreateRoomPage() {
       return;
     }
     if (selectedSubjects.length === 0) {
-      setError(t('Selecione pelo menos um assunto'));
+      setError(t('Selecione pelo menos um desafio'));
       return;
     }
 
@@ -164,13 +186,13 @@ export function CreateRoomPage() {
         <Card className="max-w-md w-full p-8 text-center">
           <BookOpen className="w-16 h-16 text-primary-600 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            {t('Cadastre assuntos personalizados')}
+            {t('Cadastre Desafios personalizados')}
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            {t('O multiplayer usa assuntos personalizados. Crie pelo menos um assunto nas Configurações para continuar.')}
+            {t('O multiplayer usa Desafios personalizados. Crie pelo menos um assunto nas Configurações para continuar.')}
           </p>
           <Button onClick={() => navigate('/settings')} className="w-full">
-            {t('Ir para Configurações')}
+            {t('Ir para Desafios')}
           </Button>
         </Card>
       </div>
@@ -249,10 +271,10 @@ export function CreateRoomPage() {
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
               <BookOpen className="inline-block w-4 h-4 mr-1" />
-              {t('Selecione os Assuntos')} ({selectedSubjects.length} {t('selecionados')})
+              {t('Selecione os Desafios')} ({selectedSubjects.length} {t('selecionados')})
             </label>
-            <div className="space-y-3 max-h-64 overflow-y-auto">
-              {availableSubjects.map((subject) => {
+            <div className="space-y-3">
+              {paginatedSubjects.map((subject) => {
                 const isSelected = selectedSubjects.includes(subject.id);
                 return (
                   <Card
@@ -279,6 +301,33 @@ export function CreateRoomPage() {
                 );
               })}
             </div>
+            
+            {/* Controles de Paginação */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  onClick={goToPrevPage}
+                  disabled={currentPage === 1}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  {t('Anterior')}
+                </button>
+                
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  {t('Página')} {currentPage}/{totalPages}
+                </span>
+                
+                <button
+                  onClick={goToNextPage}
+                  disabled={currentPage === totalPages}
+                  className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {t('Próxima')}
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Número de Perguntas */}

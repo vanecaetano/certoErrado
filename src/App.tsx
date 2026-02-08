@@ -1,9 +1,10 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import './i18n';
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Header } from '@/components/layout/Header';
+import { WelcomeModal } from '@/components/layout/WelcomeModal';
 import { HomePage } from '@/features/home/HomePage';
 import { LandingPage } from '@/features/landing/LandingPage';
 import { SettingsPage } from '@/features/settings/SettingsPage';
@@ -12,6 +13,7 @@ import GameGuard from '@/components/layout/GameGuard';
 import { ResultsPage } from '@/features/results/ResultsPage';
 import { PrivacyPage } from '@/features/privacy/PrivacyPage';
 import { SharedQuizPage } from '@/features/shared/SharedQuizPage';
+import { RankingPage } from '@/features/ranking/RankingPage';
 import { CreateRoomPage } from '@/features/multiplayer/CreateRoomPage';
 import { LobbyPage } from '@/features/multiplayer/LobbyPage';
 import { MultiplayerGamePage } from '@/features/multiplayer/MultiplayerGamePage';
@@ -26,6 +28,12 @@ const queryClient = new QueryClient();
 
 function App() {
   const { theme } = useThemeStore();
+  const [playerNameSet, setPlayerNameSet] = useState(false);
+
+  const handlePlayerNameComplete = (name: string) => {
+    console.log('✅ Nome do jogador definido:', name);
+    setPlayerNameSet(true);
+  };
   // Música de fundo global
   useEffect(() => {
     let audio: HTMLAudioElement | null = (window as any).backgroundAudio;
@@ -67,6 +75,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <WelcomeModal onComplete={handlePlayerNameComplete} />
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 md:pb-24 pb-0">
           <Header />
@@ -83,6 +92,7 @@ function App() {
               <Route path="/quiz/:id" element={<SharedQuizPage />} />
               <Route path="/results" element={<ResultsPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
+              <Route path="/ranking" element={<RankingPage />} />
               
               {/* Multiplayer Routes */}
               <Route path="/multiplayer/create" element={<CreateRoomPage />} />

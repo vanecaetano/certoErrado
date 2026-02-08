@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/Button';
+import { Home } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
@@ -7,7 +8,20 @@ export function PrivacyPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-3xl">
+    <div className="container mx-auto px-4 py-8 max-w-3xl">
+      {/* Botão Voltar */}
+      <div className="mb-6">
+        <Button 
+          variant="secondary" 
+          size="sm"
+          onClick={() => navigate('/')}
+          className="gap-2"
+        >
+          <Home className="w-4 h-4" />
+          {t('Voltar ao Início')}
+        </Button>
+      </div>
+
       <h1 className="text-2xl font-bold mb-4">{t('Política de Privacidade')}</h1>
 
       <p className="mb-4 text-sm text-gray-700 dark:text-gray-300">
@@ -28,10 +42,6 @@ export function PrivacyPage() {
       <p className="text-sm text-gray-700 dark:text-gray-300 mb-6">
         {t('Para questões sobre privacidade, envie email para: vwcodedev@gmail.com')}
       </p>
-      <div className="flex gap-2 mb-4">
-        <Button variant="secondary" onClick={() => navigate(-1)}>{t('Voltar')}</Button>
-        <Button onClick={() => navigate('/')}>{t('Ir para Início')}</Button>
-      </div>
     </div>
   );
 }

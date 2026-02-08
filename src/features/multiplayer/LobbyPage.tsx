@@ -297,11 +297,11 @@ export function LobbyPage() {
           
           {room && (
             <div className="space-y-4">
-              {/* Assuntos da Sala */}
+              {/* Desafios da Sala */}
               {room.subjects && room.subjects.length > 0 && (
                 <div className="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-4">
                   <h3 className="text-sm font-semibold text-primary-900 dark:text-primary-100 mb-2">
-                    📚 {t('Assuntos do Quiz')}:
+                    📚 {t('Desafios do Quiz')}:
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {room.subjects.map((subject, index) => (

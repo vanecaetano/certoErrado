@@ -5,6 +5,7 @@ import { Trophy, Medal, Home } from 'lucide-react';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { multiplayerService } from '@/services/multiplayerService';
+import { rankingService } from '@/services/rankingService';
 import type { MultiplayerRoom, MultiplayerPlayer } from '@/types';
 
 export function MultiplayerResultsPage() {
@@ -15,6 +16,68 @@ export function MultiplayerResultsPage() {
   const [room, setRoom] = useState<MultiplayerRoom | null>(null);
   const [playerId, setPlayerId] = useState('');
   const [ranking, setRanking] = useState<Array<{ id: string; player: MultiplayerPlayer; position: number }>>([]);
+  const [rankingUpdated, setRankingUpdated] = useState(false);
+
+  // Carregar ID do jogador
+  useEffect(() => {
+    const storedPlayerId = localStorage.getItem('multiplayerPlayerId');
+    if (storedPlayerId) {
+      setPlayerId(storedPlayerId);
+    }
+  }, []);
+
+  // Atualizar ranking semanal quando sala carrega
+  useEffect(() => {
+    if (!room || !playerId || rankingUpdated) return;
+
+    const updateRanking = async () => {
+      try {
+        const currentPlayer = room.players[playerId];
+        if (!currentPlayer) return;
+
+        const correctAnswers = currentPlayer.answers 
+          ? Object.values(currentPlayer.answers).filter(Boolean).length 
+          : 0;
+        const totalQuestions = room.questions.length;
+        
+        // Calcular tempo das respostas corretas
+        let correctAnswersTime = 0;
+        if (currentPlayer.answers && currentPlayer.responseTimes) {
+          Object.entries(currentPlayer.answers).forEach(([index, isCorrect]) => {
+            if (isCorrect) {
+              correctAnswersTime += currentPlayer.responseTimes?.[Number(index)] || 0;
+            }
+          });
+        }
+
+        // Calcular XP (score + bônus)
+        const maxTimeForCorrect = correctAnswers * 15;
+        const timeSaved = Math.max(0, maxTimeForCorrect - correctAnswersTime);
+        const speedBonus = Math.floor(timeSaved);
+        const xpGained = currentPlayer.score + speedBonus;
+
+        console.log('🏆 Atualizando ranking multiplayer:', {
+          correctAnswers,
+          totalQuestions,
+          correctAnswersTime,
+          xpGained
+        });
+
+        await rankingService.updateAfterGame(
+          correctAnswers,
+          totalQuestions,
+          correctAnswersTime,
+          xpGained
+        );
+
+        setRankingUpdated(true);
+      } catch (error) {
+        console.error('Erro ao atualizar ranking multiplayer:', error);
+      }
+    };
+
+    updateRanking();
+  }, [room, playerId, rankingUpdated]);
 
   // Carregar ID do jogador
   useEffect(() => {
@@ -73,13 +136,25 @@ export function MultiplayerResultsPage() {
     return 'from-gray-200 to-gray-400';
   };
 
-  // Calcular bônus de velocidade (1 ponto por segundo economizado)
+  // Calcular bônus de velocidade APENAS para respostas corretas
   const calculateSpeedBonus = (player: MultiplayerPlayer) => {
-    const totalQuestions = room?.questions.length || 0;
-    const maxTimePerQuestion = 15; // segundos
-    const maxTotalTime = totalQuestions * maxTimePerQuestion;
-    const actualTime = player.totalResponseTime || 0;
-    const timeSaved = Math.max(0, maxTotalTime - actualTime);
+    if (!room || !player.answers || !player.responseTimes) return 0;
+    
+    // Contar respostas corretas e seu tempo total
+    let correctAnswersTime = 0;
+    let correctCount = 0;
+    
+    Object.entries(player.answers).forEach(([questionIndex, isCorrect]) => {
+      if (isCorrect) {
+        const time = player.responseTimes?.[Number(questionIndex)] || 0;
+        correctAnswersTime += time;
+        correctCount++;
+      }
+    });
+    
+    // Bônus: 1 ponto por segundo economizado nas respostas CORRETAS
+    const maxTimeForCorrect = correctCount * 15; // 15 segundos por questão correta
+    const timeSaved = Math.max(0, maxTimeForCorrect - correctAnswersTime);
     return Math.floor(timeSaved);
   };
 

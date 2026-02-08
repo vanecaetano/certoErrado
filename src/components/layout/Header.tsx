@@ -3,6 +3,7 @@ import { Moon, Sun, Volume2, VolumeX, Menu, X } from 'lucide-react';
 import { useThemeStore } from '@/store/themeStore';
 import { useGameStore } from '@/store/gameStore';
 import { ShareQuizButton } from '@/components/ui/ShareQuizButton';
+import { RankingWidget } from '@/components/layout/RankingWidget';
 import { dbService } from '@/services/database';
 import logoUrl from '@/assets/logo.svg';
 import { Link } from 'react-router-dom';
@@ -86,6 +87,11 @@ export function Header() {
           </span>
         </Link>
 
+        {/* Ranking Widget - Centralizado no Desktop */}
+        <div className="hidden lg:flex flex-1 justify-center max-w-md">
+          <RankingWidget />
+        </div>
+
         {/* Navigation e Controles - Desktop */}
         <div className="hidden md:flex items-center gap-4 flex-shrink-0">
           {/* Seletor de Idioma */}
@@ -141,7 +147,7 @@ export function Header() {
             {t('Privacidade')}
           </Link>
           <Link to="/settings" className="text-sm text-gray-600 dark:text-gray-300 hover:underline whitespace-nowrap">
-            {t('Configurações')}
+            {t('Desafios')}
           </Link>
 
           {/* Controles de Música e Tema */}
@@ -167,6 +173,9 @@ export function Header() {
 
         {/* Mobile Controls */}
         <div className="flex md:hidden items-center gap-2">
+          {/* Ranking Widget - Mobile */}
+          <RankingWidget />
+          
           {/* Seletor de Idioma Compacto - Mobile */}
           <select
             value={lang}
@@ -196,6 +205,11 @@ export function Header() {
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 animate-fade-in">
           <div className="container mx-auto px-4 py-3 flex flex-col gap-3">
+            {/* Ranking Widget Mobile */}
+            <div className="lg:hidden pb-2 border-b border-gray-200 dark:border-gray-700">
+              <RankingWidget />
+            </div>
+
             {/* Botão Compartilhar Mobile */}
             {showShareButton && (
               <div className="pb-2 border-b border-gray-200 dark:border-gray-700">
@@ -243,7 +257,7 @@ export function Header() {
               className="text-sm text-gray-600 dark:text-gray-300 hover:underline py-2"
               onClick={() => setMobileMenuOpen(false)}
             >
-              {t('Configurações')}
+              {t('Desafios')}
             </Link>
             
             {/* Controles no Mobile Menu */}

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { Zap, Brain, Trophy, Shield, Users } from 'lucide-react';
+import { Zap, Brain, Trophy, Shield, Users, Gamepad2 } from 'lucide-react';
 import { dbService } from '@/services/database';
 import startSound from '@/assets/start.mp3';
 
@@ -30,7 +30,7 @@ export function LandingPage() {
           {t('O jogo inteligente que desafia seu conhecimento! 🎮')}
         </p>
         <p className="text-lg text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto">
-          {t('Escolha entre qualquer assunto que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!')}
+          {t('Escolha entre qualquer desafio que desejar! Tecnologia, história, esportes, culinária, séries, ou tudo que você imaginar. Ganhe pontos respondendo corretamente e desbloqueie mais perguntas!')}
         </p>
 
         {/* Cards de Destaque: Relâmpago, Personalizado e Multiplayer */}
@@ -66,7 +66,7 @@ export function LandingPage() {
           const subjects = await dbService.getAllSubjectsAsync();
           const relampago = subjects.find(s => s.name.trim().toLowerCase() === 'modo relâmpago');
           if (!relampago) {
-            alert(t('O assunto Relâmpago não foi encontrado. Crie um assunto chamado "Modo Relâmpago" nas configurações.'));
+            alert(t('O assunto Relâmpago não foi encontrado. Crie um desafio chamado "Modo Relâmpago" nas configurações.'));
             return;
           }
           // Buscar perguntas do Relâmpago
@@ -89,22 +89,22 @@ export function LandingPage() {
     </div>
   </Card>
 
-  {/* Personalizado Card */}
+  {/* Modo Individual Card */}
   <Card className="border-2 border-success-600 p-8 flex flex-col justify-between items-stretch">
     <div className="flex justify-center mb-6">
-      <Brain className="w-16 h-16 text-success-600" />
+      <Gamepad2 className="w-16 h-16 text-success-600" />
     </div>
-    <h3 className="text-2xl font-bold mb-3 text-success-600 text-center">{t('Personalizado')}</h3>
+    <h3 className="text-2xl font-bold mb-3 text-success-600 text-center">{t('Jogar Sozinho')}</h3>
     <p className="text-gray-600 dark:text-gray-400 mb-6 text-center">
-      {t('Crie seus próprios assuntos! Escolha os temas que você ama e desafie seu conhecimento.')}
+      {t('Selecione seus Desafios favoritos e comece a jogar agora mesmo!')}
     </p>
     <div className="mt-auto">
       <Button
         size="lg"
         className="w-full h-14 text-lg font-semibold rounded-xl bg-success-600 hover:bg-success-700"
-        onClick={() => navigate('/settings')}
+        onClick={() => navigate('/play')}
       >
-        {t('📚 Criar Assuntos')}
+        {t('🎮 Começar a Jogar')}
       </Button>
     </div>
   </Card>
@@ -136,7 +136,7 @@ export function LandingPage() {
         <Card className="flex items-start gap-4">
           <Brain className="w-8 h-8 text-primary-600 flex-shrink-0 mt-1" />
           <div>
-            <h3 className="text-xl font-semibold mb-2">{t('Assuntos do Seu Jeito')}</h3>
+            <h3 className="text-xl font-semibold mb-2">{t('Desafios do Seu Jeito')}</h3>
             <p className="text-gray-600 dark:text-gray-400">
               {t('Crie perguntas sobre QUALQUER coisa que você quiser! Tecnologia, história, culinária, filmes, esportes... A IA gera 10 perguntas únicas e desafiadoras em segundos!')}
             </p>
@@ -148,7 +148,7 @@ export function LandingPage() {
           <div>
             <h3 className="text-xl font-semibold mb-2">{t('Modo Relâmpago')}</h3>
             <p className="text-gray-600 dark:text-gray-400">
-              {t('Comece automaticamente com um assunto aleatório! Ideal para quando você quer jogar rápido sem escolher.')}
+              {t('Comece automaticamente com um desafio aleatório! Ideal para quando você quer jogar rápido sem escolher.')}
             </p>
           </div>
         </Card>
@@ -180,9 +180,9 @@ export function LandingPage() {
         <div className="grid md:grid-cols-3 gap-6">
           <Card className="text-center">
             <div className="text-4xl font-bold text-primary-600 mb-3">1</div>
-            <h4 className="text-xl font-semibold mb-2">{t('Crie Qualquer Assunto')}</h4>
+            <h4 className="text-xl font-semibold mb-2">{t('Crie Qualquer Desafio')}</h4>
             <p className="text-gray-600 dark:text-gray-400">
-              {t('Pense em um assunto que você adora: Filmes, Culinária, História da arte, Estrela de cinema favorita... e em segundos a IA cria perguntas incríveis sobre isso!')}
+              {t('Pense em um desafio que você adora: Filmes, Culinária, História da arte, Estrela de cinema favorita... e em segundos a IA cria perguntas incríveis sobre isso!')}
             </p>
           </Card>
 
@@ -190,7 +190,7 @@ export function LandingPage() {
             <div className="text-4xl font-bold text-primary-600 mb-3">2</div>
             <h4 className="text-xl font-semibold mb-2">{t('Selecione & Jogue')}</h4>
             <p className="text-gray-600 dark:text-gray-400">
-              {t('Escolha seus assuntos e comece a jogar! Responda certo para ganhar pontos.')}
+              {t('Escolha seus Desafios e comece a jogar! Responda certo para ganhar pontos.')}
             </p>
           </Card>
 
@@ -208,7 +208,7 @@ export function LandingPage() {
       <div className="text-center">
         <h2 className="text-3xl font-bold mb-4">{t('Pronto para Começar?')}</h2>
         <p className="text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-          {hasSubjects ? t('Comece a jogar ou crie novos assuntos!') : t('Crie seus primeiros assuntos!')}
+          {hasSubjects ? t('Comece a jogar ou crie novos Desafios!') : t('Crie seus primeiros Desafios!')}
         </p>
         <div className="flex gap-4 justify-center flex-wrap">
           {hasSubjects && (
@@ -217,7 +217,7 @@ export function LandingPage() {
             </Button>
           )}
           <Button size="lg" variant="secondary" onClick={() => navigate('/settings')}>
-            {hasSubjects ? t('⚙️ Gerenciar Assuntos') : t('⚙️ Criar Assuntos')}
+            {hasSubjects ? t('⚙️ Gerenciar Desafios') : t('⚙️ Criar Desafios')}
           </Button>
         </div>
       </div>

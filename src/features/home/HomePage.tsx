@@ -40,7 +40,7 @@ export function HomePage() {
 
   const handleStartGame = async () => {
     if (selectedSubjects.length === 0) {
-      alert(t('Selecione pelo menos um assunto para começar!'));
+      alert(t('Selecione pelo menos um desafio para começar!'));
       return;
     }
     const audio = new Audio(startSound);
@@ -63,10 +63,10 @@ export function HomePage() {
     return (
       <div className="container mx-auto px-4 py-8 text-center">
         <Card>
-          <p className="text-lg mb-4">{t('Nenhum assunto cadastrado ainda.')}</p>
+          <p className="text-lg mb-4">{t('Nenhum desafio cadastrado ainda.')}</p>
           <Button onClick={() => navigate('/settings')}>
             <Settings className="w-4 h-4 mr-2 inline" />
-            {t('Ir para Configurações')}
+            {t('Ir para Desafios')}
           </Button>
         </Card>
       </div>
@@ -75,7 +75,7 @@ export function HomePage() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h2 className="text-3xl font-bold mb-6 text-center">{t('Selecione os Assuntos')}</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center">{t('Selecione os Desafios')}</h2>
       <div className="grid gap-4 mb-6">
         {subjects.map((subject) => {
           const isSelected = selectedSubjects.includes(subject.id);
@@ -105,7 +105,7 @@ export function HomePage() {
       <div className="flex justify-center gap-4">
         <Button variant="secondary" onClick={() => navigate('/settings')}>
           <Settings className="w-4 h-4 mr-2 inline" />
-          {t('Configurações')}
+          {t('Desafios')}
         </Button>
         <Button onClick={handleStartGame} disabled={selectedSubjects.length === 0}>
           <Play className="w-4 h-4 mr-2 inline" />

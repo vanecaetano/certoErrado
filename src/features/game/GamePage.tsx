@@ -335,7 +335,7 @@ export function GamePage() {
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg p-4 w-11/12 max-w-2xl">
           <div className="mb-3 text-center">
             <div className="font-semibold">{t('Deseja continuar?')}</div>
-            <div className="text-sm text-gray-600 dark:text-gray-300">{t('Assista a um anúncio para desbloquear mais 10 perguntas deste assunto.')}</div>
+            <div className="text-sm text-gray-600 dark:text-gray-300">{t('Assista a um anúncio para desbloquear mais 10 perguntas deste desafio.')}</div>
           </div>
           <div className="flex justify-center gap-3">
             <Button variant="primary" onClick={async () => {
