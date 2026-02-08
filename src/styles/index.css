@@ -78,25 +78,27 @@ html, body {
     .site-title { font-size: 1rem; }
   }
 
-  /* Logo responsivo */
-  .header-logo {
-    width: 380px !important;
-    height: 380px !important;
-    top: 120% !important;
-  }
-
+  /* Logo responsivo - Desktop: 266px top:150%, Mobile: centralizado */
   @media (max-width: 768px) {
-    .header-logo {
-      width: 120px !important;
-      height: 120px !important;
-      top: 100% !important;
+    .header-logo-responsive {
+      width: 100px !important;
+      height: 100px !important;
+      min-width: 100px !important;
+      min-height: 100px !important;
+      max-width: 100px !important;
+      max-height: 100px !important;
+      top: 50% !important;
     }
   }
 
   @media (max-width: 480px) {
-    .header-logo {
-      width: 96px !important;
-      height: 96px !important;
+    .header-logo-responsive {
+      width: 80px !important;
+      height: 80px !important;
+      min-width: 80px !important;
+      min-height: 80px !important;
+      max-width: 80px !important;
+      max-height: 80px !important;
       top: 50% !important;
     }
   }

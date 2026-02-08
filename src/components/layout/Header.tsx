@@ -81,7 +81,7 @@ export function Header() {
             <img 
               src={logoUrl} 
               alt="Certo ou Errado logo" 
-              className="absolute left-0 flex-shrink-0 object-contain drop-shadow-2xl"
+              className="header-logo-responsive absolute left-0 flex-shrink-0 object-contain drop-shadow-2xl"
               style={{
                 width: '266px',
                 height: '266px',
