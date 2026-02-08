@@ -5,7 +5,7 @@ import { useGameStore } from '@/store/gameStore';
 import { ShareQuizButton } from '@/components/ui/ShareQuizButton';
 import { RankingWidget } from '@/components/layout/RankingWidget';
 import { dbService } from '@/services/database';
-import logoUrl from '@/assets/logo.svg';
+import logoUrl from '@/assets/logo.jpeg';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -74,17 +74,16 @@ export function Header() {
 
   return (
     <header className="app-header sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4 max-w-full overflow-hidden">
+      <div className="container mx-auto px-4 py-3 flex items-center justify-between gap-4 max-w-full">
         {/* Logo e Título */}
-        <Link to="/" className="flex items-center gap-3 min-w-0 flex-shrink hover:opacity-80 transition-opacity">
-          <img 
-            src={logoUrl} 
-            alt="Certo ou Errado logo" 
-            className="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 object-contain" 
-          />
-          <span className="site-title text-base md:text-xl truncate">
-            {t('Certo ou Errado?')}
-          </span>
+        <Link to="/" className="flex items-center gap-3 min-w-0 flex-shrink hover:opacity-80 transition-opacity relative">
+          <div className="w-16 h-12 relative">
+            <img 
+              src={logoUrl} 
+              alt="Certo ou Errado logo" 
+              className="w-14 h-14 md:w-20 md:h-20 absolute top-1/2 -translate-y-1/2 left-0 flex-shrink-0 object-contain rounded-lg" 
+            />
+          </div>
         </Link>
 
         {/* Ranking Widget - Centralizado no Desktop */}

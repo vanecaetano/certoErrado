@@ -318,7 +318,7 @@ export function GamePage() {
         </div>
 
         {motivational && (
-          <div className={`fixed top-96 right-4 z-40 px-6 py-4 rounded-xl border-2 font-bold text-center text-lg animate-bounce ${
+          <div className={`fixed top-20 left-1/2 transform -translate-x-1/2 z-40 px-6 py-4 rounded-xl border-2 font-bold text-center text-lg animate-bounce ${
             isCorrect
               ? 'bg-gradient-to-r from-success-500 to-success-600 text-white border-success-400 shadow-lg shadow-success-500/50'
               : 'bg-gradient-to-r from-error-500 to-error-600 text-white border-error-400 shadow-lg shadow-error-500/50'
