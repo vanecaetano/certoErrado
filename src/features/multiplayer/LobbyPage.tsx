@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { PlayerList } from './components/PlayerList';
 import { multiplayerService } from '@/services/multiplayerService';
+import { rankingService } from '@/services/rankingService';
 import type { MultiplayerRoom } from '@/types';
 
 export function LobbyPage() {
@@ -27,9 +28,16 @@ export function LobbyPage() {
   const allPlayersReady = room ? multiplayerService.areAllPlayersReady(room) : false;
   const canStart = isHost && allPlayersReady;
 
-  // Carregar nome do jogador do localStorage
+  // Carregar nome do jogador do localStorage ou ranking
   useEffect(() => {
-    const storedPlayerName = localStorage.getItem('multiplayerPlayerName');
+    // Primeiro tenta pegar do multiplayer localStorage
+    let storedPlayerName = localStorage.getItem('multiplayerPlayerName');
+    
+    // Se não tiver, pega do ranking
+    if (!storedPlayerName) {
+      storedPlayerName = rankingService.getPlayerName();
+    }
+    
     if (storedPlayerName) {
       setPlayerName(storedPlayerName);
     }

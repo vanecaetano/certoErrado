@@ -139,6 +139,16 @@ html, body {
   animation: fadeIn 0.3s ease-out;
 }
 
+/* Esconder scrollbar mas manter funcionalidade de scroll */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
 /* Garantir que o layout nunca quebre */
 * {
   min-width: 0;

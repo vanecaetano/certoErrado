@@ -36,7 +36,7 @@ export function RankingWidget() {
   return (
     <button
       onClick={() => navigate('/ranking')}
-      className="flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-white/5 dark:bg-white/5 hover:bg-white/10 dark:hover:bg-white/10 border border-gray-300/20 dark:border-gray-600/30 transition-all hover:scale-[1.01] backdrop-blur-sm group w-full lg:w-auto"
+      className="flex items-center gap-2.5 px-3.5 py-2 rounded-lg bg-white/5 dark:bg-white/5 hover:bg-white/10 dark:hover:bg-white/10 border border-gray-300/20 dark:border-gray-600/30 transition-all hover:scale-[1.01] backdrop-blur-sm group lg:w-auto whitespace-nowrap"
       title={t('Ver ranking completo')}
     >
       {/* Icon */}

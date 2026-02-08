@@ -172,15 +172,17 @@ export function Header() {
         </div>
 
         {/* Mobile Controls */}
-        <div className="flex md:hidden items-center gap-2">
-          {/* Ranking Widget - Mobile */}
-          <RankingWidget />
+        <div className="flex md:hidden items-center gap-2 max-w-full overflow-hidden">
+          {/* Ranking Widget - Mobile - com overflow controlado */}
+          <div className="flex-1 min-w-0 overflow-x-auto scrollbar-hide">
+            <RankingWidget />
+          </div>
           
           {/* Seletor de Idioma Compacto - Mobile */}
           <select
             value={lang}
             onChange={e => setLang(e.target.value)}
-            className="px-2 py-1.5 rounded-lg border-2 border-primary-300 dark:border-primary-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-xs font-medium hover:border-primary-500 dark:hover:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors cursor-pointer"
+            className="px-2 py-1.5 rounded-lg border-2 border-primary-300 dark:border-primary-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-xs font-medium hover:border-primary-500 dark:hover:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors cursor-pointer flex-shrink-0"
             aria-label="Selecionar idioma"
           >
             <option value="pt">🇧🇷</option>
