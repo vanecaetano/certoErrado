@@ -80,8 +80,9 @@ html, body {
 
   /* Logo responsivo */
   .header-logo {
-    width: 216px !important;
-    height: 216px !important;
+    width: 380px !important;
+    height: 380px !important;
+    top: 120% !important;
   }
 
   @media (max-width: 768px) {
